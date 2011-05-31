@@ -3,28 +3,28 @@ using DotNetMatrix;
 namespace DotNetMatrix.test
 {
 	
-	/// <summary>TestMatrix tests the functionality of the DotNetMatrix GeneralMatrix class and associated decompositions.
-	/// <P>
-	/// Run the test from the command line using
-	/// <BLOCKQUOTE><PRE><CODE>
-	/// DotNetMatrix.test.TestMatrix 
-	/// </CODE></PRE></BLOCKQUOTE>
-	/// Detailed output is provided indicating the functionality being tested
-	/// and whether the functionality is correctly implemented.   Exception handling
-	/// is also tested.  
-	/// <P>
-	/// The test is designed to run to completion and give a summary of any implementation errors
-	/// encountered. The final output should be:
-	/// <BLOCKQUOTE><PRE><CODE>
-	/// TestMatrix completed.
-	/// Total errors reported: n1
-	/// Total warning reported: n2
-	/// </CODE></PRE></BLOCKQUOTE>
-	/// If the test does not run to completion, this indicates that there is a 
-	/// substantial problem within the implementation that was not anticipated in the test design.  
-	/// The stopping point should give an indication of where the problem exists.
-	/// 
-	/// </summary>
+	// SUMMARY:TestMatrix tests the functionality of the DotNetMatrix GeneralMatrix class and associated decompositions.
+	// <P>
+	// Run the test from the command line using
+	// <BLOCKQUOTE><PRE><CODE>
+	// DotNetMatrix.test.TestMatrix 
+	// </CODE></PRE></BLOCKQUOTE>
+	// Detailed output is provided indicating the functionality being tested
+	// and whether the functionality is correctly implemented.   Exception handling
+	// is also tested.  
+	// <P>
+	// The test is designed to run to completion and give a summary of any implementation errors
+	// encountered. The final output should be:
+	// <BLOCKQUOTE><PRE><CODE>
+	// TestMatrix completed.
+	// Total errors reported: n1
+	// Total warning reported: n2
+	// </CODE></PRE></BLOCKQUOTE>
+	// If the test does not run to completion, this indicates that there is a 
+	// substantial problem within the implementation that was not anticipated in the test design.  
+	// The stopping point should give an indication of where the problem exists.
+	// 
+	// 
 	public class TestMatrix
 	{
 		[STAThread]
@@ -63,22 +63,22 @@ namespace DotNetMatrix.test
 			double sumofdiagonals = 15;
 			double sumofsquares = 650;
 			
-			/// <summary>Constructors and constructor-like methods:
-			/// double[], int
-			/// double[][]  
-			/// int, int
-			/// int, int, double
-			/// int, int, double[][]
-			/// Create(double[][])
-			/// Random(int,int)
-			/// Identity(int)
-			/// 
-			/// </summary>
+			// SUMMARY:Constructors and constructor-like methods:
+			// double[], int
+			// double[][]  
+			// int, int
+			// int, int, double
+			// int, int, double[][]
+			// Create(double[][])
+			// Random(int,int)
+			// Identity(int)
+			// 
+			// 
 			
-			print("\nTesting constructors and constructor-like methods...\n");
+			//print("\nTesting constructors and constructor-like methods...\n");
 			//try
 			//{
-			//    /// <summary>check that exception is thrown in packed constructor with invalid length *</summary>
+			//    // SUMMARY:check that exception is thrown in packed constructor with invalid length *
 			//    A = new GeneralMatrix(columnwise, invalidld);
 			//    errorCount = try_failure(errorCount, "Catch invalid length in packed constructor... ", "exception not thrown for invalid input");
 			//}
@@ -88,9 +88,9 @@ namespace DotNetMatrix.test
 			//}
 			//try
 			//{
-			//    /// <summary>check that exception is thrown in default constructor
-			//    /// if input array is 'ragged' *
-			//    /// </summary>
+			//    // SUMMARY:check that exception is thrown in default constructor
+			//    // if input array is 'ragged' *
+			//    // 
 			//    A = new GeneralMatrix(rvals);
 			//    tmp = A.GetElement(raggedr, raggedc);
 			//}
@@ -105,9 +105,9 @@ namespace DotNetMatrix.test
 			//}
 			//try
 			//{
-			//    /// <summary>check that exception is thrown in Create
-			//    /// if input array is 'ragged' *
-			//    /// </summary>
+			//    // SUMMARY:check that exception is thrown in Create
+			//    // if input array is 'ragged' *
+			//    // 
 			//    A = GeneralMatrix.Create(rvals);
 			//    tmp = A.GetElement(raggedr, raggedc);
 			//}
@@ -122,211 +122,212 @@ namespace DotNetMatrix.test
 			//    System.Console.Out.WriteLine(e.Message);
 			//}
 			
-			A = new GeneralMatrix(columnwise, validld);
-			B = new GeneralMatrix(avals);
-			tmp = B.GetElement(0, 0);
-			avals[0][0] = 0.0;
-			C = B.Subtract(A);
-			avals[0][0] = tmp;
-			B = GeneralMatrix.Create(avals);
-			tmp = B.GetElement(0, 0);
-			avals[0][0] = 0.0;
-			if ((tmp - B.GetElement(0, 0)) != 0.0)
-			{
-				/// <summary>check that Create behaves properly *</summary>
-				errorCount = try_failure(errorCount, "Create... ", "Copy not effected... data visible outside");
-			}
-			else
-			{
-				try_success("Create... ", "");
-			}
-			avals[0][0] = columnwise[0];
-			I = new GeneralMatrix(ivals);
-			try
-			{
-				check(I, GeneralMatrix.Identity(3, 4));
-				try_success("Identity... ", "");
-			}
-			catch (System.SystemException e)
-			{
-				errorCount = try_failure(errorCount, "Identity... ", "Identity GeneralMatrix not successfully created");
-				System.Console.Out.WriteLine(e.Message);
-			}
+            //A = new GeneralMatrix(columnwise, validld);
+            //B = new GeneralMatrix(avals);
+            //tmp = B.GetElement(0, 0);
+            //avals[0][0] = 0.0;
+            //C = B.Subtract(A);
+            //avals[0][0] = tmp;
+            //B = GeneralMatrix.Create(avals);
+            //tmp = B.GetElement(0, 0);
+            //avals[0][0] = 0.0;
+            //if ((tmp - B.GetElement(0, 0)) != 0.0)
+            //{
+            //    // SUMMARY:check that Create behaves properly *
+            //    errorCount = try_failure(errorCount, "Create... ", "Copy not effected... data visible outside");
+            //}
+            //else
+            //{
+            //    try_success("Create... ", "");
+            //}
+            //avals[0][0] = columnwise[0];
+
+            //I = new GeneralMatrix(ivals);
+            //try
+            //{
+            //    check(I, GeneralMatrix.Identity(3, 4));
+            //    try_success("Identity... ", "");
+            //}
+            //catch (System.SystemException e)
+            //{
+            //    errorCount = try_failure(errorCount, "Identity... ", "Identity GeneralMatrix not successfully created");
+            //    System.Console.Out.WriteLine(e.Message);
+            //}
 			
-			/// <summary>Access Methods:
-			/// getColumnDimension()
-			/// getRowDimension()
-			/// getArray()
-			/// getArrayCopy()
-			/// getColumnPackedCopy()
-			/// getRowPackedCopy()
-			/// get(int,int)
-			/// GetMatrix(int,int,int,int)
-			/// GetMatrix(int,int,int[])
-			/// GetMatrix(int[],int,int)
-			/// GetMatrix(int[],int[])
-			/// set(int,int,double)
-			/// SetMatrix(int,int,int,int,GeneralMatrix)
-			/// SetMatrix(int,int,int[],GeneralMatrix)
-			/// SetMatrix(int[],int,int,GeneralMatrix)
-			/// SetMatrix(int[],int[],GeneralMatrix)
-			/// 
-			/// </summary>
+			// SUMMARY:Access Methods:
+			// getColumnDimension()
+			// getRowDimension()
+			// getArray()
+			// getArrayCopy()
+			// getColumnPackedCopy()
+			// getRowPackedCopy()
+			// get(int,int)
+			// GetMatrix(int,int,int,int)
+			// GetMatrix(int,int,int[])
+			// GetMatrix(int[],int,int)
+			// GetMatrix(int[],int[])
+			// set(int,int,double)
+			// SetMatrix(int,int,int,int,GeneralMatrix)
+			// SetMatrix(int,int,int[],GeneralMatrix)
+			// SetMatrix(int[],int,int,GeneralMatrix)
+			// SetMatrix(int[],int[],GeneralMatrix)
+			// 
+			// 
 			
-			print("\nTesting access methods...\n");
+			//print("\nTesting access methods...\n");
 			
-			/// <summary>Various get methods:
-			/// 
-			/// </summary>
+			// SUMMARY:Various get methods:
+			// 
+			// 
 			
-			B = new GeneralMatrix(avals);
-			if (B.RowDimension != rows)
-			{
-				errorCount = try_failure(errorCount, "getRowDimension... ", "");
-			}
-			else
-			{
-				try_success("getRowDimension... ", "");
-			}
-			if (B.ColumnDimension != cols)
-			{
-				errorCount = try_failure(errorCount, "getColumnDimension... ", "");
-			}
-			else
-			{
-				try_success("getColumnDimension... ", "");
-			}
-			B = new GeneralMatrix(avals);
-			double[][] barray = B.Array;
-			if (barray != avals)
-			{
-				errorCount = try_failure(errorCount, "getArray... ", "");
-			}
-			else
-			{
-				try_success("getArray... ", "");
-			}
-			barray = B.ArrayCopy;
-			if (barray == avals)
-			{
-				errorCount = try_failure(errorCount, "getArrayCopy... ", "data not (deep) copied");
-			}
-			try
-			{
-				check(barray, avals);
-				try_success("getArrayCopy... ", "");
-			}
-			catch (System.SystemException e)
-			{
-				errorCount = try_failure(errorCount, "getArrayCopy... ", "data not successfully (deep) copied");
-				System.Console.Out.WriteLine(e.Message);
-			}
-			double[] bpacked = B.ColumnPackedCopy;
-			try
-			{
-				check(bpacked, columnwise);
-				try_success("getColumnPackedCopy... ", "");
-			}
-			catch (System.SystemException e)
-			{
-				errorCount = try_failure(errorCount, "getColumnPackedCopy... ", "data not successfully (deep) copied by columns");
-				System.Console.Out.WriteLine(e.Message);
-			}
-			bpacked = B.RowPackedCopy;
-			try
-			{
-				check(bpacked, rowwise);
-				try_success("getRowPackedCopy... ", "");
-			}
-			catch (System.SystemException e)
-			{
-				errorCount = try_failure(errorCount, "getRowPackedCopy... ", "data not successfully (deep) copied by rows");
-				System.Console.Out.WriteLine(e.Message);
-			}
-			try
-			{
-				tmp = B.GetElement(B.RowDimension, B.ColumnDimension - 1);
-				errorCount = try_failure(errorCount, "get(int,int)... ", "OutOfBoundsException expected but not thrown");
-			}
-			catch (System.IndexOutOfRangeException e)
-			{
-				System.Console.Out.WriteLine(e.Message);
-				try
-				{
-					tmp = B.GetElement(B.RowDimension - 1, B.ColumnDimension);
-					errorCount = try_failure(errorCount, "get(int,int)... ", "OutOfBoundsException expected but not thrown");
-				}
-				catch (System.IndexOutOfRangeException e1)
-				{
-					try_success("get(int,int)... OutofBoundsException... ", "");
-					System.Console.Out.WriteLine(e1.Message);
-				}
-			}
-			catch (System.ArgumentException e1)
-			{
-				errorCount = try_failure(errorCount, "get(int,int)... ", "OutOfBoundsException expected but not thrown");
-				System.Console.Out.WriteLine(e1.Message);
-			}
-			try
-			{
-				if (B.GetElement(B.RowDimension - 1, B.ColumnDimension - 1) != avals[B.RowDimension - 1][B.ColumnDimension - 1])
-				{
-					errorCount = try_failure(errorCount, "get(int,int)... ", "GeneralMatrix entry (i,j) not successfully retreived");
-				}
-				else
-				{
-					try_success("get(int,int)... ", "");
-				}
-			}
-			catch (System.IndexOutOfRangeException e)
-			{
-				errorCount = try_failure(errorCount, "get(int,int)... ", "Unexpected ArrayIndexOutOfBoundsException");
-				System.Console.Out.WriteLine(e.Message);
-			}
+            B = new GeneralMatrix(avals);
+            //if (B.RowDimension != rows)
+            //{
+            //    errorCount = try_failure(errorCount, "getRowDimension... ", "");
+            //}
+            //else
+            //{
+            //    try_success("getRowDimension... ", "");
+            //}
+            //if (B.ColumnDimension != cols)
+            //{
+            //    errorCount = try_failure(errorCount, "getColumnDimension... ", "");
+            //}
+            //else
+            //{
+            //    try_success("getColumnDimension... ", "");
+            //}
+            //B = new GeneralMatrix(avals);
+            //double[][] barray = B.Array;
+            //if (barray != avals)
+            //{
+            //    errorCount = try_failure(errorCount, "getArray... ", "");
+            //}
+            //else
+            //{
+            //    try_success("getArray... ", "");
+            //}
+            //barray = B.ArrayCopy;
+            //if (barray == avals)
+            //{
+            //    errorCount = try_failure(errorCount, "getArrayCopy... ", "data not (deep) copied");
+            //}
+            //try
+            //{
+            //    check(barray, avals);
+            //    try_success("getArrayCopy... ", "");
+            //}
+            //catch (System.SystemException e)
+            //{
+            //    errorCount = try_failure(errorCount, "getArrayCopy... ", "data not successfully (deep) copied");
+            //    System.Console.Out.WriteLine(e.Message);
+            //}
+            //double[] bpacked = B.ColumnPackedCopy;
+            //try
+            //{
+            //    check(bpacked, columnwise);
+            //    try_success("getColumnPackedCopy... ", "");
+            //}
+            //catch (System.SystemException e)
+            //{
+            //    errorCount = try_failure(errorCount, "getColumnPackedCopy... ", "data not successfully (deep) copied by columns");
+            //    System.Console.Out.WriteLine(e.Message);
+            //}
+            //bpacked = B.RowPackedCopy;
+            //try
+            //{
+            //    check(bpacked, rowwise);
+            //    try_success("getRowPackedCopy... ", "");
+            //}
+            //catch (System.SystemException e)
+            //{
+            //    errorCount = try_failure(errorCount, "getRowPackedCopy... ", "data not successfully (deep) copied by rows");
+            //    System.Console.Out.WriteLine(e.Message);
+            //}
+            //try
+            //{
+            //    tmp = B.GetElement(B.RowDimension, B.ColumnDimension - 1);
+            //    errorCount = try_failure(errorCount, "get(int,int)... ", "OutOfBoundsException expected but not thrown");
+            //}
+            //catch (System.IndexOutOfRangeException e)
+            //{
+            //    System.Console.Out.WriteLine(e.Message);
+            //    try
+            //    {
+            //        tmp = B.GetElement(B.RowDimension - 1, B.ColumnDimension);
+            //        errorCount = try_failure(errorCount, "get(int,int)... ", "OutOfBoundsException expected but not thrown");
+            //    }
+            //    catch (System.IndexOutOfRangeException e1)
+            //    {
+            //        try_success("get(int,int)... OutofBoundsException... ", "");
+            //        System.Console.Out.WriteLine(e1.Message);
+            //    }
+            //}
+            //catch (System.ArgumentException e1)
+            //{
+            //    errorCount = try_failure(errorCount, "get(int,int)... ", "OutOfBoundsException expected but not thrown");
+            //    System.Console.Out.WriteLine(e1.Message);
+            //}
+            //try
+            //{
+            //    if (B.GetElement(B.RowDimension - 1, B.ColumnDimension - 1) != avals[B.RowDimension - 1][B.ColumnDimension - 1])
+            //    {
+            //        errorCount = try_failure(errorCount, "get(int,int)... ", "GeneralMatrix entry (i,j) not successfully retreived");
+            //    }
+            //    else
+            //    {
+            //        try_success("get(int,int)... ", "");
+            //    }
+            //}
+            //catch (System.IndexOutOfRangeException e)
+            //{
+            //    errorCount = try_failure(errorCount, "get(int,int)... ", "Unexpected ArrayIndexOutOfBoundsException");
+            //    System.Console.Out.WriteLine(e.Message);
+            //}
 			SUB = new GeneralMatrix(subavals);
-			try
-			{
-				M = B.GetMatrix(ib, ie + B.RowDimension + 1, jb, je);
-				errorCount = try_failure(errorCount, "GetMatrix(int,int,int,int)... ", "ArrayIndexOutOfBoundsException expected but not thrown");
-			}
-			catch (System.IndexOutOfRangeException e)
-			{
-				System.Console.Out.WriteLine(e.Message);
-				try
-				{
-					M = B.GetMatrix(ib, ie, jb, je + B.ColumnDimension + 1);
-					errorCount = try_failure(errorCount, "GetMatrix(int,int,int,int)... ", "ArrayIndexOutOfBoundsException expected but not thrown");
-				}
-				catch (System.IndexOutOfRangeException e1)
-				{
-					try_success("GetMatrix(int,int,int,int)... ArrayIndexOutOfBoundsException... ", "");
-					System.Console.Out.WriteLine(e1.Message);
-				}
-			}
-			catch (System.ArgumentException e1)
-			{
-				errorCount = try_failure(errorCount, "GetMatrix(int,int,int,int)... ", "ArrayIndexOutOfBoundsException expected but not thrown");
-				System.Console.Out.WriteLine(e1.Message);
-			}
-			try
-			{
-				M = B.GetMatrix(ib, ie, jb, je);
-				try
-				{
-					check(SUB, M);
-					try_success("GetMatrix(int,int,int,int)... ", "");
-				}
-				catch (System.SystemException e)
-				{
-					errorCount = try_failure(errorCount, "GetMatrix(int,int,int,int)... ", "submatrix not successfully retreived");
-					System.Console.Out.WriteLine(e.Message);
-				}
-			}
-			catch (System.IndexOutOfRangeException e)
-			{
-				errorCount = try_failure(errorCount, "GetMatrix(int,int,int,int)... ", "Unexpected ArrayIndexOutOfBoundsException");
-				System.Console.Out.WriteLine(e.Message);
-			}
+            //try
+            //{
+            //    M = B.GetMatrix(ib, ie + B.RowDimension + 1, jb, je);
+            //    errorCount = try_failure(errorCount, "GetMatrix(int,int,int,int)... ", "ArrayIndexOutOfBoundsException expected but not thrown");
+            //}
+            //catch (System.IndexOutOfRangeException e)
+            //{
+            //    System.Console.Out.WriteLine(e.Message);
+            //    try
+            //    {
+            //        M = B.GetMatrix(ib, ie, jb, je + B.ColumnDimension + 1);
+            //        errorCount = try_failure(errorCount, "GetMatrix(int,int,int,int)... ", "ArrayIndexOutOfBoundsException expected but not thrown");
+            //    }
+            //    catch (System.IndexOutOfRangeException e1)
+            //    {
+            //        try_success("GetMatrix(int,int,int,int)... ArrayIndexOutOfBoundsException... ", "");
+            //        System.Console.Out.WriteLine(e1.Message);
+            //    }
+            //}
+            //catch (System.ArgumentException e1)
+            //{
+            //    errorCount = try_failure(errorCount, "GetMatrix(int,int,int,int)... ", "ArrayIndexOutOfBoundsException expected but not thrown");
+            //    System.Console.Out.WriteLine(e1.Message);
+            //}
+            //try
+            //{
+            //    M = B.GetMatrix(ib, ie, jb, je);
+            //    try
+            //    {
+            //        check(SUB, M);
+            //        try_success("GetMatrix(int,int,int,int)... ", "");
+            //    }
+            //    catch (System.SystemException e)
+            //    {
+            //        errorCount = try_failure(errorCount, "GetMatrix(int,int,int,int)... ", "submatrix not successfully retreived");
+            //        System.Console.Out.WriteLine(e.Message);
+            //    }
+            //}
+            //catch (System.IndexOutOfRangeException e)
+            //{
+            //    errorCount = try_failure(errorCount, "GetMatrix(int,int,int,int)... ", "Unexpected ArrayIndexOutOfBoundsException");
+            //    System.Console.Out.WriteLine(e.Message);
+            //}
 			
 			try
 			{
@@ -458,9 +459,9 @@ namespace DotNetMatrix.test
 				System.Console.Out.WriteLine(e.Message);
 			}
 			
-			/// <summary>Various set methods:
-			/// 
-			/// </summary>
+			// SUMMARY:Various set methods:
+			// 
+			// 
 			
 			try
 			{
@@ -683,21 +684,21 @@ namespace DotNetMatrix.test
 				System.Console.Out.WriteLine(e1.Message);
 			}
 			
-			/// <summary>Array-like methods:
-			/// Subtract
-			/// SubtractEquals
-			/// Add
-			/// AddEquals
-			/// ArrayLeftDivide
-			/// ArrayLeftDivideEquals
-			/// ArrayRightDivide
-			/// ArrayRightDivideEquals
-			/// arrayTimes
-			/// ArrayMultiplyEquals
-			/// uminus
-			/// 
-			/// </summary>
-			
+			// SUMMARY:Array-like methods:
+			// Subtract
+			// SubtractEquals
+			// Add
+			// AddEquals
+			// ArrayLeftDivide
+			// ArrayLeftDivideEquals
+			// ArrayRightDivide
+			// ArrayRightDivideEquals
+			// arrayTimes
+			// ArrayMultiplyEquals
+			// uminus
+			// 
+			// 
+            A = new GeneralMatrix(columnwise, validld);
 			print("\nTesting array-like methods...\n");
 			S = new GeneralMatrix(columnwise, nonconformld);
 			R = GeneralMatrix.Random(A.RowDimension, A.ColumnDimension);
@@ -930,27 +931,27 @@ namespace DotNetMatrix.test
 				System.Console.Out.WriteLine(e.Message);
 			}
 			
-			/// <summary>LA methods:
-			/// Transpose
-			/// Multiply
-			/// Condition
-			/// Rank
-			/// Determinant
-			/// trace
-			/// Norm1
-			/// norm2
-			/// normF
-			/// normInf
-			/// Solve
-			/// solveTranspose
-			/// Inverse
-			/// chol
-			/// Eigen
-			/// lu
-			/// qr
-			/// svd 
-			/// 
-			/// </summary>
+			// SUMMARY:LA methods:
+			// Transpose
+			// Multiply
+			// Condition
+			// Rank
+			// Determinant
+			// trace
+			// Norm1
+			// norm2
+			// normF
+			// normInf
+			// Solve
+			// solveTranspose
+			// Inverse
+			// chol
+			// Eigen
+			// lu
+			// qr
+			// svd 
+			// 
+			// 
 			
 			print("\nTesting linear algebra methods...\n");
 			A = new GeneralMatrix(columnwise, 3);
@@ -1187,9 +1188,9 @@ namespace DotNetMatrix.test
 			print("Total warnings reported: " + System.Convert.ToString(warningCount) + "\n");
 		}
 		
-		/// <summary>private utility routines *</summary>
+		// SUMMARY:private utility routines *
 		
-		/// <summary>Check magnitude of difference of scalars. *</summary>
+		// SUMMARY:Check magnitude of difference of scalars. *
 		
 		private static void  check(double x, double y)
 		{
@@ -1204,7 +1205,7 @@ namespace DotNetMatrix.test
 			}
 		}
 		
-		/// <summary>Check norm of difference of "vectors". *</summary>
+		// SUMMARY:Check norm of difference of "vectors". *
 		
 		private static void  check(double[] x, double[] y)
 		{
@@ -1221,7 +1222,7 @@ namespace DotNetMatrix.test
 			}
 		}
 		
-		/// <summary>Check norm of difference of arrays. *</summary>
+		// SUMMARY:Check norm of difference of arrays. *
 		
 		private static void  check(double[][] x, double[][] y)
 		{
@@ -1230,7 +1231,7 @@ namespace DotNetMatrix.test
 			check(A, B);
 		}
 		
-		/// <summary>Check norm of difference of Matrices. *</summary>
+		// SUMMARY:Check norm of difference of Matrices. *
 		
 		private static void  check(GeneralMatrix X, GeneralMatrix Y)
 		{
@@ -1245,14 +1246,14 @@ namespace DotNetMatrix.test
 			}
 		}
 		
-		/// <summary>Shorten spelling of print. *</summary>
+		// SUMMARY:Shorten spelling of print. *
 		
 		private static void  print(System.String s)
 		{
 			System.Console.Out.Write(s);
 		}
 		
-		/// <summary>Print appropriate messages for successful outcome try *</summary>
+		// SUMMARY:Print appropriate messages for successful outcome try *
 		
 		private static void  try_success(System.String s, System.String e)
 		{
@@ -1262,7 +1263,7 @@ namespace DotNetMatrix.test
 				print(">      Message: " + e + "\n");
 			}
 		}
-		/// <summary>Print appropriate messages for unsuccessful outcome try *</summary>
+		// SUMMARY:Print appropriate messages for unsuccessful outcome try *
 		
 		private static int try_failure(int count, System.String s, System.String e)
 		{
@@ -1270,7 +1271,7 @@ namespace DotNetMatrix.test
 			return ++count;
 		}
 		
-		/// <summary>Print appropriate messages for unsuccessful outcome try *</summary>
+		// SUMMARY:Print appropriate messages for unsuccessful outcome try *
 		
 		private static int try_warning(int count, System.String s, System.String e)
 		{

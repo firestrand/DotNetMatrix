@@ -14,15 +14,16 @@ namespace DotNetMatrix_Test
         int errorCount = 0;
         int warningCount = 0;
         double tmp;
-        double[] columnwise = new[] { 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0 };
-        double[] rowwise = new[] { 1.0, 4.0, 7.0, 10.0, 2.0, 5.0, 8.0, 11.0, 3.0, 6.0, 9.0, 12.0 };
-        double[][] avals = { new[] { 1.0, 4.0, 7.0, 10.0 }, new[] { 2.0, 5.0, 8.0, 11.0 }, new[] { 3.0, 6.0, 9.0, 12.0 } };
+        double[] columnwise { get { return new[] { 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0 }; } }
+        double[] rowwise { get { return new[] { 1.0, 4.0, 7.0, 10.0, 2.0, 5.0, 8.0, 11.0, 3.0, 6.0, 9.0, 12.0 }; } } 
+        double[][] avals { get{ return new[] { new[] { 1.0, 4.0, 7.0, 10.0 }, new[] { 2.0, 5.0, 8.0, 11.0 }, new[] { 3.0, 6.0, 9.0, 12.0 } }; } }
+ 
         //double[][] rankdef = avals;
-        double[][] tvals = { new[] { 1.0, 2.0, 3.0 }, new[] { 4.0, 5.0, 6.0 }, new[] { 7.0, 8.0, 9.0 }, new[] { 10.0, 11.0, 12.0 } };
-        double[][] subavals = { new[] { 5.0, 8.0, 11.0 }, new[] { 6.0, 9.0, 12.0 } };
-        double[][] rvals = { new[] { 1.0, 4.0, 7.0 }, new[] { 2.0, 5.0, 8.0, 11.0 }, new[] { 3.0, 6.0, 9.0, 12.0 } };
-        double[][] pvals = { new[] { 1.0, 1.0, 1.0 }, new[] { 1.0, 2.0, 3.0 }, new[] { 1.0, 3.0, 6.0 } };
-        double[][] ivals = { new[] { 1.0, 0.0, 0.0, 0.0 }, new[] { 0.0, 1.0, 0.0, 0.0 }, new[] { 0.0, 0.0, 1.0, 0.0 } };
+        double[][] tvals { get { return new[] {new[] {1.0, 2.0, 3.0}, new[] {4.0, 5.0, 6.0}, new[] {7.0, 8.0, 9.0}, new[] {10.0, 11.0, 12.0}}; }} 
+        double[][] subavals { get { return new[] {new[] {5.0, 8.0, 11.0}, new[] {6.0, 9.0, 12.0}}; }} 
+        double[][] rvals { get { return new[] {new[] {1.0, 4.0, 7.0}, new[] {2.0, 5.0, 8.0, 11.0}, new[] {3.0, 6.0, 9.0, 12.0}}; }}
+        double[][] pvals { get { return new[] { new[] { 1.0, 1.0, 1.0 }, new[] { 1.0, 2.0, 3.0 }, new[] { 1.0, 3.0, 6.0 } }; } } 
+        double[][] ivals { get { return new[] { new[] { 1.0, 0.0, 0.0, 0.0 }, new[] { 0.0, 1.0, 0.0, 0.0 }, new[] { 0.0, 0.0, 1.0, 0.0 } }; } } 
         double[][] evals = { new[] { 0.0, 1.0, 0.0, 0.0 }, new[] { 1.0, 0.0, 2e-7, 0.0 }, new[] { 0.0, -2e-7, 0.0, 1.0 }, new[] { 0.0, 0.0, 1.0, 0.0 } };
         double[][] square = { new[] { 166.0, 188.0, 210.0 }, new[] { 188.0, 214.0, 240.0 }, new[] { 210.0, 240.0, 270.0 } };
         double[][] sqSolution = { new[] { 13.0 }, new[] { 15.0 } };
@@ -42,15 +43,29 @@ namespace DotNetMatrix_Test
         double rowsummax = 30.0;
         double sumofdiagonals = 15;
         double sumofsquares = 650;
+
+        /// <summary>Check norm of difference of Matrices. *</summary>
+
+        private static void check(GeneralMatrix x, GeneralMatrix y)
+        {
+            double eps = Math.Pow(2.0, -52.0);
+            if (x.Norm1() == 0.0 & y.Norm1() < 10 * eps)
+                return;
+            if (y.Norm1() == 0.0 & x.Norm1() < 10 * eps)
+                return;
+            if (x.Subtract(y).Norm1() > 1000 * eps * Math.Max(x.Norm1(), y.Norm1()))
+            {
+                throw new SystemException("The norm of (X-Y) is too large: " + x.Subtract(y).Norm1());
+            }
+        }
         /// <summary>
         /// check that exception is thrown in packed constructor with invalid length 
         /// </summary>
         [TestMethod][ExpectedException(typeof(ArgumentException))]
         public void ArgumentExceptionIsThrownInPackedConstructorWithInvalidLength()
         {
-            double[] packed = new[] { 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0 };
             int invalid = 5; /* should trigger bad shape for construction with val */
-            var a = new GeneralMatrix(packed, invalid);
+            var a = new GeneralMatrix(columnwise, invalid);
             Assert.Inconclusive(a.ToString());
         }
         /// <summary>
@@ -100,7 +115,7 @@ namespace DotNetMatrix_Test
         [TestMethod]
         public void ConstructionFromAnArrayAltersOriginalArrayValues()
         {
-            double[][] array = { new[] { 1.0, 4.0, 7.0, 10.0 }, new[] { 2.0, 5.0, 8.0, 11.0 }, new[] { 3.0, 6.0, 9.0, 12.0 } };
+            double[][] array = avals;
             var b = new GeneralMatrix(array); //B still references avals underneath
             var temp = b.GetElement(0, 0);
             array[0][0] = 0.0;
@@ -110,7 +125,7 @@ namespace DotNetMatrix_Test
         [TestMethod]
         public void CreateFromAnArrayDoesNotAlterOriginalArrayValues()
         {
-            double[][] array = { new[] { 1.0, 4.0, 7.0, 10.0 }, new[] { 2.0, 5.0, 8.0, 11.0 }, new[] { 3.0, 6.0, 9.0, 12.0 } };
+            double[][] array = avals;
             var b = GeneralMatrix.Create(array);
             var temp = b.GetElement(0, 0);
             array[0][0] = 0.0;
@@ -128,37 +143,33 @@ namespace DotNetMatrix_Test
         [TestMethod]
         public void CanAccessRowDimensions()
         {
-            double[][] array = { new[] { 1.0, 4.0, 7.0, 10.0 }, new[] { 2.0, 5.0, 8.0, 11.0 }, new[] { 3.0, 6.0, 9.0, 12.0 } };
-            var matrix = new GeneralMatrix(array);
+            var matrix = new GeneralMatrix(avals);
             Assert.AreEqual(3,matrix.RowDimension);
         }
         [TestMethod]
         public void CanAccessColumnDimensions()
         {
-            double[][] array = { new[] { 1.0, 4.0, 7.0, 10.0 }, new[] { 2.0, 5.0, 8.0, 11.0 }, new[] { 3.0, 6.0, 9.0, 12.0 } };
-            var matrix = new GeneralMatrix(array);
+            var matrix = new GeneralMatrix(avals);
             Assert.AreEqual(4, matrix.ColumnDimension);
         }
         [TestMethod]
         public void ArrayPropertyReturnsReferenceToUnderlyingArray()
         {
-            double[][] array = { new[] { 1.0, 4.0, 7.0, 10.0 }, new[] { 2.0, 5.0, 8.0, 11.0 }, new[] { 3.0, 6.0, 9.0, 12.0 } };
-            var matrix = new GeneralMatrix(array);
-            Assert.AreEqual(array, matrix.Array);
+            var expected = avals;
+            var matrix = new GeneralMatrix(expected);
+            Assert.AreEqual(expected, matrix.Array);
         }
         [TestMethod]
         public void ArrayCopyPropertyReturnsADeepCopyOfUnderlyingArray()
         {
-            double[][] array = { new[] { 1.0, 4.0, 7.0, 10.0 }, new[] { 2.0, 5.0, 8.0, 11.0 }, new[] { 3.0, 6.0, 9.0, 12.0 } };
-            var matrix = new GeneralMatrix(array);
-            Assert.AreNotEqual(array, matrix.ArrayCopy);
+            var matrix = new GeneralMatrix(avals);
+            Assert.AreNotEqual(avals, matrix.ArrayCopy);
         }
         [TestMethod]
         public void ColumnPackedCopyPropertyReturnsAColumnPackedCopyOfUnderlyingArray()
         {
-            double[] expected = new[] { 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0 };
-            double[][] array = { new[] { 1.0, 4.0, 7.0, 10.0 }, new[] { 2.0, 5.0, 8.0, 11.0 }, new[] { 3.0, 6.0, 9.0, 12.0 } };
-            var matrix = new GeneralMatrix(array);
+            var expected = new[] { 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0 };
+            var matrix = new GeneralMatrix(avals);
             Assert.IsTrue(expected.SequenceEqual(matrix.ColumnPackedCopy));
             matrix = new GeneralMatrix(expected,3);
             Assert.IsTrue(expected.SequenceEqual(matrix.ColumnPackedCopy));
@@ -167,9 +178,8 @@ namespace DotNetMatrix_Test
         [TestMethod]
         public void RowPackedCopyPropertyReturnsARowPackedCopyOfUnderlyingArray()
         {
-            double[] expected = new[] { 1.0, 4.0, 7.0, 10.0, 2.0, 5.0, 8.0, 11.0, 3.0, 6.0, 9.0, 12.0 };
-            double[][] array = { new[] { 1.0, 4.0, 7.0, 10.0 }, new[] { 2.0, 5.0, 8.0, 11.0 }, new[] { 3.0, 6.0, 9.0, 12.0 } };
-            var matrix = new GeneralMatrix(array);
+            var expected = new[] { 1.0, 4.0, 7.0, 10.0, 2.0, 5.0, 8.0, 11.0, 3.0, 6.0, 9.0, 12.0 };
+            var matrix = new GeneralMatrix(avals);
             Assert.IsTrue(expected.SequenceEqual(matrix.RowPackedCopy));
             matrix = new GeneralMatrix(3, expected);
             Assert.IsTrue(expected.SequenceEqual(matrix.RowPackedCopy));
@@ -179,27 +189,44 @@ namespace DotNetMatrix_Test
         [ExpectedException(typeof(IndexOutOfRangeException))]
         public void ZeroElementAccessThrowsAnIndexOutOfRangeExceptionWhenColumnValueIsEqualToColumnDimension()
         {
-            double[][] array = { new[] { 1.0, 4.0, 7.0, 10.0 }, new[] { 2.0, 5.0, 8.0, 11.0 }, new[] { 3.0, 6.0, 9.0, 12.0 } };
-            var matrix = new GeneralMatrix(array);
+            var matrix = new GeneralMatrix(avals);
             matrix.GetElement(matrix.RowDimension - 1, matrix.ColumnDimension);
         }
         [TestMethod]
         [ExpectedException(typeof(IndexOutOfRangeException))]
         public void ZeroElementAccessThrowsAnIndexOutOfRangeExceptionWhenRowValueIsEqualToRowDimension()
         {
-            double[][] array = { new[] { 1.0, 4.0, 7.0, 10.0 }, new[] { 2.0, 5.0, 8.0, 11.0 }, new[] { 3.0, 6.0, 9.0, 12.0 } };
-            var matrix = new GeneralMatrix(array);
+            var matrix = new GeneralMatrix(avals);
             matrix.GetElement(matrix.RowDimension, matrix.ColumnDimension-1);
         }
         [TestMethod]
         public void ZeroBasedGetElementMethodReturnsCorrectElement()
         {
-            double[][] array = { new[] { 1.0, 4.0, 7.0, 10.0 }, new[] { 2.0, 5.0, 8.0, 11.0 }, new[] { 3.0, 6.0, 9.0, 12.0 } };
-            var matrix = new GeneralMatrix(array);
-            var expected = 12.0;
+            var matrix = new GeneralMatrix(avals);
             var actual = matrix.GetElement(matrix.RowDimension-1, matrix.ColumnDimension-1);
+            Assert.AreEqual(12.0,actual);
+        }
+        [TestMethod]
+        [ExpectedException(typeof(IndexOutOfRangeException))]
+        public void GetSubMatrixThrowAnIndexOutOfRangeExceptionWhenFinalRowIndexExceedsRowDimension()
+        {
+            var matrix = new GeneralMatrix(avals);
+            matrix.GetMatrix(ib, ie + matrix.RowDimension + 1, jb, je);
+        }
+        [TestMethod]
+        [ExpectedException(typeof(IndexOutOfRangeException))]
+        public void GetSubMatrixThrowAnIndexOutOfRangeExceptionWhenFinalColumnIndexExceedsColumnDimension()
+        {
+            var matrix = new GeneralMatrix(avals);
+            matrix.GetMatrix(ib, ie, jb, je + matrix.ColumnDimension + 1);
+        }
+        [TestMethod]
+        public void GetSubMatrixGetsCorrectSubMatrix()
+        {
+            var matrix = new GeneralMatrix(avals);
+            var expected = new GeneralMatrix(subavals);
+            var actual = matrix.GetMatrix(ib, ie, jb, je);
             Assert.AreEqual(expected,actual);
         }
-
     }
 }
