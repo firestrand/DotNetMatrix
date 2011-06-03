@@ -46,17 +46,20 @@ namespace DotNetMatrix_Test
 
         /// <summary>Check norm of difference of Matrices. *</summary>
 
-        private static void check(GeneralMatrix x, GeneralMatrix y)
+        private static bool check(GeneralMatrix x, GeneralMatrix y)
         {
             double eps = Math.Pow(2.0, -52.0);
             if (x.Norm1() == 0.0 & y.Norm1() < 10 * eps)
-                return;
+                return true;
             if (y.Norm1() == 0.0 & x.Norm1() < 10 * eps)
-                return;
-            if (x.Subtract(y).Norm1() > 1000 * eps * Math.Max(x.Norm1(), y.Norm1()))
-            {
-                throw new SystemException("The norm of (X-Y) is too large: " + x.Subtract(y).Norm1());
-            }
+                return true;
+            return (x.Subtract(y).Norm1() > 1000*eps*Math.Max(x.Norm1(), y.Norm1()));
+        }
+        [TestInitialize]
+        public void InitializeArrays()
+        {
+            B = new GeneralMatrix(avals);
+            M = new GeneralMatrix(2, 3, 0.0);
         }
         /// <summary>
         /// check that exception is thrown in packed constructor with invalid length 
@@ -208,25 +211,184 @@ namespace DotNetMatrix_Test
         }
         [TestMethod]
         [ExpectedException(typeof(IndexOutOfRangeException))]
-        public void GetSubMatrixThrowAnIndexOutOfRangeExceptionWhenFinalRowIndexExceedsRowDimension()
+        public void GetSubMatrixThrowsAnIndexOutOfRangeExceptionWhenFinalRowIndexExceedsRowDimension()
         {
             var matrix = new GeneralMatrix(avals);
             matrix.GetMatrix(ib, ie + matrix.RowDimension + 1, jb, je);
         }
         [TestMethod]
         [ExpectedException(typeof(IndexOutOfRangeException))]
-        public void GetSubMatrixThrowAnIndexOutOfRangeExceptionWhenFinalColumnIndexExceedsColumnDimension()
+        public void GetSubMatrixThrowsAnIndexOutOfRangeExceptionWhenFinalColumnIndexExceedsColumnDimension()
         {
             var matrix = new GeneralMatrix(avals);
             matrix.GetMatrix(ib, ie, jb, je + matrix.ColumnDimension + 1);
         }
         [TestMethod]
-        public void GetSubMatrixGetsCorrectSubMatrix()
+        public void GetSubMatrixUsingColumnAndRowStartStopGetsCorrectSubMatrix()
         {
             var matrix = new GeneralMatrix(avals);
             var expected = new GeneralMatrix(subavals);
             var actual = matrix.GetMatrix(ib, ie, jb, je);
             Assert.AreEqual(expected,actual);
+        }
+        [TestMethod]
+        [ExpectedException(typeof(IndexOutOfRangeException))]
+        public void GetSubMatrixThrowsAnIndexOutOfRangeExceptionWhenAColumnIndexInTheIndexArrayExceedsColumnDimension()
+        {
+            var matrix = new GeneralMatrix(avals);
+            matrix.GetMatrix(ib, ie, badcolumnindexset);
+        }
+        [TestMethod]
+        [ExpectedException(typeof(IndexOutOfRangeException))]
+        public void GetSubMatrixUsingColumnIndexArrayThrowsAnIndexOutOfRangeExceptionWhenAFinalRowIndexExceedsRowDimension()
+        {
+            var matrix = new GeneralMatrix(avals);
+            matrix.GetMatrix(ib, ie + matrix.RowDimension + 1, columnindexset);
+        }
+        [TestMethod]
+        public void GetSubMatrixUsingRowStartStopAndColumnIdexArrayGetsCorrectSubMatrix()
+        {
+            var matrix = new GeneralMatrix(avals);
+            var expected = new GeneralMatrix(subavals);
+            var actual = matrix.GetMatrix(ib, ie, columnindexset);
+            Assert.AreEqual(expected, actual);
+        }
+        [TestMethod]
+        [ExpectedException(typeof(IndexOutOfRangeException))]
+        public void GetSubMatrixThrowsAnIndexOutOfRangeExceptionWhenARowIndexInTheIndexArrayExceedsRowDimension()
+        {
+            var matrix = new GeneralMatrix(avals);
+            matrix.GetMatrix(badrowindexset, jb, je);
+        }
+        [TestMethod]
+        [ExpectedException(typeof(IndexOutOfRangeException))]
+        public void GetSubMatrixUsingRowIndexArrayThrowsAnIndexOutOfRangeExceptionWhenAFinalColumnIndexExceedsColumnDimension()
+        {
+            var matrix = new GeneralMatrix(avals);
+            matrix.GetMatrix(rowindexset, jb, je + matrix.ColumnDimension + 1);
+        }
+        [TestMethod]
+        public void GetSubMatrixUsingColumnStartStopAndRowIdexArrayGetsCorrectSubMatrix()
+        {
+            var matrix = new GeneralMatrix(avals);
+            var expected = new GeneralMatrix(subavals);
+            var actual = matrix.GetMatrix(rowindexset,jb,je);
+            Assert.AreEqual(expected, actual);
+        }
+        [TestMethod]
+        [ExpectedException(typeof(IndexOutOfRangeException))]
+        public void GetSubMatrixUsingRowAndColumnArraysThrowsAnIndexOutOfRangeExceptionWhenARowIndexInTheIndexArrayExceedsRowDimension()
+        {
+            var matrix = new GeneralMatrix(avals);
+            matrix.GetMatrix(badrowindexset, columnindexset);
+        }
+        [TestMethod]
+        [ExpectedException(typeof(IndexOutOfRangeException))]
+        public void GetSubMatrixUsingRowAndColumnArraysThrowsAnIndexOutOfRangeExceptionWhenAColumnIndexInTheIndexArrayExceedsColumnDimension()
+        {
+            var matrix = new GeneralMatrix(avals);
+            matrix.GetMatrix(rowindexset, badcolumnindexset);
+        }
+        [TestMethod]
+        public void GetSubMatrixUsingColumnAndRowIdexArrayGetsCorrectSubMatrix()
+        {
+            var matrix = new GeneralMatrix(avals);
+            var expected = new GeneralMatrix(subavals);
+            var actual = matrix.GetMatrix(rowindexset, columnindexset);
+            Assert.AreEqual(expected, actual);
+        }
+        [TestMethod]
+        [ExpectedException(typeof(IndexOutOfRangeException))]
+        public void SetElementWithInvalidRowIndexThrowsAnException()
+        {
+            var matrix = new GeneralMatrix(avals);
+            matrix.SetElement(matrix.RowDimension,matrix.ColumnDimension + 1, 0.0);
+        }
+        [TestMethod]
+        [ExpectedException(typeof(IndexOutOfRangeException))]
+        public void SetElementWithInvalidColumnIndexThrowsAnException()
+        {
+            var matrix = new GeneralMatrix(avals);
+            matrix.SetElement(matrix.RowDimension + 1, matrix.ColumnDimension , 0.0);
+        }
+        [TestMethod]
+        public void SetElementCorrectlySetsAMatrixElement()
+        {
+            var matrix = new GeneralMatrix(avals);
+            matrix.SetElement(ib,jb,0.0);
+            Assert.AreEqual(0.0,matrix.GetElement(ib,jb));
+        }
+        [TestMethod]
+        [ExpectedException(typeof(IndexOutOfRangeException))]
+        public void SetMatrixWithPassedInMatrixAndInvalidRowStopIndexThrowsAnException()
+        {
+            B.SetMatrix(ib, ie + B.RowDimension + 1, jb, je, M);
+        }
+        [TestMethod]
+        [ExpectedException(typeof(IndexOutOfRangeException))]
+        public void SetMatrixWithPassedInMatrixAndInvalidColumnStopIndexThrowsAnException()
+        {
+            B.SetMatrix(ib, ie, jb, je + B.ColumnDimension + 1, M);
+        }
+        [TestMethod]
+        public void SetMatrixWithPassedInMatrixCorrectlySetsTheMatrixValues()
+        {
+            B.SetMatrix(ib, ie, jb, je, M);
+            Assert.IsTrue(check(M.Subtract(B.GetMatrix(ib, ie, jb, je)), M));
+        }
+        [TestMethod]
+        [ExpectedException(typeof(IndexOutOfRangeException))]
+        public void SetMatrixWithPassedInMatrixAndColumnArrayAndInvalidRowStopIndexThrowsAnException()
+        {
+            B.SetMatrix(ib, ie + B.RowDimension + 1, columnindexset, M);
+        }
+        [TestMethod]
+        [ExpectedException(typeof(IndexOutOfRangeException))]
+        public void SetMatrixWithPassedInMatrixAndInvalidColumnArrayIndexThrowsAnException()
+        {
+            B.SetMatrix(ib, ie, badcolumnindexset, M);
+        }
+        [TestMethod]
+        public void SetMatrixWithPassedInMatrixAndColumnSetArrayCorrectlySetsTheMatrixValues()
+        {
+            B.SetMatrix(ib, ie, columnindexset, M);
+            Assert.IsTrue(check(M.Subtract(B.GetMatrix(ib, ie, columnindexset)), M));
+        }
+        [TestMethod]
+        [ExpectedException(typeof(IndexOutOfRangeException))]
+        public void SetMatrixWithPassedInMatrixAndRowArrayAndInvalidColumnStopIndexThrowsAnException()
+        {
+            B.SetMatrix(rowindexset, jb, je + B.ColumnDimension + 1, M);
+        }
+        [TestMethod]
+        [ExpectedException(typeof(IndexOutOfRangeException))]
+        public void SetMatrixWithPassedInMatrixAndInvalidRowArrayIndexThrowsAnException()
+        {
+            B.SetMatrix(badrowindexset, jb, je, M);
+        }
+        [TestMethod]
+        public void SetMatrixWithPassedInMatrixAndRowSetArrayCorrectlySetsTheMatrixValues()
+        {
+            B.SetMatrix(rowindexset, jb, je, M);
+            Assert.IsTrue(check(M.Subtract(B.GetMatrix(rowindexset, jb, je)), M));
+        }
+        [TestMethod]
+        [ExpectedException(typeof(IndexOutOfRangeException))]
+        public void SetMatrixWithPassedInMatrixAndRowArrayAndInvalidColumnArrayIndexThrowsAnException()
+        {
+            B.SetMatrix(rowindexset, badcolumnindexset, M);
+        }
+        [TestMethod]
+        [ExpectedException(typeof(IndexOutOfRangeException))]
+        public void SetMatrixWithPassedInMatrixAndColumnArrayAndInvalidRowArrayIndexThrowsAnException()
+        {
+            B.SetMatrix(badrowindexset, columnindexset, M);
+        }
+        [TestMethod]
+        public void SetMatrixWithPassedInMatrixRowAndColumnSetArrayCorrectlySetsTheMatrixValues()
+        {
+            B.SetMatrix(rowindexset, columnindexset, M);
+            Assert.IsTrue(check(M.Subtract(B.GetMatrix(rowindexset, columnindexset)), M));
         }
     }
 }
