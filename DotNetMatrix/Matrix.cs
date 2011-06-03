@@ -416,29 +416,29 @@ namespace DotNetMatrix
         /// <summary>
         ///   Get a submatrix.
         /// </summary>
-        /// <param name = "i0">  Initial row index
+        /// <param name = "startRowIndex">  Initial row index
         /// </param>
-        /// <param name = "i1">  Final row index
+        /// <param name = "endRowIndex">  Final row index
         /// </param>
         /// <param name = "j0">  Initial column index
         /// </param>
         /// <param name = "j1">  Final column index
         /// </param>
-        /// <returns>     A(i0:i1,j0:j1)
+        /// <returns>     A(startRowIndex:endRowIndex,j0:j1)
         /// </returns>
         /// <exception cref = "System.IndexOutOfRangeException">   Submatrix indices
         /// </exception>
-        public virtual GeneralMatrix GetMatrix(int i0, int i1, int j0, int j1)
+        public virtual GeneralMatrix GetMatrix(int startRowIndex, int endRowIndex, int j0, int j1)
         {
-            var x = new GeneralMatrix(i1 - i0 + 1, j1 - j0 + 1);
+            var x = new GeneralMatrix(endRowIndex - startRowIndex + 1, j1 - j0 + 1);
             double[][] b = x.Array;
             try
             {
-                for (int i = i0; i <= i1; i++)
+                for (int i = startRowIndex; i <= endRowIndex; i++)
                 {
                     for (int j = j0; j <= j1; j++)
                     {
-                        b[i - i0][j - j0] = _a[i][j];
+                        b[i - startRowIndex][j - j0] = _a[i][j];
                     }
                 }
             }
@@ -456,7 +456,7 @@ namespace DotNetMatrix
         /// </param>
         /// <param name = "c">   Array of column indices.
         /// </param>
-        /// <returns>     A(r(:),c(:))
+        /// <returns>     A(r(:),columnIndexes(:))
         /// </returns>
         /// <exception cref = "System.IndexOutOfRangeException">   Submatrix indices
         /// </exception>
@@ -484,27 +484,27 @@ namespace DotNetMatrix
         /// <summary>
         ///   Get a submatrix.
         /// </summary>
-        /// <param name = "i0">  Initial row index
+        /// <param name = "startRowIndex">  Initial row index
         /// </param>
-        /// <param name = "i1">  Final row index
+        /// <param name = "endRowIndex">  Final row index
         /// </param>
-        /// <param name = "c">   Array of column indices.
+        /// <param name = "columnIndexes">   Array of column indices.
         /// </param>
-        /// <returns>     A(i0:i1,c(:))
+        /// <returns>     A(startRowIndex:endRowIndex,columnIndexes(:))
         /// </returns>
         /// <exception cref = "System.IndexOutOfRangeException">   Submatrix indices
         /// </exception>
-        public virtual GeneralMatrix GetMatrix(int i0, int i1, int[] c)
+        public virtual GeneralMatrix GetMatrix(int startRowIndex, int endRowIndex, int[] columnIndexes)
         {
-            var x = new GeneralMatrix(i1 - i0 + 1, c.Length);
+            var x = new GeneralMatrix(endRowIndex - startRowIndex + 1, columnIndexes.Length);
             double[][] b = x.Array;
             try
             {
-                for (int i = i0; i <= i1; i++)
+                for (int i = startRowIndex; i <= endRowIndex; i++)
                 {
-                    for (int j = 0; j < c.Length; j++)
+                    for (int j = 0; j < columnIndexes.Length; j++)
                     {
-                        b[i - i0][j] = _a[i][c[j]];
+                        b[i - startRowIndex][j] = _a[i][columnIndexes[j]];
                     }
                 }
             }
@@ -576,7 +576,7 @@ namespace DotNetMatrix
         /// </param>
         /// <param name = "j1">  Final column index
         /// </param>
-        /// <param name = "x">   A(i0:i1,j0:j1)
+        /// <param name = "x">   A(startRowIndex:endRowIndex,j0:j1)
         /// </param>
         /// <exception cref = "System.IndexOutOfRangeException">  Submatrix indices
         /// </exception>
@@ -605,7 +605,7 @@ namespace DotNetMatrix
         /// </param>
         /// <param name = "c">   Array of column indices.
         /// </param>
-        /// <param name = "x">   A(r(:),c(:))
+        /// <param name = "x">   A(r(:),columnIndexes(:))
         /// </param>
         /// <exception cref = "System.IndexOutOfRangeException">  Submatrix indices
         /// </exception>
@@ -667,7 +667,7 @@ namespace DotNetMatrix
         /// </param>
         /// <param name = "c">   Array of column indices.
         /// </param>
-        /// <param name = "x">   A(i0:i1,c(:))
+        /// <param name = "x">   A(startRowIndex:endRowIndex,columnIndexes(:))
         /// </param>
         /// <exception cref = "System.IndexOutOfRangeException">  Submatrix indices
         /// </exception>
@@ -1247,6 +1247,58 @@ namespace DotNetMatrix
             return a;
         }
 
+        /// <summary>
+        ///   Generate matrix with random elements
+        /// </summary>
+        /// <param name = "m">   Number of rows.
+        /// </param>
+        /// <param name = "n">   Number of colums.
+        /// </param>
+        /// <param name="minValue">lowest value for random number</param>
+        /// <param name="maxValue">highest value for random number</param>
+        /// <returns>     An m-by-n matrix with uniformly distributed random elements.
+        /// </returns>
+        public static GeneralMatrix Random(int m, int n, double minValue, double maxValue)
+        {
+            var random = new Random();
+            var range = maxValue - minValue;
+            var a = new GeneralMatrix(m, n);
+            double[][] x = a.Array;
+            for (int i = 0; i < m; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    x[i][j] = random.NextDouble() * range + minValue;
+                }
+            }
+            return a;
+        }
+        /// <summary>
+        ///   Generate matrix with random elements
+        /// </summary>
+        /// <param name = "m">   Number of rows.
+        /// </param>
+        /// <param name = "n">   Number of colums.
+        /// </param>
+        /// <param name="minValue">lowest value for random number</param>
+        /// <param name="maxValue">highest value for random number</param>
+        /// <returns>     An m-by-n matrix with uniformly distributed random elements.
+        /// </returns>
+        public static GeneralMatrix Random(int m, int n, int minValue, int maxValue)
+        {
+            var random = new Random();
+            var range = maxValue - minValue;
+            var a = new GeneralMatrix(m, n);
+            double[][] x = a.Array;
+            for (int i = 0; i < m; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    x[i][j] = random.Next(minValue,maxValue);
+                }
+            }
+            return a;
+        }
         /// <summary>
         ///   Generate identity matrix
         /// </summary>

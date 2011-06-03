@@ -329,360 +329,360 @@ namespace DotNetMatrix.test
             //    System.Console.Out.WriteLine(e.Message);
             //}
 			
-			try
-			{
-				M = B.GetMatrix(ib, ie, badcolumnindexset);
-				errorCount = try_failure(errorCount, "GetMatrix(int,int,int[])... ", "ArrayIndexOutOfBoundsException expected but not thrown");
-			}
-			catch (System.IndexOutOfRangeException e)
-			{
-				System.Console.Out.WriteLine(e.Message);
-				try
-				{
-					M = B.GetMatrix(ib, ie + B.RowDimension + 1, columnindexset);
-					errorCount = try_failure(errorCount, "GetMatrix(int,int,int[])... ", "ArrayIndexOutOfBoundsException expected but not thrown");
-				}
-				catch (System.IndexOutOfRangeException e1)
-				{
-					try_success("GetMatrix(int,int,int[])... ArrayIndexOutOfBoundsException... ", "");
-					System.Console.Out.WriteLine(e1.Message);
-				}
-			}
-			catch (System.ArgumentException e1)
-			{
-				errorCount = try_failure(errorCount, "GetMatrix(int,int,int[])... ", "ArrayIndexOutOfBoundsException expected but not thrown");
-				System.Console.Out.WriteLine(e1.Message);
-			}
-			try
-			{
-				M = B.GetMatrix(ib, ie, columnindexset);
-				try
-				{
-					check(SUB, M);
-					try_success("GetMatrix(int,int,int[])... ", "");
-				}
-				catch (System.SystemException e)
-				{
-					errorCount = try_failure(errorCount, "GetMatrix(int,int,int[])... ", "submatrix not successfully retreived");
-					System.Console.Out.WriteLine(e.Message);
-				}
-			}
-			catch (System.IndexOutOfRangeException e)
-			{
-				errorCount = try_failure(errorCount, "GetMatrix(int,int,int[])... ", "Unexpected ArrayIndexOutOfBoundsException");
-				System.Console.Out.WriteLine(e.Message);
-			}
-			try
-			{
-				M = B.GetMatrix(badrowindexset, jb, je);
-				errorCount = try_failure(errorCount, "GetMatrix(int[],int,int)... ", "ArrayIndexOutOfBoundsException expected but not thrown");
-			}
-			catch (System.IndexOutOfRangeException e)
-			{
-				System.Console.Out.WriteLine(e.Message);
-				try
-				{
-					M = B.GetMatrix(rowindexset, jb, je + B.ColumnDimension + 1);
-					errorCount = try_failure(errorCount, "GetMatrix(int[],int,int)... ", "ArrayIndexOutOfBoundsException expected but not thrown");
-				}
-				catch (System.IndexOutOfRangeException e1)
-				{
-					try_success("GetMatrix(int[],int,int)... ArrayIndexOutOfBoundsException... ", "");
-					System.Console.Out.WriteLine(e1.Message);
-				}
-			}
-			catch (System.ArgumentException e1)
-			{
-				errorCount = try_failure(errorCount, "GetMatrix(int[],int,int)... ", "ArrayIndexOutOfBoundsException expected but not thrown");
-				System.Console.Out.WriteLine(e1.Message);
-			}
-			try
-			{
-				M = B.GetMatrix(rowindexset, jb, je);
-				try
-				{
-					check(SUB, M);
-					try_success("GetMatrix(int[],int,int)... ", "");
-				}
-				catch (System.SystemException e)
-				{
-					errorCount = try_failure(errorCount, "GetMatrix(int[],int,int)... ", "submatrix not successfully retreived");
-					System.Console.Out.WriteLine(e.Message);
-				}
-			}
-			catch (System.IndexOutOfRangeException e)
-			{
-				errorCount = try_failure(errorCount, "GetMatrix(int[],int,int)... ", "Unexpected ArrayIndexOutOfBoundsException");
-				System.Console.Out.WriteLine(e.Message);
-			}
-			try
-			{
-				M = B.GetMatrix(badrowindexset, columnindexset);
-				errorCount = try_failure(errorCount, "GetMatrix(int[],int[])... ", "ArrayIndexOutOfBoundsException expected but not thrown");
-			}
-			catch (System.IndexOutOfRangeException e)
-			{
-				System.Console.Out.WriteLine(e.Message);
-				try
-				{
-					M = B.GetMatrix(rowindexset, badcolumnindexset);
-					errorCount = try_failure(errorCount, "GetMatrix(int[],int[])... ", "ArrayIndexOutOfBoundsException expected but not thrown");
-				}
-				catch (System.IndexOutOfRangeException e1)
-				{
-					try_success("GetMatrix(int[],int[])... ArrayIndexOutOfBoundsException... ", "");
-					System.Console.Out.WriteLine(e1.Message);
-				}
-			}
-			catch (System.ArgumentException e1)
-			{
-				errorCount = try_failure(errorCount, "GetMatrix(int[],int[])... ", "ArrayIndexOutOfBoundsException expected but not thrown");
-				System.Console.Out.WriteLine(e1.Message);
-			}
-			try
-			{
-				M = B.GetMatrix(rowindexset, columnindexset);
-				try
-				{
-					check(SUB, M);
-					try_success("GetMatrix(int[],int[])... ", "");
-				}
-				catch (System.SystemException e)
-				{
-					errorCount = try_failure(errorCount, "GetMatrix(int[],int[])... ", "submatrix not successfully retreived");
-					System.Console.Out.WriteLine(e.Message);
-				}
-			}
-			catch (System.IndexOutOfRangeException e)
-			{
-				errorCount = try_failure(errorCount, "GetMatrix(int[],int[])... ", "Unexpected ArrayIndexOutOfBoundsException");
-				System.Console.Out.WriteLine(e.Message);
-			}
+            //try
+            //{
+            //    M = B.GetMatrix(ib, ie, badcolumnindexset);
+            //    errorCount = try_failure(errorCount, "GetMatrix(int,int,int[])... ", "ArrayIndexOutOfBoundsException expected but not thrown");
+            //}
+            //catch (System.IndexOutOfRangeException e)
+            //{
+            //    System.Console.Out.WriteLine(e.Message);
+            //    try
+            //    {
+            //        M = B.GetMatrix(ib, ie + B.RowDimension + 1, columnindexset);
+            //        errorCount = try_failure(errorCount, "GetMatrix(int,int,int[])... ", "ArrayIndexOutOfBoundsException expected but not thrown");
+            //    }
+            //    catch (System.IndexOutOfRangeException e1)
+            //    {
+            //        try_success("GetMatrix(int,int,int[])... ArrayIndexOutOfBoundsException... ", "");
+            //        System.Console.Out.WriteLine(e1.Message);
+            //    }
+            //}
+            //catch (System.ArgumentException e1)
+            //{
+            //    errorCount = try_failure(errorCount, "GetMatrix(int,int,int[])... ", "ArrayIndexOutOfBoundsException expected but not thrown");
+            //    System.Console.Out.WriteLine(e1.Message);
+            //}
+            //try
+            //{
+            //    M = B.GetMatrix(ib, ie, columnindexset);
+            //    try
+            //    {
+            //        check(SUB, M);
+            //        try_success("GetMatrix(int,int,int[])... ", "");
+            //    }
+            //    catch (System.SystemException e)
+            //    {
+            //        errorCount = try_failure(errorCount, "GetMatrix(int,int,int[])... ", "submatrix not successfully retreived");
+            //        System.Console.Out.WriteLine(e.Message);
+            //    }
+            //}
+            //catch (System.IndexOutOfRangeException e)
+            //{
+            //    errorCount = try_failure(errorCount, "GetMatrix(int,int,int[])... ", "Unexpected ArrayIndexOutOfBoundsException");
+            //    System.Console.Out.WriteLine(e.Message);
+            //}
+            //try
+            //{
+            //    M = B.GetMatrix(badrowindexset, jb, je);
+            //    errorCount = try_failure(errorCount, "GetMatrix(int[],int,int)... ", "ArrayIndexOutOfBoundsException expected but not thrown");
+            //}
+            //catch (System.IndexOutOfRangeException e)
+            //{
+            //    System.Console.Out.WriteLine(e.Message);
+            //    try
+            //    {
+            //        M = B.GetMatrix(rowindexset, jb, je + B.ColumnDimension + 1);
+            //        errorCount = try_failure(errorCount, "GetMatrix(int[],int,int)... ", "ArrayIndexOutOfBoundsException expected but not thrown");
+            //    }
+            //    catch (System.IndexOutOfRangeException e1)
+            //    {
+            //        try_success("GetMatrix(int[],int,int)... ArrayIndexOutOfBoundsException... ", "");
+            //        System.Console.Out.WriteLine(e1.Message);
+            //    }
+            //}
+            //catch (System.ArgumentException e1)
+            //{
+            //    errorCount = try_failure(errorCount, "GetMatrix(int[],int,int)... ", "ArrayIndexOutOfBoundsException expected but not thrown");
+            //    System.Console.Out.WriteLine(e1.Message);
+            //}
+            //try
+            //{
+            //    M = B.GetMatrix(rowindexset, jb, je);
+            //    try
+            //    {
+            //        check(SUB, M);
+            //        try_success("GetMatrix(int[],int,int)... ", "");
+            //    }
+            //    catch (System.SystemException e)
+            //    {
+            //        errorCount = try_failure(errorCount, "GetMatrix(int[],int,int)... ", "submatrix not successfully retreived");
+            //        System.Console.Out.WriteLine(e.Message);
+            //    }
+            //}
+            //catch (System.IndexOutOfRangeException e)
+            //{
+            //    errorCount = try_failure(errorCount, "GetMatrix(int[],int,int)... ", "Unexpected ArrayIndexOutOfBoundsException");
+            //    System.Console.Out.WriteLine(e.Message);
+            //}
+            //try
+            //{
+            //    M = B.GetMatrix(badrowindexset, columnindexset);
+            //    errorCount = try_failure(errorCount, "GetMatrix(int[],int[])... ", "ArrayIndexOutOfBoundsException expected but not thrown");
+            //}
+            //catch (System.IndexOutOfRangeException e)
+            //{
+            //    System.Console.Out.WriteLine(e.Message);
+            //    try
+            //    {
+            //        M = B.GetMatrix(rowindexset, badcolumnindexset);
+            //        errorCount = try_failure(errorCount, "GetMatrix(int[],int[])... ", "ArrayIndexOutOfBoundsException expected but not thrown");
+            //    }
+            //    catch (System.IndexOutOfRangeException e1)
+            //    {
+            //        try_success("GetMatrix(int[],int[])... ArrayIndexOutOfBoundsException... ", "");
+            //        System.Console.Out.WriteLine(e1.Message);
+            //    }
+            //}
+            //catch (System.ArgumentException e1)
+            //{
+            //    errorCount = try_failure(errorCount, "GetMatrix(int[],int[])... ", "ArrayIndexOutOfBoundsException expected but not thrown");
+            //    System.Console.Out.WriteLine(e1.Message);
+            //}
+            //try
+            //{
+            //    M = B.GetMatrix(rowindexset, columnindexset);
+            //    try
+            //    {
+            //        check(SUB, M);
+            //        try_success("GetMatrix(int[],int[])... ", "");
+            //    }
+            //    catch (System.SystemException e)
+            //    {
+            //        errorCount = try_failure(errorCount, "GetMatrix(int[],int[])... ", "submatrix not successfully retreived");
+            //        System.Console.Out.WriteLine(e.Message);
+            //    }
+            //}
+            //catch (System.IndexOutOfRangeException e)
+            //{
+            //    errorCount = try_failure(errorCount, "GetMatrix(int[],int[])... ", "Unexpected ArrayIndexOutOfBoundsException");
+            //    System.Console.Out.WriteLine(e.Message);
+            //}
 			
 			// SUMMARY:Various set methods:
 			// 
 			// 
 			
-			try
-			{
-				B.SetElement(B.RowDimension, B.ColumnDimension - 1, 0.0);
-				errorCount = try_failure(errorCount, "set(int,int,double)... ", "OutOfBoundsException expected but not thrown");
-			}
-			catch (System.IndexOutOfRangeException e)
-			{
-				System.Console.Out.WriteLine(e.Message);
-				try
-				{
-					B.SetElement(B.RowDimension - 1, B.ColumnDimension, 0.0);
-					errorCount = try_failure(errorCount, "set(int,int,double)... ", "OutOfBoundsException expected but not thrown");
-				}
-				catch (System.IndexOutOfRangeException e1)
-				{
-					try_success("set(int,int,double)... OutofBoundsException... ", "");
-					System.Console.Out.WriteLine(e1.Message);
-				}
-			}
-			catch (System.ArgumentException e1)
-			{
-				errorCount = try_failure(errorCount, "set(int,int,double)... ", "OutOfBoundsException expected but not thrown");
-				System.Console.Out.WriteLine(e1.Message);
-			}
-			try
-			{
-				B.SetElement(ib, jb, 0.0);
-				tmp = B.GetElement(ib, jb);
-				try
-				{
-					check(tmp, 0.0);
-					try_success("set(int,int,double)... ", "");
-				}
-				catch (System.SystemException e)
-				{
-					errorCount = try_failure(errorCount, "set(int,int,double)... ", "GeneralMatrix element not successfully set");
-					System.Console.Out.WriteLine(e.Message);
-				}
-			}
-			catch (System.IndexOutOfRangeException e1)
-			{
-				errorCount = try_failure(errorCount, "set(int,int,double)... ", "Unexpected ArrayIndexOutOfBoundsException");
-				System.Console.Out.WriteLine(e1.Message);
-			}
+            //try
+            //{
+            //    B.SetElement(B.RowDimension, B.ColumnDimension - 1, 0.0);
+            //    errorCount = try_failure(errorCount, "set(int,int,double)... ", "OutOfBoundsException expected but not thrown");
+            //}
+            //catch (System.IndexOutOfRangeException e)
+            //{
+            //    System.Console.Out.WriteLine(e.Message);
+            //    try
+            //    {
+            //        B.SetElement(B.RowDimension - 1, B.ColumnDimension, 0.0);
+            //        errorCount = try_failure(errorCount, "set(int,int,double)... ", "OutOfBoundsException expected but not thrown");
+            //    }
+            //    catch (System.IndexOutOfRangeException e1)
+            //    {
+            //        try_success("set(int,int,double)... OutofBoundsException... ", "");
+            //        System.Console.Out.WriteLine(e1.Message);
+            //    }
+            //}
+            //catch (System.ArgumentException e1)
+            //{
+            //    errorCount = try_failure(errorCount, "set(int,int,double)... ", "OutOfBoundsException expected but not thrown");
+            //    System.Console.Out.WriteLine(e1.Message);
+            //}
+            //try
+            //{
+            //    B.SetElement(ib, jb, 0.0);
+            //    tmp = B.GetElement(ib, jb);
+            //    try
+            //    {
+            //        check(tmp, 0.0);
+            //        try_success("set(int,int,double)... ", "");
+            //    }
+            //    catch (System.SystemException e)
+            //    {
+            //        errorCount = try_failure(errorCount, "set(int,int,double)... ", "GeneralMatrix element not successfully set");
+            //        System.Console.Out.WriteLine(e.Message);
+            //    }
+            //}
+            //catch (System.IndexOutOfRangeException e1)
+            //{
+            //    errorCount = try_failure(errorCount, "set(int,int,double)... ", "Unexpected ArrayIndexOutOfBoundsException");
+            //    System.Console.Out.WriteLine(e1.Message);
+            //}
 			M = new GeneralMatrix(2, 3, 0.0);
-			try
-			{
-				B.SetMatrix(ib, ie + B.RowDimension + 1, jb, je, M);
-				errorCount = try_failure(errorCount, "SetMatrix(int,int,int,int,GeneralMatrix)... ", "ArrayIndexOutOfBoundsException expected but not thrown");
-			}
-			catch (System.IndexOutOfRangeException e)
-			{
-				System.Console.Out.WriteLine(e.Message);
-				try
-				{
-					B.SetMatrix(ib, ie, jb, je + B.ColumnDimension + 1, M);
-					errorCount = try_failure(errorCount, "SetMatrix(int,int,int,int,GeneralMatrix)... ", "ArrayIndexOutOfBoundsException expected but not thrown");
-				}
-				catch (System.IndexOutOfRangeException e1)
-				{
-					try_success("SetMatrix(int,int,int,int,GeneralMatrix)... ArrayIndexOutOfBoundsException... ", "");
-					System.Console.Out.WriteLine(e1.Message);
-				}
-			}
-			catch (System.ArgumentException e1)
-			{
-				errorCount = try_failure(errorCount, "SetMatrix(int,int,int,int,GeneralMatrix)... ", "ArrayIndexOutOfBoundsException expected but not thrown");
-				System.Console.Out.WriteLine(e1.Message);
-			}
-			try
-			{
-				B.SetMatrix(ib, ie, jb, je, M);
-				try
-				{
-					check(M.Subtract(B.GetMatrix(ib, ie, jb, je)), M);
-					try_success("SetMatrix(int,int,int,int,GeneralMatrix)... ", "");
-				}
-				catch (System.SystemException e)
-				{
-					errorCount = try_failure(errorCount, "SetMatrix(int,int,int,int,GeneralMatrix)... ", "submatrix not successfully set");
-					System.Console.Out.WriteLine(e.Message);
-				}
-				B.SetMatrix(ib, ie, jb, je, SUB);
-			}
-			catch (System.IndexOutOfRangeException e1)
-			{
-				errorCount = try_failure(errorCount, "SetMatrix(int,int,int,int,GeneralMatrix)... ", "Unexpected ArrayIndexOutOfBoundsException");
-				System.Console.Out.WriteLine(e1.Message);
-			}
-			try
-			{
-				B.SetMatrix(ib, ie + B.RowDimension + 1, columnindexset, M);
-				errorCount = try_failure(errorCount, "SetMatrix(int,int,int[],GeneralMatrix)... ", "ArrayIndexOutOfBoundsException expected but not thrown");
-			}
-			catch (System.IndexOutOfRangeException e)
-			{
-				System.Console.Out.WriteLine(e.Message);
-				try
-				{
-					B.SetMatrix(ib, ie, badcolumnindexset, M);
-					errorCount = try_failure(errorCount, "SetMatrix(int,int,int[],GeneralMatrix)... ", "ArrayIndexOutOfBoundsException expected but not thrown");
-				}
-				catch (System.IndexOutOfRangeException e1)
-				{
-					try_success("SetMatrix(int,int,int[],GeneralMatrix)... ArrayIndexOutOfBoundsException... ", "");
-					System.Console.Out.WriteLine(e1.Message);
-				}
-			}
-			catch (System.ArgumentException e1)
-			{
-				errorCount = try_failure(errorCount, "SetMatrix(int,int,int[],GeneralMatrix)... ", "ArrayIndexOutOfBoundsException expected but not thrown");
-				System.Console.Out.WriteLine(e1.Message);
-			}
-			try
-			{
-				B.SetMatrix(ib, ie, columnindexset, M);
-				try
-				{
-					check(M.Subtract(B.GetMatrix(ib, ie, columnindexset)), M);
-					try_success("SetMatrix(int,int,int[],GeneralMatrix)... ", "");
-				}
-				catch (System.SystemException e)
-				{
-					errorCount = try_failure(errorCount, "SetMatrix(int,int,int[],GeneralMatrix)... ", "submatrix not successfully set");
-					System.Console.Out.WriteLine(e.Message);
-				}
-				B.SetMatrix(ib, ie, jb, je, SUB);
-			}
-			catch (System.IndexOutOfRangeException e1)
-			{
-				errorCount = try_failure(errorCount, "SetMatrix(int,int,int[],GeneralMatrix)... ", "Unexpected ArrayIndexOutOfBoundsException");
-				System.Console.Out.WriteLine(e1.Message);
-			}
-			try
-			{
-				B.SetMatrix(rowindexset, jb, je + B.ColumnDimension + 1, M);
-				errorCount = try_failure(errorCount, "SetMatrix(int[],int,int,GeneralMatrix)... ", "ArrayIndexOutOfBoundsException expected but not thrown");
-			}
-			catch (System.IndexOutOfRangeException e)
-			{
-				System.Console.Out.WriteLine(e.Message);
-				try
-				{
-					B.SetMatrix(badrowindexset, jb, je, M);
-					errorCount = try_failure(errorCount, "SetMatrix(int[],int,int,GeneralMatrix)... ", "ArrayIndexOutOfBoundsException expected but not thrown");
-				}
-				catch (System.IndexOutOfRangeException e1)
-				{
-					try_success("SetMatrix(int[],int,int,GeneralMatrix)... ArrayIndexOutOfBoundsException... ", "");
-					System.Console.Out.WriteLine(e1.Message);
-				}
-			}
-			catch (System.ArgumentException e1)
-			{
-				errorCount = try_failure(errorCount, "SetMatrix(int[],int,int,GeneralMatrix)... ", "ArrayIndexOutOfBoundsException expected but not thrown");
-				System.Console.Out.WriteLine(e1.Message);
-			}
-			try
-			{
-				B.SetMatrix(rowindexset, jb, je, M);
-				try
-				{
-					check(M.Subtract(B.GetMatrix(rowindexset, jb, je)), M);
-					try_success("SetMatrix(int[],int,int,GeneralMatrix)... ", "");
-				}
-				catch (System.SystemException e)
-				{
-					errorCount = try_failure(errorCount, "SetMatrix(int[],int,int,GeneralMatrix)... ", "submatrix not successfully set");
-					System.Console.Out.WriteLine(e.Message);
-				}
-				B.SetMatrix(ib, ie, jb, je, SUB);
-			}
-			catch (System.IndexOutOfRangeException e1)
-			{
-				errorCount = try_failure(errorCount, "SetMatrix(int[],int,int,GeneralMatrix)... ", "Unexpected ArrayIndexOutOfBoundsException");
-				System.Console.Out.WriteLine(e1.Message);
-			}
-			try
-			{
-				B.SetMatrix(rowindexset, badcolumnindexset, M);
-				errorCount = try_failure(errorCount, "SetMatrix(int[],int[],GeneralMatrix)... ", "ArrayIndexOutOfBoundsException expected but not thrown");
-			}
-			catch (System.IndexOutOfRangeException e)
-			{
-				System.Console.Out.WriteLine(e.Message);
-				try
-				{
-					B.SetMatrix(badrowindexset, columnindexset, M);
-					errorCount = try_failure(errorCount, "SetMatrix(int[],int[],GeneralMatrix)... ", "ArrayIndexOutOfBoundsException expected but not thrown");
-				}
-				catch (System.IndexOutOfRangeException e1)
-				{
-					try_success("SetMatrix(int[],int[],GeneralMatrix)... ArrayIndexOutOfBoundsException... ", "");
-					System.Console.Out.WriteLine(e1.Message);
-				}
-			}
-			catch (System.ArgumentException e1)
-			{
-				errorCount = try_failure(errorCount, "SetMatrix(int[],int[],GeneralMatrix)... ", "ArrayIndexOutOfBoundsException expected but not thrown");
-				System.Console.Out.WriteLine(e1.Message);
-			}
-			try
-			{
-				B.SetMatrix(rowindexset, columnindexset, M);
-				try
-				{
-					check(M.Subtract(B.GetMatrix(rowindexset, columnindexset)), M);
-					try_success("SetMatrix(int[],int[],GeneralMatrix)... ", "");
-				}
-				catch (System.SystemException e)
-				{
-					errorCount = try_failure(errorCount, "SetMatrix(int[],int[],GeneralMatrix)... ", "submatrix not successfully set");
-					System.Console.Out.WriteLine(e.Message);
-				}
-			}
-			catch (System.IndexOutOfRangeException e1)
-			{
-				errorCount = try_failure(errorCount, "SetMatrix(int[],int[],GeneralMatrix)... ", "Unexpected ArrayIndexOutOfBoundsException");
-				System.Console.Out.WriteLine(e1.Message);
-			}
+            //try
+            //{
+            //    B.SetMatrix(ib, ie + B.RowDimension + 1, jb, je, M);
+            //    errorCount = try_failure(errorCount, "SetMatrix(int,int,int,int,GeneralMatrix)... ", "ArrayIndexOutOfBoundsException expected but not thrown");
+            //}
+            //catch (System.IndexOutOfRangeException e)
+            //{
+            //    System.Console.Out.WriteLine(e.Message);
+            //    try
+            //    {
+            //        B.SetMatrix(ib, ie, jb, je + B.ColumnDimension + 1, M);
+            //        errorCount = try_failure(errorCount, "SetMatrix(int,int,int,int,GeneralMatrix)... ", "ArrayIndexOutOfBoundsException expected but not thrown");
+            //    }
+            //    catch (System.IndexOutOfRangeException e1)
+            //    {
+            //        try_success("SetMatrix(int,int,int,int,GeneralMatrix)... ArrayIndexOutOfBoundsException... ", "");
+            //        System.Console.Out.WriteLine(e1.Message);
+            //    }
+            //}
+            //catch (System.ArgumentException e1)
+            //{
+            //    errorCount = try_failure(errorCount, "SetMatrix(int,int,int,int,GeneralMatrix)... ", "ArrayIndexOutOfBoundsException expected but not thrown");
+            //    System.Console.Out.WriteLine(e1.Message);
+            //}
+            //try
+            //{
+            //    B.SetMatrix(ib, ie, jb, je, M);
+            //    try
+            //    {
+            //        check(M.Subtract(B.GetMatrix(ib, ie, jb, je)), M);
+            //        try_success("SetMatrix(int,int,int,int,GeneralMatrix)... ", "");
+            //    }
+            //    catch (System.SystemException e)
+            //    {
+            //        errorCount = try_failure(errorCount, "SetMatrix(int,int,int,int,GeneralMatrix)... ", "submatrix not successfully set");
+            //        System.Console.Out.WriteLine(e.Message);
+            //    }
+            //    B.SetMatrix(ib, ie, jb, je, SUB);
+            //}
+            //catch (System.IndexOutOfRangeException e1)
+            //{
+            //    errorCount = try_failure(errorCount, "SetMatrix(int,int,int,int,GeneralMatrix)... ", "Unexpected ArrayIndexOutOfBoundsException");
+            //    System.Console.Out.WriteLine(e1.Message);
+            //}
+            //try
+            //{
+            //    B.SetMatrix(ib, ie + B.RowDimension + 1, columnindexset, M);
+            //    errorCount = try_failure(errorCount, "SetMatrix(int,int,int[],GeneralMatrix)... ", "ArrayIndexOutOfBoundsException expected but not thrown");
+            //}
+            //catch (System.IndexOutOfRangeException e)
+            //{
+            //    System.Console.Out.WriteLine(e.Message);
+            //    try
+            //    {
+            //        B.SetMatrix(ib, ie, badcolumnindexset, M);
+            //        errorCount = try_failure(errorCount, "SetMatrix(int,int,int[],GeneralMatrix)... ", "ArrayIndexOutOfBoundsException expected but not thrown");
+            //    }
+            //    catch (System.IndexOutOfRangeException e1)
+            //    {
+            //        try_success("SetMatrix(int,int,int[],GeneralMatrix)... ArrayIndexOutOfBoundsException... ", "");
+            //        System.Console.Out.WriteLine(e1.Message);
+            //    }
+            //}
+            //catch (System.ArgumentException e1)
+            //{
+            //    errorCount = try_failure(errorCount, "SetMatrix(int,int,int[],GeneralMatrix)... ", "ArrayIndexOutOfBoundsException expected but not thrown");
+            //    System.Console.Out.WriteLine(e1.Message);
+            //}
+            //try
+            //{
+            //    B.SetMatrix(ib, ie, columnindexset, M);
+            //    try
+            //    {
+            //        check(M.Subtract(B.GetMatrix(ib, ie, columnindexset)), M);
+            //        try_success("SetMatrix(int,int,int[],GeneralMatrix)... ", "");
+            //    }
+            //    catch (System.SystemException e)
+            //    {
+            //        errorCount = try_failure(errorCount, "SetMatrix(int,int,int[],GeneralMatrix)... ", "submatrix not successfully set");
+            //        System.Console.Out.WriteLine(e.Message);
+            //    }
+            //    B.SetMatrix(ib, ie, jb, je, SUB);
+            //}
+            //catch (System.IndexOutOfRangeException e1)
+            //{
+            //    errorCount = try_failure(errorCount, "SetMatrix(int,int,int[],GeneralMatrix)... ", "Unexpected ArrayIndexOutOfBoundsException");
+            //    System.Console.Out.WriteLine(e1.Message);
+            //}
+            //try
+            //{
+            //    B.SetMatrix(rowindexset, jb, je + B.ColumnDimension + 1, M);
+            //    errorCount = try_failure(errorCount, "SetMatrix(int[],int,int,GeneralMatrix)... ", "ArrayIndexOutOfBoundsException expected but not thrown");
+            //}
+            //catch (System.IndexOutOfRangeException e)
+            //{
+            //    System.Console.Out.WriteLine(e.Message);
+            //    try
+            //    {
+            //        B.SetMatrix(badrowindexset, jb, je, M);
+            //        errorCount = try_failure(errorCount, "SetMatrix(int[],int,int,GeneralMatrix)... ", "ArrayIndexOutOfBoundsException expected but not thrown");
+            //    }
+            //    catch (System.IndexOutOfRangeException e1)
+            //    {
+            //        try_success("SetMatrix(int[],int,int,GeneralMatrix)... ArrayIndexOutOfBoundsException... ", "");
+            //        System.Console.Out.WriteLine(e1.Message);
+            //    }
+            //}
+            //catch (System.ArgumentException e1)
+            //{
+            //    errorCount = try_failure(errorCount, "SetMatrix(int[],int,int,GeneralMatrix)... ", "ArrayIndexOutOfBoundsException expected but not thrown");
+            //    System.Console.Out.WriteLine(e1.Message);
+            //}
+            //try
+            //{
+            //    B.SetMatrix(rowindexset, jb, je, M);
+            //    try
+            //    {
+            //        check(M.Subtract(B.GetMatrix(rowindexset, jb, je)), M);
+            //        try_success("SetMatrix(int[],int,int,GeneralMatrix)... ", "");
+            //    }
+            //    catch (System.SystemException e)
+            //    {
+            //        errorCount = try_failure(errorCount, "SetMatrix(int[],int,int,GeneralMatrix)... ", "submatrix not successfully set");
+            //        System.Console.Out.WriteLine(e.Message);
+            //    }
+            //    B.SetMatrix(ib, ie, jb, je, SUB);
+            //}
+            //catch (System.IndexOutOfRangeException e1)
+            //{
+            //    errorCount = try_failure(errorCount, "SetMatrix(int[],int,int,GeneralMatrix)... ", "Unexpected ArrayIndexOutOfBoundsException");
+            //    System.Console.Out.WriteLine(e1.Message);
+            //}
+            //try
+            //{
+            //    B.SetMatrix(rowindexset, badcolumnindexset, M);
+            //    errorCount = try_failure(errorCount, "SetMatrix(int[],int[],GeneralMatrix)... ", "ArrayIndexOutOfBoundsException expected but not thrown");
+            //}
+            //catch (System.IndexOutOfRangeException e)
+            //{
+            //    System.Console.Out.WriteLine(e.Message);
+            //    try
+            //    {
+            //        B.SetMatrix(badrowindexset, columnindexset, M);
+            //        errorCount = try_failure(errorCount, "SetMatrix(int[],int[],GeneralMatrix)... ", "ArrayIndexOutOfBoundsException expected but not thrown");
+            //    }
+            //    catch (System.IndexOutOfRangeException e1)
+            //    {
+            //        try_success("SetMatrix(int[],int[],GeneralMatrix)... ArrayIndexOutOfBoundsException... ", "");
+            //        System.Console.Out.WriteLine(e1.Message);
+            //    }
+            //}
+            //catch (System.ArgumentException e1)
+            //{
+            //    errorCount = try_failure(errorCount, "SetMatrix(int[],int[],GeneralMatrix)... ", "ArrayIndexOutOfBoundsException expected but not thrown");
+            //    System.Console.Out.WriteLine(e1.Message);
+            //}
+            //try
+            //{
+            //    B.SetMatrix(rowindexset, columnindexset, M);
+            //    try
+            //    {
+            //        check(M.Subtract(B.GetMatrix(rowindexset, columnindexset)), M);
+            //        try_success("SetMatrix(int[],int[],GeneralMatrix)... ", "");
+            //    }
+            //    catch (System.SystemException e)
+            //    {
+            //        errorCount = try_failure(errorCount, "SetMatrix(int[],int[],GeneralMatrix)... ", "submatrix not successfully set");
+            //        System.Console.Out.WriteLine(e.Message);
+            //    }
+            //}
+            //catch (System.IndexOutOfRangeException e1)
+            //{
+            //    errorCount = try_failure(errorCount, "SetMatrix(int[],int[],GeneralMatrix)... ", "Unexpected ArrayIndexOutOfBoundsException");
+            //    System.Console.Out.WriteLine(e1.Message);
+            //}
 			
 			// SUMMARY:Array-like methods:
 			// Subtract
@@ -703,189 +703,189 @@ namespace DotNetMatrix.test
 			S = new GeneralMatrix(columnwise, nonconformld);
 			R = GeneralMatrix.Random(A.RowDimension, A.ColumnDimension);
 			A = R;
-			try
-			{
-				S = A.Subtract(S);
-				errorCount = try_failure(errorCount, "Subtract conformance check... ", "nonconformance not raised");
-			}
-			catch (System.ArgumentException e)
-			{
-				try_success("Subtract conformance check... ", "");
-				System.Console.Out.WriteLine(e.Message);
-			}
-			if (A.Subtract(R).Norm1() != 0.0)
-			{
-				errorCount = try_failure(errorCount, "Subtract... ", "(difference of identical Matrices is nonzero,\nSubsequent use of Subtract should be suspect)");
-			}
-			else
-			{
-				try_success("Subtract... ", "");
-			}
+            //try
+            //{
+            //    S = A.Subtract(S);
+            //    errorCount = try_failure(errorCount, "Subtract conformance check... ", "nonconformance not raised");
+            //}
+            //catch (System.ArgumentException e)
+            //{
+            //    try_success("Subtract conformance check... ", "");
+            //    System.Console.Out.WriteLine(e.Message);
+            //}
+            //if (A.Subtract(R).Norm1() != 0.0)
+            //{
+            //    errorCount = try_failure(errorCount, "Subtract... ", "(difference of identical Matrices is nonzero,\nSubsequent use of Subtract should be suspect)");
+            //}
+            //else
+            //{
+            //    try_success("Subtract... ", "");
+            //}
 			A = R.Copy();
 			A.SubtractEquals(R);
 			Z = new GeneralMatrix(A.RowDimension, A.ColumnDimension);
-			try
-			{
-				A.SubtractEquals(S);
-				errorCount = try_failure(errorCount, "SubtractEquals conformance check... ", "nonconformance not raised");
-			}
-			catch (System.ArgumentException e)
-			{
-				try_success("SubtractEquals conformance check... ", "");
-				System.Console.Out.WriteLine(e.Message);
-			}
-			if (A.Subtract(Z).Norm1() != 0.0)
-			{
-				errorCount = try_failure(errorCount, "SubtractEquals... ", "(difference of identical Matrices is nonzero,\nSubsequent use of Subtract should be suspect)");
-			}
-			else
-			{
-				try_success("SubtractEquals... ", "");
-			}
+            //try
+            //{
+            //    A.SubtractEquals(S);
+            //    errorCount = try_failure(errorCount, "SubtractEquals conformance check... ", "nonconformance not raised");
+            //}
+            //catch (System.ArgumentException e)
+            //{
+            //    try_success("SubtractEquals conformance check... ", "");
+            //    System.Console.Out.WriteLine(e.Message);
+            //}
+            //if (A.Subtract(Z).Norm1() != 0.0)
+            //{
+            //    errorCount = try_failure(errorCount, "SubtractEquals... ", "(difference of identical Matrices is nonzero,\nSubsequent use of Subtract should be suspect)");
+            //}
+            //else
+            //{
+            //    try_success("SubtractEquals... ", "");
+            //}
 			
 			A = R.Copy();
 			B = GeneralMatrix.Random(A.RowDimension, A.ColumnDimension);
 			C = A.Subtract(B);
-			try
-			{
-				S = A.Add(S);
-				errorCount = try_failure(errorCount, "Add conformance check... ", "nonconformance not raised");
-			}
-			catch (System.ArgumentException e)
-			{
-				try_success("Add conformance check... ", "");
-				System.Console.Out.WriteLine(e.Message);
-			}
-			try
-			{
-				check(C.Add(B), A);
-				try_success("Add... ", "");
-			}
-			catch (System.SystemException e)
-			{
-				errorCount = try_failure(errorCount, "Add... ", "(C = A - B, but C + B != A)");
-				System.Console.Out.WriteLine(e.Message);
-			}
+            //try
+            //{
+            //    S = A.Add(S);
+            //    errorCount = try_failure(errorCount, "Add conformance check... ", "nonconformance not raised");
+            //}
+            //catch (System.ArgumentException e)
+            //{
+            //    try_success("Add conformance check... ", "");
+            //    System.Console.Out.WriteLine(e.Message);
+            //}
+            //try
+            //{
+            //    check(C.Add(B), A);
+            //    try_success("Add... ", "");
+            //}
+            //catch (System.SystemException e)
+            //{
+            //    errorCount = try_failure(errorCount, "Add... ", "(C = A - B, but C + B != A)");
+            //    System.Console.Out.WriteLine(e.Message);
+            //}
 			C = A.Subtract(B);
 			C.AddEquals(B);
-			try
-			{
-				A.AddEquals(S);
-				errorCount = try_failure(errorCount, "AddEquals conformance check... ", "nonconformance not raised");
-			}
-			catch (System.ArgumentException e)
-			{
-				try_success("AddEquals conformance check... ", "");
-				System.Console.Out.WriteLine(e.Message);
-			}
-			try
-			{
-				check(C, A);
-				try_success("AddEquals... ", "");
-			}
-			catch (System.SystemException e)
-			{
-				errorCount = try_failure(errorCount, "AddEquals... ", "(C = A - B, but C = C + B != A)");
-				System.Console.Out.WriteLine(e.Message);
-			}
-			A = R.UnaryMinus();
-			try
-			{
-				check(A.Add(R), Z);
-				try_success("UnaryMinus... ", "");
-			}
-			catch (System.SystemException e)
-			{
-				errorCount = try_failure(errorCount, "uminus... ", "(-A + A != zeros)");
-				System.Console.Out.WriteLine(e.Message);
-			}
+            //try
+            //{
+            //    A.AddEquals(S);
+            //    errorCount = try_failure(errorCount, "AddEquals conformance check... ", "nonconformance not raised");
+            //}
+            //catch (System.ArgumentException e)
+            //{
+            //    try_success("AddEquals conformance check... ", "");
+            //    System.Console.Out.WriteLine(e.Message);
+            //}
+            //try
+            //{
+            //    check(C, A);
+            //    try_success("AddEquals... ", "");
+            //}
+            //catch (System.SystemException e)
+            //{
+            //    errorCount = try_failure(errorCount, "AddEquals... ", "(C = A - B, but C = C + B != A)");
+            //    System.Console.Out.WriteLine(e.Message);
+            //}
+            //A = R.UnaryMinus();
+            //try
+            //{
+            //    check(A.Add(R), Z);
+            //    try_success("UnaryMinus... ", "");
+            //}
+            //catch (System.SystemException e)
+            //{
+            //    errorCount = try_failure(errorCount, "uminus... ", "(-A + A != zeros)");
+            //    System.Console.Out.WriteLine(e.Message);
+            //}
 			A = R.Copy();
 			O = new GeneralMatrix(A.RowDimension, A.ColumnDimension, 1.0);
 			C = A.ArrayLeftDivide(R);
-			try
-			{
-				S = A.ArrayLeftDivide(S);
-				errorCount = try_failure(errorCount, "ArrayLeftDivide conformance check... ", "nonconformance not raised");
-			}
-			catch (System.ArgumentException e)
-			{
-				try_success("ArrayLeftDivide conformance check... ", "");
-				System.Console.Out.WriteLine(e.Message);
-			}
-			try
-			{
-				check(C, O);
-				try_success("ArrayLeftDivide... ", "");
-			}
-			catch (System.SystemException e)
-			{
-				errorCount = try_failure(errorCount, "ArrayLeftDivide... ", "(M.\\M != ones)");
-				System.Console.Out.WriteLine(e.Message);
-			}
-			try
-			{
-				A.ArrayLeftDivideEquals(S);
-				errorCount = try_failure(errorCount, "ArrayLeftDivideEquals conformance check... ", "nonconformance not raised");
-			}
-			catch (System.ArgumentException e)
-			{
-				try_success("ArrayLeftDivideEquals conformance check... ", "");
-				System.Console.Out.WriteLine(e.Message);
-			}
-			A.ArrayLeftDivideEquals(R);
-			try
-			{
-				check(A, O);
-				try_success("ArrayLeftDivideEquals... ", "");
-			}
-			catch (System.SystemException e)
-			{
-				errorCount = try_failure(errorCount, "ArrayLeftDivideEquals... ", "(M.\\M != ones)");
-				System.Console.Out.WriteLine(e.Message);
-			}
-			A = R.Copy();
-			try
-			{
-				A.ArrayRightDivide(S);
-				errorCount = try_failure(errorCount, "ArrayRightDivide conformance check... ", "nonconformance not raised");
-			}
-			catch (System.ArgumentException e)
-			{
-				try_success("ArrayRightDivide conformance check... ", "");
-				System.Console.Out.WriteLine(e.Message);
-			}
-			C = A.ArrayRightDivide(R);
-			try
-			{
-				check(C, O);
-				try_success("ArrayRightDivide... ", "");
-			}
-			catch (System.SystemException e)
-			{
-				errorCount = try_failure(errorCount, "ArrayRightDivide... ", "(M./M != ones)");
-				System.Console.Out.WriteLine(e.Message);
-			}
-			try
-			{
-				A.ArrayRightDivideEquals(S);
-				errorCount = try_failure(errorCount, "ArrayRightDivideEquals conformance check... ", "nonconformance not raised");
-			}
-			catch (System.ArgumentException e)
-			{
-				try_success("ArrayRightDivideEquals conformance check... ", "");
-				System.Console.Out.WriteLine(e.Message);
-			}
-			A.ArrayRightDivideEquals(R);
-			try
-			{
-				check(A, O);
-				try_success("ArrayRightDivideEquals... ", "");
-			}
-			catch (System.SystemException e)
-			{
-				errorCount = try_failure(errorCount, "ArrayRightDivideEquals... ", "(M./M != ones)");
-				System.Console.Out.WriteLine(e.Message);
-			}
+            //try
+            //{
+            //    S = A.ArrayLeftDivide(S);
+            //    errorCount = try_failure(errorCount, "ArrayLeftDivide conformance check... ", "nonconformance not raised");
+            //}
+            //catch (System.ArgumentException e)
+            //{
+            //    try_success("ArrayLeftDivide conformance check... ", "");
+            //    System.Console.Out.WriteLine(e.Message);
+            //}
+            //try
+            //{
+            //    check(C, O);
+            //    try_success("ArrayLeftDivide... ", "");
+            //}
+            //catch (System.SystemException e)
+            //{
+            //    errorCount = try_failure(errorCount, "ArrayLeftDivide... ", "(M.\\M != ones)");
+            //    System.Console.Out.WriteLine(e.Message);
+            //}
+            //try
+            //{
+            //    A.ArrayLeftDivideEquals(S);
+            //    errorCount = try_failure(errorCount, "ArrayLeftDivideEquals conformance check... ", "nonconformance not raised");
+            //}
+            //catch (System.ArgumentException e)
+            //{
+            //    try_success("ArrayLeftDivideEquals conformance check... ", "");
+            //    System.Console.Out.WriteLine(e.Message);
+            //}
+            //A.ArrayLeftDivideEquals(R);
+            //try
+            //{
+            //    check(A, O);
+            //    try_success("ArrayLeftDivideEquals... ", "");
+            //}
+            //catch (System.SystemException e)
+            //{
+            //    errorCount = try_failure(errorCount, "ArrayLeftDivideEquals... ", "(M.\\M != ones)");
+            //    System.Console.Out.WriteLine(e.Message);
+            //}
+			//A = R.Copy();
+            //try
+            //{
+            //    A.ArrayRightDivide(S);
+            //    errorCount = try_failure(errorCount, "ArrayRightDivide conformance check... ", "nonconformance not raised");
+            //}
+            //catch (System.ArgumentException e)
+            //{
+            //    try_success("ArrayRightDivide conformance check... ", "");
+            //    System.Console.Out.WriteLine(e.Message);
+            //}
+            //C = A.ArrayRightDivide(R);
+            //try
+            //{
+            //    check(C, O);
+            //    try_success("ArrayRightDivide... ", "");
+            //}
+            //catch (System.SystemException e)
+            //{
+            //    errorCount = try_failure(errorCount, "ArrayRightDivide... ", "(M./M != ones)");
+            //    System.Console.Out.WriteLine(e.Message);
+            //}
+            //try
+            //{
+            //    A.ArrayRightDivideEquals(S);
+            //    errorCount = try_failure(errorCount, "ArrayRightDivideEquals conformance check... ", "nonconformance not raised");
+            //}
+            //catch (System.ArgumentException e)
+            //{
+            //    try_success("ArrayRightDivideEquals conformance check... ", "");
+            //    System.Console.Out.WriteLine(e.Message);
+            //}
+            //A.ArrayRightDivideEquals(R);
+            //try
+            //{
+            //    check(A, O);
+            //    try_success("ArrayRightDivideEquals... ", "");
+            //}
+            //catch (System.SystemException e)
+            //{
+            //    errorCount = try_failure(errorCount, "ArrayRightDivideEquals... ", "(M./M != ones)");
+            //    System.Console.Out.WriteLine(e.Message);
+            //}
 			A = R.Copy();
 			B = GeneralMatrix.Random(A.RowDimension, A.ColumnDimension);
 			try
