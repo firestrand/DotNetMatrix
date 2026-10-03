@@ -44,6 +44,7 @@ namespace DotNetMatrix
 
         public CholeskyDecomposition(GeneralMatrix Arg)
         {
+            NumericalGuard.Matrix(Arg, nameof(Arg), square: true);
             // Initialize.
             double[][] A = Arg.Array;
             n = Arg.RowDimension;
@@ -97,10 +98,10 @@ namespace DotNetMatrix
 
         #region Public Methods
 
-        /// <summary>Return triangular factor.</summary>
-        /// <returns>     L
-        /// </returns>
+        /// <summary>Returns an independent copy of the triangular factor.</summary>
+        public GeneralMatrix GetLCopy() => GetL().Copy();
 
+        /// <summary>Returns the triangular factor backed by mutable decomposition storage.</summary>
         public virtual GeneralMatrix GetL()
         {
             return new GeneralMatrix(L, n, n);
@@ -118,6 +119,7 @@ namespace DotNetMatrix
 
         public virtual GeneralMatrix Solve(GeneralMatrix B)
         {
+            NumericalGuard.Matrix(B, nameof(B), nonempty: false);
             if (B.RowDimension != n)
             {
                 throw new System.ArgumentException("Matrix row dimensions must agree.");
@@ -134,16 +136,16 @@ namespace DotNetMatrix
             // Solve L*Y = B;
             for (int k = 0; k < n; k++)
             {
+                for (int j = 0; j < nx; j++)
+                {
+                    X[k][j] /= L[k][k];
+                }
                 for (int i = k + 1; i < n; i++)
                 {
                     for (int j = 0; j < nx; j++)
                     {
                         X[i][j] -= X[k][j] * L[i][k];
                     }
-                }
-                for (int j = 0; j < nx; j++)
-                {
-                    X[k][j] /= L[k][k];
                 }
             }
 

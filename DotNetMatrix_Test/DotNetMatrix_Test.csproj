@@ -8,6 +8,7 @@
     <StartupObject>DotNetMatrix_Test.MicrosoftTestingPlatformEntryPoint</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <None Update="testconfig.json" CopyToOutputDirectory="PreserveNewest" />
     <PackageReference Include="MSTest.TestAdapter" />
     <PackageReference Include="MSTest.TestFramework" />
     <PackageReference Include="coverlet.MTP" PrivateAssets="all" />

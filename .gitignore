@@ -29,3 +29,5 @@ _ReSharper*/
 [Tt]est[Rr]esult*
 # Modern verification outputs
 artifacts/
+.serena/
+__pycache__/

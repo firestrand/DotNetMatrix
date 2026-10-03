@@ -23,6 +23,18 @@ namespace DotNetMatrix
     [Serializable]
     public class EigenvalueDecomposition
     {
+        private int maxIterations;
+        private int iterations;
+
+        private void CheckConvergenceBudget()
+        {
+            if (iterations >= maxIterations)
+            {
+                throw new DecompositionConvergenceException(nameof(EigenvalueDecomposition), maxIterations);
+            }
+            iterations++;
+        }
+
         #region	 Class variables
 
         /// <summary>Row and column dimension (square matrix).
@@ -240,7 +252,8 @@ namespace DotNetMatrix
                     int iter = 0;
                     do
                     {
-                        iter = iter + 1; // (Could check iteration count here.)
+                        CheckConvergenceBudget();
+                        iter = iter + 1;
 
                         // Compute implicit shift
 
@@ -672,7 +685,8 @@ namespace DotNetMatrix
                         }
                     }
 
-                    iter = iter + 1; // (Could check iteration count here.)
+                    CheckConvergenceBudget();
+                    iter = iter + 1;
 
                     // Look for two consecutive small sub-diagonal elements
 
@@ -1009,8 +1023,15 @@ namespace DotNetMatrix
         /// <returns>     Structure to access D and V.
         /// </returns>
 
-        public EigenvalueDecomposition(GeneralMatrix Arg)
+        public EigenvalueDecomposition(GeneralMatrix Arg) : this(Arg, 100_000)
         {
+        }
+
+        /// <summary>Constructs eigenvectors with a positive total QR/QL iteration budget.</summary>
+        public EigenvalueDecomposition(GeneralMatrix Arg, int maxIterations)
+        {
+            NumericalGuard.Matrix(Arg, nameof(Arg), square: true);
+            this.maxIterations = NumericalGuard.Iterations(maxIterations);
             double[][] A = Arg.Array;
             n = Arg.ColumnDimension;
             V = new double[n][];
@@ -1074,7 +1095,7 @@ namespace DotNetMatrix
         #endregion //  Constructor
 
         #region Public Properties
-        /// <summary>Return the real parts of the eigenvalues</summary>
+        /// <summary>Returns the mutable internal real eigenvalue array.</summary>
         /// <returns>     real(diag(D))
         /// </returns>
         virtual public double[] RealEigenvalues
@@ -1084,7 +1105,7 @@ namespace DotNetMatrix
                 return d;
             }
         }
-        /// <summary>Return the imaginary parts of the eigenvalues</summary>
+        /// <summary>Returns the mutable internal imaginary eigenvalue array.</summary>
         /// <returns>     imag(diag(D))
         /// </returns>
         virtual public double[] ImagEigenvalues
@@ -1126,10 +1147,16 @@ namespace DotNetMatrix
 
         #region Public Methods
 
-        /// <summary>Return the eigenvector matrix</summary>
-        /// <returns>     V
-        /// </returns>
+        /// <summary>Returns an independent copy of the eigenvectors.</summary>
+        public GeneralMatrix GetVCopy() => GetV().Copy();
 
+        /// <summary>Returns an independent copy of the real eigenvalues.</summary>
+        public double[] GetRealEigenvaluesCopy() => (double[])d.Clone();
+
+        /// <summary>Returns an independent copy of the imaginary eigenvalues.</summary>
+        public double[] GetImagEigenvaluesCopy() => (double[])e.Clone();
+
+        /// <summary>Returns eigenvectors backed by mutable decomposition storage.</summary>
         public virtual GeneralMatrix GetV()
         {
             return new GeneralMatrix(V, n, n);

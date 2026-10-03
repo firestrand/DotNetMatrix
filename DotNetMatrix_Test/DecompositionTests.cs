@@ -32,17 +32,14 @@ public sealed class DecompositionTests
     }
 
     [TestMethod]
-    public void CholeskyNonunitDiagonalSolvePreservesLegacyForwardSubstitutionDefect()
+    public void CholeskyNonunitDiagonalSolveSatisfiesEquation()
     {
-        // Legacy forward substitution updates later rows before dividing the current
-        // row by its diagonal. Preserve this documented defect during modernization.
-        // For L = [[2,0],[1,3]], B = [[10,0],[32,36]], forward substitution
-        // yields [[5,0],[22/3,12]]; backward substitution yields these rational values.
-        // The mathematically correct solution would be [[1,-2],[3,4]].
         var input = Matrix([4, 2], [2, 10]);
         var right = Matrix([10, 0], [32, 36]);
         var original = right.Copy();
-        AssertMatrix(Matrix([23d / 18, -2], [22d / 9, 4]), input.Chol().Solve(right));
+        var solution = input.Chol().Solve(right);
+        AssertMatrix(Matrix([1, -2], [3, 4]), solution);
+        AssertMatrix(right, input.Multiply(solution));
         AssertMatrix(original, right);
     }
 
@@ -53,8 +50,7 @@ public sealed class DecompositionTests
         [
             Matrix([2, 1], [0, 2]),
             Matrix([1, 2], [2, 1]),
-            Matrix([0, 0], [0, 1]),
-            Matrix([1, 0, 5], [0, 1, 6])
+            Matrix([0, 0], [0, 1])
         ];
         foreach (var input in invalid)
         {
@@ -62,6 +58,7 @@ public sealed class DecompositionTests
             Assert.IsFalse(decomposition.SPD);
             Assert.ThrowsExactly<SystemException>(() => decomposition.Solve(GeneralMatrix.Identity(2, 2)));
         }
+        Assert.ThrowsExactly<ArgumentException>(() => new CholeskyDecomposition(Matrix([1, 0, 5], [0, 1, 6])));
         Assert.ThrowsExactly<ArgumentException>(() => Matrix([1]).Chol().Solve(new GeneralMatrix(2, 1)));
     }
 
@@ -163,6 +160,9 @@ public sealed class DecompositionTests
     {
         GeneralMatrix[] fixtures =
         [
+            Matrix([1, 2, 3], [4, 5, 6]),
+            Matrix([1, 1]),
+            new GeneralMatrix(2, 5),
             Matrix([3]),
             Matrix([-2]),
             Matrix([0]),
@@ -234,8 +234,8 @@ public sealed class DecompositionTests
         var u = decomposition.GetU();
         var v = decomposition.GetV();
         AssertMatrix(input, u.Multiply(decomposition.S).Multiply(v.Transpose()));
-        AssertMatrix(GeneralMatrix.Identity(input.ColumnDimension, input.ColumnDimension), u.Transpose().Multiply(u));
-        AssertMatrix(GeneralMatrix.Identity(input.ColumnDimension, input.ColumnDimension), v.Transpose().Multiply(v));
+        AssertMatrix(GeneralMatrix.Identity(Math.Min(input.RowDimension, input.ColumnDimension), Math.Min(input.RowDimension, input.ColumnDimension)), u.Transpose().Multiply(u));
+        AssertMatrix(GeneralMatrix.Identity(Math.Min(input.RowDimension, input.ColumnDimension), Math.Min(input.RowDimension, input.ColumnDimension)), v.Transpose().Multiply(v));
         var values = decomposition.SingularValues;
         for (var i = 0; i < values.Length; i++)
         {

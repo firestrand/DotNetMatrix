@@ -49,6 +49,7 @@ namespace DotNetMatrix
 
         public QRDecomposition(GeneralMatrix A)
         {
+            NumericalGuard.Matrix(A, nameof(A), tall: true);
             // Initialize.
             QR = A.ArrayCopy;
             m = A.RowDimension;
@@ -228,6 +229,7 @@ namespace DotNetMatrix
 
         public virtual GeneralMatrix Solve(GeneralMatrix B)
         {
+            NumericalGuard.Matrix(B, nameof(B), nonempty: false);
             if (B.RowDimension != m)
             {
                 throw new System.ArgumentException("GeneralMatrix row dimensions must agree.");

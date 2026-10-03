@@ -51,7 +51,7 @@ namespace DotNetMatrix
     /// <version>  5 August 1998
     /// </version>
     [Serializable]
-    public class GeneralMatrix : ICloneable, ISerializable, IDisposable
+    public partial class GeneralMatrix : ICloneable, ISerializable, IDisposable, IEquatable<GeneralMatrix>
     {
         #region Class variables
 
@@ -1164,7 +1164,7 @@ namespace DotNetMatrix
         /// </returns>
         public virtual GeneralMatrix SolveTranspose(GeneralMatrix b)
         {
-            return Transpose().Solve(b.Transpose());
+            return Transpose().Solve(b.Transpose()).Transpose();
         }
 
         /// <summary>
@@ -1409,26 +1409,27 @@ namespace DotNetMatrix
 
         #endregion
 
-        public static bool operator ==(GeneralMatrix m1, GeneralMatrix m2)
+        public static bool operator ==(GeneralMatrix? m1, GeneralMatrix? m2)
         {
-            return m1.Equals(m2);
+            return object.Equals(m1, m2);
         }
-        public static bool operator !=(GeneralMatrix m1, GeneralMatrix m2)
+        public static bool operator !=(GeneralMatrix? m1, GeneralMatrix? m2)
         {
-            return !m1.Equals(m2);
+            return !object.Equals(m1, m2);
         }
 
         public bool Equals(GeneralMatrix? other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
+            if (GetType() != other.GetType()) return false;
             if (_m != other._m || _n != other._n) return false;
             bool result = true;
             for (int i = 0; i < _m; i++)
             {
                 for (int j = 0; j < _n; j++)
                 {
-                    if (_a[i][j] != other._a[i][j])
+                    if (!_a[i][j].Equals(other._a[i][j]))
                         result = false;
                 }
             }
@@ -1439,19 +1440,19 @@ namespace DotNetMatrix
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != typeof(GeneralMatrix)) return false;
-            return Equals((GeneralMatrix)obj);
+            return obj is GeneralMatrix matrix && Equals(matrix);
         }
 
         public override int GetHashCode()
         {
-            unchecked
-            {
-                int result = (_a != null ? _a.GetHashCode() : 0);
-                result = (result * 397) ^ _m;
-                result = (result * 397) ^ _n;
-                return result;
-            }
+            var hash = new HashCode();
+            hash.Add(GetType());
+            hash.Add(_m);
+            hash.Add(_n);
+            for (int i = 0; i < _m; i++)
+                for (int j = 0; j < _n; j++)
+                    hash.Add(_a[i][j]);
+            return hash.ToHashCode();
         }
     }
 }

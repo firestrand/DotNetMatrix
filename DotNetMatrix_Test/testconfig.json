@@ -1,0 +1,13 @@
+{
+  "platformOptions": {
+    "Coverlet": {
+      "include": "[DotNetMatrix]*",
+      "exclude": "[DotNetMatrix_Test]*",
+      "excludeByAttribute": "ExcludeFromCodeCoverage,ExcludeFromCodeCoverageAttribute,GeneratedCodeAttribute,CompilerGeneratedAttribute",
+      "format": "cobertura",
+      "skipAutoProps": false,
+      "includeTestAssembly": false,
+      "excludeAssembliesWithoutSources": "MissingAll"
+    }
+  }
+}

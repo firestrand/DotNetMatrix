@@ -5,17 +5,16 @@ namespace DotNetMatrix
 {
 
     /// <summary>Singular Value Decomposition.
-    /// <P>
-    /// For an m-by-n matrix A with m >= n, the singular value decomposition is
-    /// an m-by-n orthogonal matrix U, an n-by-n diagonal matrix S, and
-    /// an n-by-n orthogonal matrix V so that A = U*S*V'.
-    /// <P>
+    ///
+    /// For a finite nonempty m-by-n matrix A, let r = min(m,n). The decomposition is
+    /// an m-by-r matrix U, an r-by-r diagonal matrix S, and
+    /// an n-by-r matrix V with orthonormal columns so that A = U*S*V'.
+    ///
     /// The singular values, sigma[k] = S[k][k], are ordered so that
-    /// sigma[0] >= sigma[1] >= ... >= sigma[n-1].
-    /// <P>
-    /// The singular value decompostion always exists, so the constructor will
-    /// never fail.  The matrix condition number and the effective numerical
-    /// rank can be computed from this decomposition.
+    /// sigma[0] >= sigma[1] >= ... >= sigma[r-1].
+    ///
+    /// The constructor rejects unsupported input and throws if its iteration budget is exhausted.
+    /// The matrix condition number and effective numerical rank can be computed from this decomposition.
     /// </summary>
 
     [Serializable]
@@ -50,8 +49,26 @@ namespace DotNetMatrix
         /// <returns>     Structure to access U, S and V.
         /// </returns>
 
-        public SingularValueDecomposition(GeneralMatrix Arg)
+        public SingularValueDecomposition(GeneralMatrix Arg) : this(Arg, 100_000)
         {
+        }
+
+        /// <summary>Constructs economy factors with a positive total iteration budget.</summary>
+        public SingularValueDecomposition(GeneralMatrix Arg, int maxIterations)
+        {
+            NumericalGuard.Matrix(Arg, nameof(Arg));
+            NumericalGuard.Iterations(maxIterations);
+            if (Arg.RowDimension < Arg.ColumnDimension)
+            {
+                var transposed = new SingularValueDecomposition(Arg.Transpose(), maxIterations);
+                m = Arg.RowDimension;
+                n = Arg.ColumnDimension;
+                U = transposed.V;
+                V = transposed.U;
+                s = transposed.s;
+                return;
+            }
+            int iterations = 0;
             // Derived from LINPACK code.
             // Initialize.
             double[][] A = Arg.ArrayCopy;
@@ -310,7 +327,11 @@ namespace DotNetMatrix
             {
                 int k, kase;
 
-                // Here is where a test for too many iterations would go.
+                if (iterations >= maxIterations)
+                {
+                    throw new DecompositionConvergenceException(nameof(SingularValueDecomposition), maxIterations);
+                }
+                iterations++;
 
                 // This section of the program inspects for
                 // negligible elements in the s and e arrays.  On
@@ -564,7 +585,7 @@ namespace DotNetMatrix
         #endregion	//Constructor
 
         #region Public Properties
-        /// <summary>Return the one-dimensional array of singular values</summary>
+        /// <summary>Returns the mutable internal singular value array.</summary>
         /// <returns>     diagonal of S.
         /// </returns>
         virtual public double[] SingularValues
@@ -582,11 +603,12 @@ namespace DotNetMatrix
         {
             get
             {
-                GeneralMatrix X = new GeneralMatrix(n, n);
+                int rankDimension = System.Math.Min(m, n);
+                GeneralMatrix X = new GeneralMatrix(rankDimension, rankDimension);
                 double[][] S = X.Array;
-                for (int i = 0; i < n; i++)
+                for (int i = 0; i < rankDimension; i++)
                 {
-                    for (int j = 0; j < n; j++)
+                    for (int j = 0; j < rankDimension; j++)
                     {
                         S[i][j] = 0.0;
                     }
@@ -599,23 +621,32 @@ namespace DotNetMatrix
 
         #region	 Public Methods
 
-        /// <summary>Return the left singular vectors</summary>
+        /// <summary>Returns left singular vectors backed by mutable decomposition storage.</summary>
         /// <returns>     U
         /// </returns>
 
         public virtual GeneralMatrix GetU()
         {
-            return new GeneralMatrix(U, m, System.Math.Min(m + 1, n));
+            return new GeneralMatrix(U, m, System.Math.Min(m, n));
         }
 
-        /// <summary>Return the right singular vectors</summary>
+        /// <summary>Returns right singular vectors backed by mutable decomposition storage.</summary>
         /// <returns>     V
         /// </returns>
 
         public virtual GeneralMatrix GetV()
         {
-            return new GeneralMatrix(V, n, n);
+            return new GeneralMatrix(V, n, System.Math.Min(m, n));
         }
+
+        /// <summary>Returns an independent copy of the left singular vectors.</summary>
+        public GeneralMatrix GetUCopy() => GetU().Copy();
+
+        /// <summary>Returns an independent copy of the right singular vectors.</summary>
+        public GeneralMatrix GetVCopy() => GetV().Copy();
+
+        /// <summary>Returns an independent copy of the singular values.</summary>
+        public double[] GetSingularValuesCopy() => (double[])s.Clone();
 
         /// <summary>Two norm</summary>
         /// <returns>     max(S)

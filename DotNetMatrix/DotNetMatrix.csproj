@@ -1,1 +1,21 @@
-<Project Sdk="Microsoft.NET.Sdk" />
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <PackageId>DotNetMatrix.LocalPreview</PackageId>
+    <Version>2.0.0-preview.1</Version>
+    <Description>Dense double matrix operations and decompositions for .NET 10.</Description>
+    <Authors>DotNetMatrix contributors</Authors>
+    <RepositoryUrl>https://github.com/firestrand/DotNetMatrix</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>matrix;linear-algebra;dense;numerical</PackageTags>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <!-- Historical members lack full XML comments. Other documentation/compiler warnings remain errors. -->
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="../README.md" Pack="true" PackagePath="/" />
+    <None Include="../LICENSE" Pack="true" PackagePath="/" />
+    <None Include="../docs/provenance-and-release.md" Pack="true" PackagePath="/docs/" />
+  </ItemGroup>
+</Project>

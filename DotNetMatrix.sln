@@ -1,9 +1,21 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
+Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetMatrix", "DotNetMatrix\DotNetMatrix.csproj", "{33769BE4-931F-4D02-AC39-2A2FC6368411}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetMatrix_Test", "DotNetMatrix_Test\DotNetMatrix_Test.csproj", "{BE8CCA2A-057F-44A2-99D5-48B099EC23D4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{07C2787E-EAC7-C090-1BA3-A61EC2A24D84}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiBaseline", "tools\ApiBaseline\ApiBaseline.csproj", "{7141552F-7D67-40E0-842A-46AD8A4BECDE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{5D20AA90-6969-D8BD-9DCD-8634F4692FDA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeastSquares", "samples\LeastSquares\LeastSquares.csproj", "{19CBE3AB-1E99-4CB7-ABBB-E15585E4C91A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "benchmarks", "benchmarks", "{66320409-64EC-F7C5-3DEF-65E7510DAAD1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetMatrix.Benchmarks", "benchmarks\DotNetMatrix.Benchmarks.csproj", "{9B9D6BC0-F165-4139-9980-A2E4F159C9DA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,8 +31,25 @@ Global
 		{BE8CCA2A-057F-44A2-99D5-48B099EC23D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BE8CCA2A-057F-44A2-99D5-48B099EC23D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BE8CCA2A-057F-44A2-99D5-48B099EC23D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7141552F-7D67-40E0-842A-46AD8A4BECDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7141552F-7D67-40E0-842A-46AD8A4BECDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7141552F-7D67-40E0-842A-46AD8A4BECDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7141552F-7D67-40E0-842A-46AD8A4BECDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19CBE3AB-1E99-4CB7-ABBB-E15585E4C91A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19CBE3AB-1E99-4CB7-ABBB-E15585E4C91A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19CBE3AB-1E99-4CB7-ABBB-E15585E4C91A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19CBE3AB-1E99-4CB7-ABBB-E15585E4C91A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B9D6BC0-F165-4139-9980-A2E4F159C9DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B9D6BC0-F165-4139-9980-A2E4F159C9DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B9D6BC0-F165-4139-9980-A2E4F159C9DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B9D6BC0-F165-4139-9980-A2E4F159C9DA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7141552F-7D67-40E0-842A-46AD8A4BECDE} = {07C2787E-EAC7-C090-1BA3-A61EC2A24D84}
+		{19CBE3AB-1E99-4CB7-ABBB-E15585E4C91A} = {5D20AA90-6969-D8BD-9DCD-8634F4692FDA}
+		{9B9D6BC0-F165-4139-9980-A2E4F159C9DA} = {66320409-64EC-F7C5-3DEF-65E7510DAAD1}
 	EndGlobalSection
 EndGlobal

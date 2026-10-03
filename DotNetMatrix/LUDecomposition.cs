@@ -48,6 +48,7 @@ namespace DotNetMatrix
 
         public LUDecomposition(GeneralMatrix A)
         {
+            NumericalGuard.Matrix(A, nameof(A), tall: true);
             // Use a "left-looking", dot-product, Crout/Doolittle algorithm.
 
             LU = A.ArrayCopy;
@@ -268,6 +269,11 @@ namespace DotNetMatrix
 
         public virtual GeneralMatrix Solve(GeneralMatrix B)
         {
+            NumericalGuard.Matrix(B, nameof(B), nonempty: false);
+            if (m != n)
+            {
+                throw new ArgumentException("LU solve requires a square coefficient matrix; use QR or minimum-norm solve for rectangular matrices.");
+            }
             if (B.RowDimension != m)
             {
                 throw new System.ArgumentException("Matrix row dimensions must agree.");

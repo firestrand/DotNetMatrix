@@ -252,10 +252,9 @@ public sealed class ModernMatrixTests
         Assert.IsFalse(source.Equals(copy));
         Assert.IsFalse(source == copy);
         Assert.IsTrue(source != copy);
-        // Legacy hashes use storage identity and dimensions, so value mutations leave them unchanged.
-        int originalHash = source.GetHashCode();
+        Assert.AreEqual(source.GetHashCode(), source.Copy().GetHashCode());
         source.SetElement(0, 0, -100);
-        Assert.AreEqual(originalHash, source.GetHashCode());
+        Assert.AreEqual(source.GetHashCode(), source.Copy().GetHashCode());
     }
 
     [TestMethod]
@@ -281,14 +280,13 @@ public sealed class ModernMatrixTests
     }
 
     [TestMethod]
-    public void SolveTransposePreservesLegacyTransposedResult()
+    public void SolveTransposeReturnsTheDocumentedSolution()
     {
         var coefficients = new GeneralMatrix(new[] { new[] { 2.0, 1 }, new[] { 0.0, 3 } });
         var rightHandSide = new GeneralMatrix(new[] { new[] { 8.0, 19 } });
-        var legacyResult = coefficients.SolveTranspose(rightHandSide);
-        // The implementation returns X-transpose although its XML documentation says X.
-        AssertMatrix(legacyResult, 2, 1, 4, 5);
-        AssertMatrix(legacyResult.Transpose().Multiply(coefficients), 1, 2, 8, 19);
+        var result = coefficients.SolveTranspose(rightHandSide);
+        AssertMatrix(result, 1, 2, 4, 5);
+        AssertMatrix(result.Multiply(coefficients), 1, 2, 8, 19);
     }
 
     [TestMethod]
