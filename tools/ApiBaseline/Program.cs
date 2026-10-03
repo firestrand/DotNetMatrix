@@ -6,16 +6,67 @@ using System.Linq;
 using System.Reflection;
 using System.Reflection.Metadata;
 using System.Reflection.Metadata.Ecma335;
+using System.Reflection.PortableExecutable;
 using System.Text.Json;
 
-if (args.Length != 2 || (args[0] != "api" && args[0] != "coverage-types"))
+var commands = new HashSet<string>(StringComparer.Ordinal) { "api", "coverage-types", "source-link" };
+if (args.Length != 2 || !commands.Contains(args[0]))
 {
-    Console.Error.WriteLine("Usage: ApiBaseline api|coverage-types ASSEMBLY_PATH");
+    Console.Error.WriteLine("Usage: ApiBaseline api|coverage-types|source-link ASSEMBLY_PATH");
     return 2;
 }
 
+if (string.Equals(args[0], "source-link", StringComparison.Ordinal))
+{
+    using FileStream pdb = File.OpenRead(Path.ChangeExtension(args[1], ".pdb"));
+    using MetadataReaderProvider provider = MetadataReaderProvider.FromPortablePdbStream(pdb);
+    MetadataReader reader = provider.GetMetadataReader();
+    using FileStream image = File.OpenRead(args[1]);
+    using var executable = new PEReader(image);
+    DebugDirectoryEntry[] codeViews = executable.ReadDebugDirectory()
+        .Where(entry => entry.Type == DebugDirectoryEntryType.CodeView && entry.IsPortableCodeView).ToArray();
+    if (codeViews.Length != 1 || reader.DebugMetadataHeader == null)
+        throw new BadImageFormatException("Exactly one portable CodeView record and PDB identity are required.");
+    CodeViewDebugDirectoryData codeView = executable.ReadCodeViewDebugDirectoryData(codeViews[0]);
+    var pdbIdentity = new BlobContentId(reader.DebugMetadataHeader.Id);
+    if (codeView.Guid != pdbIdentity.Guid || codeViews[0].Stamp != pdbIdentity.Stamp || codeView.Age != 1)
+        throw new BadImageFormatException("The portable PDB identity does not match the assembly's CodeView record.");
+    // Portable PDB custom-debug-information kinds defined by the .NET format specification.
+    var sourceLinkKind = new Guid("cc110556-a091-4d38-9fec-25ab9a351a6a");
+    var embeddedSourceKind = new Guid("0e8a571b-6926-466e-b4ad-8ab04611f5fe");
+    JsonElement? sourceLink = null;
+    foreach (CustomDebugInformationHandle handle in reader.CustomDebugInformation)
+    {
+        CustomDebugInformation information = reader.GetCustomDebugInformation(handle);
+        if (information.Parent.Kind != HandleKind.ModuleDefinition || reader.GetGuid(information.Kind) != sourceLinkKind)
+            continue;
+        if (sourceLink.HasValue)
+            throw new BadImageFormatException("The portable PDB contains multiple Source Link maps.");
+        using JsonDocument map = JsonDocument.Parse(reader.GetBlobBytes(information.Value));
+        sourceLink = map.RootElement.Clone();
+    }
+
+    var documents = new List<object>();
+    foreach (DocumentHandle handle in reader.Documents.OrderBy(handle => reader.GetString(reader.GetDocument(handle).Name), StringComparer.Ordinal))
+    {
+        Document document = reader.GetDocument(handle);
+        bool embeddedSource = reader.GetCustomDebugInformation(handle)
+            .Any(information => reader.GetGuid(reader.GetCustomDebugInformation(information).Kind) == embeddedSourceKind);
+        documents.Add(new
+        {
+            name = reader.GetString(document.Name),
+            hashAlgorithm = reader.GetGuid(document.HashAlgorithm).ToString("D", CultureInfo.InvariantCulture),
+            hash = Convert.ToHexString(reader.GetBlobBytes(document.Hash)),
+            embeddedSource
+        });
+    }
+    Console.Write(JsonSerializer.Serialize(new { schemaVersion = 1, sourceLink, documents },
+        new JsonSerializerOptions { WriteIndented = true, NewLine = "\n" }) + "\n");
+    return 0;
+}
+
 Assembly assembly = Assembly.LoadFrom(Path.GetFullPath(args[1]));
-if (args[0] == "coverage-types")
+if (string.Equals(args[0], "coverage-types", StringComparison.Ordinal))
 {
     using FileStream pdb = File.OpenRead(Path.ChangeExtension(args[1], ".pdb"));
     using MetadataReaderProvider provider = MetadataReaderProvider.FromPortablePdbStream(pdb);
@@ -32,7 +83,7 @@ if (args[0] == "coverage-types")
         if (type?.FullName != null)
             names.Add(type.FullName.Replace('+', '/'));
     }
-    Console.WriteLine(JsonSerializer.Serialize(names, new JsonSerializerOptions { WriteIndented = true }));
+    Console.Write(JsonSerializer.Serialize(names, new JsonSerializerOptions { WriteIndented = true, NewLine = "\n" }) + "\n");
     return 0;
 }
 
@@ -56,7 +107,7 @@ foreach (Type type in assembly.GetExportedTypes().OrderBy(type => type.FullName,
     foreach (EventInfo item in type.GetEvents(flags))
         lines.Add($"event {name}.{item.Name}:{TypeName(item.EventHandlerType)}");
 }
-Console.WriteLine(string.Join(Environment.NewLine, lines.Order(StringComparer.Ordinal)));
+Console.Write(string.Join("\n", lines.Order(StringComparer.Ordinal)) + "\n");
 return 0;
 
 static string TypeName(Type? type) => type?.FullName ?? type?.ToString() ?? "-";
