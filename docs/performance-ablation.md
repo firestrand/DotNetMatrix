@@ -1,42 +1,5 @@
 # Performance optimization and ablation study
 
-## GOTCHA spec
-
-**Goals:** find and implement measured performance improvements without changing
-numerical operations, public APIs, serialization, storage ownership or exceptions.
-
-**Objectives:** retain only candidates with repeatable throughput or allocation
-benefits; isolate each mechanism with an otherwise identical ablation; verify
-unchanged behavior and non-regressing production coverage.
-
-**Tasks:** inspect existing evidence and hot paths, benchmark isolated candidates,
-reject inconclusive/regressing candidates, implement demonstrated improvements,
-then validate the actual production implementation and document results.
-
-**Capabilities:** local C# changes, pinned .NET/BenchmarkDotNet, tests, native CPU
-affinity and statistical reports. No runtime/dependency changes, unsafe memory,
-arithmetic reassociation, unapproved API or storage redesign, or remote publication.
-
-**Health:** no user budget specified; use two process launches, warmup and repeated
-measurements, with bounded build time and persisted logs. Re-measure only when new
-changes, high uncertainty or contradictory evidence justify it.
-
-**Attributes and constraints:** preserve summation order and floating-point bits;
-zero shapes must not begin inspecting previously ignored storage. Malformed
-borrowed arrays must retain their exception types. Every promotion needs its own
-ablation, not a combined before/after explanation.
-
-**Users:** maintainers and numerical library consumers. Public contracts remain
-unchanged; timing claims apply only to the observed runtime/hardware/workloads.
-
-**Runtime:** per-run benchmark processes and owned fixture arrays; persisted raw
-reports and source variants. Process isolation and a fixed CPU reduce migration
-noise but do not eliminate shared-host load or thermal effects.
-
-**Beliefs and intentions:** previous multiplication candidates were slower or
-inconclusive and must not be promoted on that evidence. Investigate data movement
-and repeated jagged-array indexing first, then other measured hot paths.
-
 ## Study protocol
 
 Benchmark the existing production entry point as a calibration alongside a frozen
@@ -149,7 +112,7 @@ discovery and guarded phases. The [study manifest](../benchmarks/baselines/data-
 records source hashes, job settings and verification results. A fresh checkout
 uses `dotnet restore DotNetMatrix.sln --locked-mode` before the documented build.
 
-## ATLAS hardness report
+## Correctness and verification
 
 **Edge cases tested:** exact signed-zero, infinity and custom NaN bits; independent
 rows even when source rows alias; logical prefixes of longer rows; both scalar
@@ -177,9 +140,11 @@ Python verification tests, unchanged API comparison, all 179 C# tests, coverage
 comparison, independent package consumer, numerical-candidate validation and the
 least-squares sample. Production coverage is 1598/1611 lines (99.19%) and
 1054/1096 branches (96.17%), passing the reviewed non-regression baselines.
-The entire command exits 1 at the pre-existing final standards gate because
-`EXC-2026-001` still lacks independent protected approval/issue evidence. This
-study neither activates that pending exception nor claims the full gate is green.
+At the time of this study, the entire command exited 1 at the final standards
+gate because `EXC-2026-001` lacked protected approval/issue evidence. The retained
+study manifest records that historical result. The maintainer has since approved
+the exception under the [simplified project policy](standards/README.md); the
+[exception record](standards/serialization-exception.md) describes its current status.
 
 **Disposition:** retain the measured wide-row copy improvement; retain the scalar
 path below 16 columns; reject unconditional copying and the insufficient guard;

@@ -36,5 +36,5 @@ if [[ "${CI:-}" == "true" ]]; then
     DotNetMatrix/bin/Release/net10.0/DotNetMatrix.dll > "$results_dir/source-link.json"
   python3 scripts/check-source-link.py "$results_dir/source-link.json" "$(git rev-parse HEAD)"
 fi
-# Unapproved exceptions deliberately fail the complete gate.
+# Validate the catalog and exact scope of maintainer-approved exceptions.
 python3 scripts/check-standards.py

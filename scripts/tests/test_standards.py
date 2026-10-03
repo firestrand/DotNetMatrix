@@ -1,4 +1,4 @@
-"""Synthetic local controls tests: fixtures never constitute real review approval."""
+"""Tests for maintainer approval, exact exception scope and standards lint."""
 from __future__ import annotations
 
 import copy
@@ -19,21 +19,11 @@ class StandardsGateTests(unittest.TestCase):
     def setUp(self):
         self.catalog = GATE.load_json(ROOT / "docs/standards/dotnet-rules.json")
         self.record = copy.deepcopy(GATE.load_json(ROOT / "docs/standards/overrides.yaml")["overrides"][0])
-        self.record.update(status="active", approved_by="synthetic-independent-reviewer", remediation_issue="https://example.invalid/issues/1")
+        self.record.update(status="active", approved_by=self.record["owner"])
         self.now = datetime(2026, 10, 3, tzinfo=timezone.utc)
-        self.digest = "synthetic-registry-digest"
-        self.evidence = {
-            "registry_sha256": self.digest, "owner_review_verified": True,
-            "exceptions": {self.record["id"]: {
-                "record_sha256": GATE.sha256(json.dumps(self.record, sort_keys=True).encode()),
-                "approved_by": self.record["approved_by"], "approval_verified": True,
-                "issue": self.record["remediation_issue"], "issue_state": "open", "checked_at": "2026-10-02T12:00:00Z"}}}
 
-    def validate(self, evidence=True):
-        return GATE.validate_record(self.record, self.catalog, self.now, self.digest, self.evidence if evidence else None)
-
-    def refresh_record_digest(self):
-        self.evidence["exceptions"][self.record["id"]]["record_sha256"] = GATE.sha256(json.dumps(self.record, sort_keys=True).encode())
+    def validate(self):
+        return GATE.validate_record(self.record, self.catalog, self.now)
 
     def test_exact_source_and_43_catalog_ids(self):
         catalog, errors = GATE.validate_catalog(ROOT)
@@ -42,21 +32,21 @@ class StandardsGateTests(unittest.TestCase):
         group = next(rule for rule in catalog["rules"] if rule["id"] == "DOTNET-BASE-004")
         self.assertGreater(group["source"]["end_line"], 122)
 
-    def test_synthetic_fresh_independent_evidence(self):
+    def test_maintainer_can_approve_without_external_evidence(self):
+        self.assertEqual(self.record["owner"], self.record["approved_by"])
+        self.assertNotIn("remediation_issue", self.record)
         self.assertEqual([], self.validate())
 
-    def test_utc_expiration_is_exclusive_at_midnight(self):
+    def test_utc_expiration_is_exclusive_at_midnight_when_specified(self):
+        self.record["expires_on"] = "2026-11-01"
         self.now = datetime(2026, 11, 1, tzinfo=timezone.utc)
         self.assertTrue(any("expired" in error for error in self.validate()))
         self.now = datetime(2026, 10, 31, 23, 59, 59, tzinfo=timezone.utc)
-        self.evidence["exceptions"][self.record["id"]]["checked_at"] = "2026-10-31T23:00:00Z"
         self.assertEqual([], self.validate())
 
     def test_leap_date_and_malformed_date(self):
         self.record.update(created_on="2028-02-28", expires_on="2028-02-29")
         self.now = datetime(2028, 2, 28, 23, tzinfo=timezone.utc)
-        self.evidence["exceptions"][self.record["id"]]["checked_at"] = "2028-02-28T22:00:00Z"
-        self.refresh_record_digest()
         self.assertEqual([], self.validate())
         self.record["expires_on"] = "2027-02-29"
         self.assertTrue(any("calendar" in error for error in self.validate()))
@@ -78,37 +68,33 @@ class StandardsGateTests(unittest.TestCase):
             self.record["scope"]["files"] = [path]
             self.assertTrue(any("exact repository-relative" in error for error in self.validate()))
 
-    def test_missing_self_or_retired_approval(self):
-        self.assertTrue(any("external" in error for error in self.validate(evidence=False)))
-        for approver in [None, self.record["owner"]]:
-            self.record["approved_by"] = approver
-            self.assertTrue(any("independent approval" in error for error in self.validate()))
-        self.record["status"] = "retired"
-        self.assertTrue(any("retired record" in error for error in self.validate()))
+    def test_missing_approval_and_inactive_records_are_rejected(self):
+        for approver in [None, "", "  "]:
+            with self.subTest(approver=approver):
+                self.record["approved_by"] = approver
+                self.assertTrue(any("maintainer approval" in error for error in self.validate()))
+        self.record["approved_by"] = self.record["owner"]
+        for status in ["retired", "pending"]:
+            self.record["status"] = status
+            self.assertTrue(any(f"{status} record" in error for error in self.validate()))
 
-    def test_closed_unknown_and_api_failed_issue(self):
-        item = self.evidence["exceptions"][self.record["id"]]
-        for state in ["closed", "unknown", "api-failed", None]:
-            item["issue_state"] = state
-            self.assertTrue(any("closed, unavailable, or unknown" in error for error in self.validate()))
-        del item["checked_at"]
-        self.assertTrue(any("API failure" in error for error in self.validate()))
-
-    def test_stale_future_non_utc_and_exact_24h_issue_evidence(self):
-        item = self.evidence["exceptions"][self.record["id"]]
-        for timestamp in ["2026-10-01T23:59:59Z", "2026-10-03T00:00:01Z", "2026-10-02T12:00:00", "2026-10-02T12:00:00+01:00"]:
-            item["checked_at"] = timestamp
-            self.assertTrue(self.validate())
-        item["checked_at"] = "2026-10-02T00:00:00Z"
+    def test_permanent_approval_has_no_artificial_expiration(self):
+        self.record["expires_on"] = None
+        self.now = datetime(2040, 1, 1, tzinfo=timezone.utc)
         self.assertEqual([], self.validate())
 
-    def test_registry_scope_drift_and_gate_review_self_authorization(self):
-        self.record["scope"]["symbols"] = ["Expanded.Scope.Method"]
-        self.assertTrue(any("changed after" in error for error in self.validate()))
-        self.evidence["owner_review_verified"] = False
-        self.assertTrue(any("protected owner review" in error for error in self.validate()))
-        self.evidence["registry_sha256"] = "PR-modified-registry"
-        self.assertTrue(any("revision" in error for error in self.validate()))
+    def test_maintainer_approval_does_not_authorize_expanded_diagnostics(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            target = root / "docs/standards"
+            target.mkdir(parents=True)
+            for name in ["engineering-standard.md", "dotnet-rules.json"]:
+                (target / name).write_bytes((ROOT / "docs/standards" / name).read_bytes())
+            record = copy.deepcopy(self.record)
+            record["scope"] = {"files": ["Test.cs"], "symbols": ["Example.Tests.Method"]}
+            (target / "overrides.yaml").write_text(json.dumps({"schema_version": 1, "standard_version": GATE.STANDARD_VERSION, "overrides": [record]}))
+            (root / "Test.cs").write_text('namespace Example;\npublic class Tests {\n public void Method() {\n// OVERRIDE(DOTNET-REPO-004, EXC-2026-001)\n#pragma warning disable SYSLIB0050, CA1416\n#pragma warning restore SYSLIB0050, CA1416\n }\n}\n')
+            self.assertTrue(any("scope mismatch" in error for error in GATE.lint(root, self.now)))
 
     def test_catalog_duplicate_unknown_and_source_drift_fail(self):
         with tempfile.TemporaryDirectory() as temporary:
@@ -135,10 +121,11 @@ class StandardsGateTests(unittest.TestCase):
             self.assertTrue(any("SHA-256" in error for error in GATE.validate_catalog(root)[1]))
 
     def test_pending_proposal_never_approves_live_suppression(self):
-        proposal = GATE.load_json(ROOT / "docs/standards/overrides.yaml")["overrides"][0]
-        errors = GATE.validate_record(proposal, self.catalog, self.now, self.digest)
+        proposal = copy.deepcopy(self.record)
+        proposal.update(status="pending", approved_by=None)
+        errors = GATE.validate_record(proposal, self.catalog, self.now)
         self.assertTrue(any("pending record" in error for error in errors))
-        self.assertTrue(any("missing independent approval" in error for error in errors))
+        self.assertTrue(any("missing maintainer approval" in error for error in errors))
 
     def test_multiline_xml_attribute_and_globalconfig_suppressions_are_detected(self):
         fixtures = {

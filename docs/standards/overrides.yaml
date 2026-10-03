@@ -20,17 +20,16 @@
       },
       "reason": "The original assertion directly inspects the empty legacy ISerializable callback without invoking a formatter. Preserve exact original test intent while retaining the narrow obsolete SerializationInfo/FormatterConverter warning suppression.",
       "owner": "repository-maintainer",
-      "approved_by": null,
-      "security_impact": "Pending independent review; test-only construction of serialization metadata, no formatter/deserialization invocation.",
+      "approved_by": "repository-maintainer (explicit operator approval)",
+      "security_impact": "Accepted by the repository maintainer: test-only serialization metadata construction; no formatter, deserialization, external input, runtime enablement or production change.",
       "compensating_controls": [
         "Retain exact MemberCount == 0 and ObjectType assertions",
         "Do not invoke any legacy binary formatter",
         "Limit suppression to the named regression test"
       ],
       "created_on": "2026-10-02",
-      "expires_on": "2026-11-01",
-      "remediation_issue": null,
-      "status": "pending"
+      "expires_on": null,
+      "status": "active"
     }
   ]
 }

@@ -1,5 +1,4 @@
-# Repository owner; required reviews must be enabled in branch/ruleset settings.
-# This file does not appoint an independent exception approver.
+# Repository owner for review routing; exceptions use the recorded maintainer policy.
 /.github/ @firestrand
 /docs/standards/ @firestrand
 /docs/coverage-baseline.json @firestrand

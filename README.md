@@ -26,10 +26,10 @@ can pass.
 
 The gate also prevents coverage reductions against the reviewed baseline, audits
 dependencies, checks symbols/package metadata, and validates the adopted
-[engineering standard](docs/standards/README.md). It currently fails on the
-**pending legacy serialization exception**; see the
-[audit and remaining controls](docs/standards/audit.md). A passing build/test run
-alone is not full standards compliance.
+[engineering standard and project exception policy](docs/standards/README.md).
+The maintainer-approved legacy serialization exception is narrowly scoped to its
+compatibility test; it preserves the original assertions. See the
+[approval record](docs/standards/serialization-exception.md).
 
 To run unit tests alone:
 

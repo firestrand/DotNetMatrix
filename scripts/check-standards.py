@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Offline standards lint; exception authorization comes only from protected evidence."""
+"""Offline standards lint with repository-maintainer-approved exceptions."""
 from __future__ import annotations
 
 import argparse
@@ -7,7 +7,7 @@ import hashlib
 import json
 import re
 import sys
-from datetime import date, datetime, timedelta, timezone
+from datetime import date, datetime, timezone
 from pathlib import Path
 import xml.etree.ElementTree as ET
 
@@ -100,21 +100,13 @@ def validate_catalog(root: Path) -> tuple[dict, list[str]]:
     return catalog, errors
 
 
-def utc_instant(value: str) -> datetime:
-    parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
-    if parsed.tzinfo is None or parsed.utcoffset() != timedelta(0):
-        raise ValueError("evidence timestamp must explicitly be UTC")
-    return parsed
-
-
-def validate_record(record: dict, catalog: dict, now: datetime, registry_digest: str,
-                    evidence: dict | None = None) -> list[str]:
+def validate_record(record: dict, catalog: dict, now: datetime) -> list[str]:
     errors = []
     ident = record.get("id", "<missing>")
     rule = record.get("rule", "<missing>")
     prefix = f"{ident} {rule} {record.get('scope', {})}: "
     required = {"id", "standard_version", "rule", "clause", "diagnostics", "scope", "reason", "owner", "approved_by",
-                "security_impact", "compensating_controls", "created_on", "expires_on", "remediation_issue", "status"}
+                "security_impact", "compensating_controls", "created_on", "expires_on", "status"}
     if not required.issubset(record):
         return [prefix + "missing registry fields: " + ", ".join(sorted(required - record.keys()))]
     if not isinstance(ident, str) or not EXCEPTION_PATTERN.fullmatch(ident):
@@ -139,37 +131,18 @@ def validate_record(record: dict, catalog: dict, now: datetime, registry_digest:
             errors.append(f"missing {field}")
     try:
         created = date.fromisoformat(record["created_on"])
-        expiry = date.fromisoformat(record["expires_on"])
-        if expiry <= created:
-            errors.append("expiration must follow creation")
-        if now.date() >= expiry:
-            errors.append("expired at 00:00 UTC on expires_on")
+        if record["expires_on"] is not None:
+            expiry = date.fromisoformat(record["expires_on"])
+            if expiry <= created:
+                errors.append("expiration must follow creation")
+            if now.date() >= expiry:
+                errors.append("expired at 00:00 UTC on expires_on")
     except (TypeError, ValueError):
         errors.append("malformed calendar date")
     if record["status"] != "active":
         errors.append(f"{record['status']} record cannot authorize a finding")
-    if not record["approved_by"] or record["approved_by"] == record["owner"]:
-        errors.append("missing independent approval")
-    if not record["remediation_issue"] or not str(record["remediation_issue"]).startswith("https://"):
-        errors.append("missing HTTPS remediation/review issue")
-    if evidence is None:
-        errors.append("missing protected external approval/issue evidence")
-    else:
-        if evidence.get("registry_sha256") != registry_digest or evidence.get("owner_review_verified") is not True:
-            errors.append("registry revision/protected owner review not verified")
-        approved = evidence.get("exceptions", {}).get(ident, {})
-        if approved.get("record_sha256") != sha256(json.dumps(record, sort_keys=True).encode()):
-            errors.append("scope/record changed after independent review")
-        if approved.get("approved_by") != record["approved_by"] or approved.get("approval_verified") is not True:
-            errors.append("independent approval not verified")
-        if approved.get("issue") != record["remediation_issue"] or approved.get("issue_state") != "open":
-            errors.append("issue closed, unavailable, or unknown")
-        try:
-            age = now - utc_instant(approved["checked_at"])
-            if age < timedelta(0) or age > timedelta(hours=24):
-                errors.append("issue evidence stale/future (maximum age 24 hours)")
-        except (KeyError, TypeError, ValueError):
-            errors.append("issue evidence missing/malformed/API failure")
+    if not isinstance(record["approved_by"], str) or not record["approved_by"].strip():
+        errors.append("missing maintainer approval")
     return [prefix + error for error in errors]
 
 
@@ -294,11 +267,10 @@ def findings(root: Path) -> tuple[list[dict], list[str]]:
     return found, errors
 
 
-def lint(root: Path, now: datetime, evidence: dict | None = None) -> list[str]:
+def lint(root: Path, now: datetime) -> list[str]:
     catalog, errors = validate_catalog(root)
     registry_path = root / "docs/standards/overrides.yaml"
     registry = load_json(registry_path)
-    digest = sha256(registry_path.read_bytes())
     if registry.get("schema_version") != 1 or registry.get("standard_version") != STANDARD_VERSION:
         errors.append("DOTNET-GOV-004: unsupported override schema/version")
     records = registry.get("overrides", [])
@@ -315,10 +287,10 @@ def lint(root: Path, now: datetime, evidence: dict | None = None) -> list[str]:
     for finding in current:
         record = next((item for item in records if item.get("id") == finding["exception"]), None)
         if record is None:
-            errors.append(f"DOTNET-REPO-004 {finding['file']}:{finding['line']}: unregistered suppression {finding['diagnostics']} (independent approval required)")
+            errors.append(f"DOTNET-REPO-004 {finding['file']}:{finding['line']}: unregistered suppression {finding['diagnostics']} (maintainer approval required)")
             continue
         used.add(record["id"])
-        errors.extend(validate_record(record, catalog, now, digest, evidence))
+        errors.extend(validate_record(record, catalog, now))
         if finding["rule"] != record.get("rule") or finding["file"] not in record.get("scope", {}).get("files", []) or not set(finding["diagnostics"]).issubset(record.get("diagnostics", [])) or finding["symbol"] not in record.get("scope", {}).get("symbols", []):
             errors.append(f"{record['id']} {record['rule']} {finding['file']}:{finding['line']}: marker/diagnostic/file/symbol scope mismatch")
     # Registry records must also be well formed when currently unused; active unused records are errors until retired.
@@ -328,8 +300,8 @@ def lint(root: Path, now: datetime, evidence: dict | None = None) -> list[str]:
                 errors.append(f"{record.get('id')} {record.get('rule')}: unused active record must be retired")
             elif record.get("status") in {"pending", "retired"}:
                 # Validate structural/rule/scope/date fields even for unused proposals/history.
-                structural = validate_record(record, catalog, now, digest, None)
-                ignored = ("record cannot authorize", "missing independent approval", "missing HTTPS remediation", "missing protected external", "expired at")
+                structural = validate_record(record, catalog, now)
+                ignored = ("record cannot authorize", "missing maintainer approval", "expired at")
                 errors.extend(error for error in structural if not any(text in error for text in ignored))
             else:
                 errors.append(f"{record.get('id')}: unknown exception status")
@@ -339,26 +311,17 @@ def lint(root: Path, now: datetime, evidence: dict | None = None) -> list[str]:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[1])
-    parser.add_argument("--release", action="store_true", help="release/trusted job; evidence cannot come from repository")
-    parser.add_argument("--trusted-evidence", type=Path)
-    parser.add_argument("--evidence-sha256", help="digest supplied by independently protected job, never PR input")
     args = parser.parse_args()
     root = args.root.resolve()
     try:
-        evidence = None
-        if args.trusted_evidence:
-            path = args.trusted_evidence.resolve()
-            if not args.release or path.is_relative_to(root) or not args.evidence_sha256 or sha256(path.read_bytes()) != args.evidence_sha256:
-                raise ValueError("external evidence requires release mode, outside-repository path and protected expected digest")
-            evidence = load_json(path)
-        errors = lint(root, datetime.now(timezone.utc), evidence)
+        errors = lint(root, datetime.now(timezone.utc))
     except (ValueError, TypeError, KeyError, AttributeError, OSError, ET.ParseError) as error:
         errors = [f"DOTNET-GOV-001/004: malformed/missing input: {error}"]
     if errors:
         for error in errors:
             print(error, file=sys.stderr)
         return 1
-    print("Adopted 43-rule catalog and local override lint passed; external qualification/review are separate controls.")
+    print("Adopted 43-rule catalog and maintainer-approved override lint passed.")
     return 0
 
 

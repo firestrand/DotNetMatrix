@@ -30,8 +30,8 @@ reports are in `artifacts/verification.9Jl7g4/`.
 
 High coverage does not establish correctness of every public contract. Some tests
 intentionally protect incorrect legacy behavior until a behavior-changing release
-is approved. The earlier [modernization report](modernization-report.md) records
-why those behaviors were retained.
+is approved. Those earlier characterizations preserved the legacy contracts during
+the runtime migration.
 
 | Finding | Evidence in the current repository | Consequence |
 | --- | --- | --- |
@@ -283,8 +283,7 @@ is not supported by the present repository evidence.
 4. For numerical features, agree on supported shapes, relative tolerance defaults,
    special-value policies, and failure reporting before documenting the APIs.
 5. Expand each selected milestone into a focused implementation plan with tests
-   before behavior changes, a GOTCHA spec where required, and ATLAS evidence at
-   completion. Retain `bash scripts/verify.sh` and >80% overall line/branch coverage
+   before behavior changes and verification evidence at completion. Retain `bash scripts/verify.sh` and >80% overall line/branch coverage
    as minimum gates; add capability-specific numerical checks.
 
 Recommended first deliverable: R1 regression tests and an approved correction

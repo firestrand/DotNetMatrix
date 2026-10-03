@@ -33,3 +33,8 @@ artifacts/
 __pycache__/
 
 .nuget/
+
+# Local agent planning and editor state
+/AGENT_STATE.md
+/AGENT_SUMMARY.md
+.mdcrdt/

@@ -39,8 +39,8 @@ but its incompatible extension is never registered or loaded.
 
 Verified result: 100/100 passing tests (including all 62 original unit tests and
 the original numerical console harness), 99.62% line / 96.62% branch coverage.
-Every production module exceeds 80% on both metrics. See docs/modernization-report.md
-for baseline, compatibility evidence, exact counts, and remaining limitations.
+Every production module exceeds 80% on both metrics. See README.md for current
+verification commands, API documentation and compatibility guidance.
 
 Compatibility and preserved legacy limitations
 ---------------------------------------------

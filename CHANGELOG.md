@@ -25,6 +25,5 @@ and declared in NuGet metadata. This package remains a local preview.
 ## Earlier modernization
 
 The original .NET Framework 4.0 code was moved to .NET 10 / C# 14 with SDK-style
-projects and modern MSTest/Microsoft.Testing.Platform tooling. See
-[modernization report](docs/modernization-report.md) for the historical 100-test
-baseline and intentionally preserved defects at that point in time.
+projects and modern MSTest/Microsoft.Testing.Platform tooling. The historical
+modernization baseline had 100 passing tests.

@@ -17,7 +17,7 @@
       "status": "adopted-for-project-audit",
       "clauses": [],
       "enforcement": [
-        "review:docs/standards/audit.md requirement applicability and evidence"
+        "review:docs/standards/README.md project applicability and exception policy"
       ]
     },
     {
@@ -33,7 +33,7 @@
       "status": "adopted-for-project-audit",
       "clauses": [],
       "enforcement": [
-        "review:docs/standards/audit.md requirement applicability and evidence"
+        "review:docs/standards/README.md project applicability and exception policy"
       ]
     },
     {
@@ -49,7 +49,7 @@
       "status": "adopted-for-project-audit",
       "clauses": [],
       "enforcement": [
-        "review:docs/standards/audit.md requirement applicability and evidence"
+        "review:docs/standards/README.md project applicability and exception policy"
       ]
     },
     {
@@ -65,7 +65,7 @@
       "status": "adopted-for-project-audit",
       "clauses": [],
       "enforcement": [
-        "review:docs/standards/audit.md requirement applicability and evidence"
+        "review:docs/standards/README.md project applicability and exception policy"
       ]
     },
     {
@@ -81,7 +81,7 @@
       "status": "adopted-for-project-audit",
       "clauses": [],
       "enforcement": [
-        "review:docs/standards/audit.md requirement applicability and evidence"
+        "review:docs/standards/README.md project applicability and exception policy"
       ]
     },
     {
@@ -97,7 +97,7 @@
       "status": "adopted-for-project-audit",
       "clauses": [],
       "enforcement": [
-        "review:docs/standards/audit.md requirement applicability and evidence",
+        "review:docs/standards/README.md project applicability and exception policy",
         "test:DotNetMatrix_Test/PlatformContractTests.cs native process architecture qualification"
       ]
     },
@@ -114,7 +114,7 @@
       "status": "adopted-for-project-audit",
       "clauses": [],
       "enforcement": [
-        "review:docs/standards/audit.md requirement applicability and evidence"
+        "review:docs/standards/README.md project applicability and exception policy"
       ]
     },
     {
@@ -130,7 +130,7 @@
       "status": "adopted-for-project-audit",
       "clauses": [],
       "enforcement": [
-        "review:docs/standards/audit.md requirement applicability and evidence"
+        "review:docs/standards/README.md project applicability and exception policy"
       ]
     },
     {
@@ -146,7 +146,7 @@
       "status": "adopted-for-project-audit",
       "clauses": [],
       "enforcement": [
-        "review:docs/standards/audit.md requirement applicability and evidence"
+        "review:docs/standards/README.md project applicability and exception policy"
       ]
     },
     {
@@ -164,7 +164,7 @@
         "CI and release publication **MUST** fail on the configured compiler/analyzer warnings."
       ],
       "enforcement": [
-        "review:docs/standards/audit.md requirement applicability and evidence",
+        "review:docs/standards/README.md project applicability and exception policy",
         "gate:scripts/verify.sh effective build and verification controls"
       ]
     },
@@ -181,7 +181,7 @@
       "status": "adopted-for-project-audit",
       "clauses": [],
       "enforcement": [
-        "review:docs/standards/audit.md requirement applicability and evidence"
+        "review:docs/standards/README.md project applicability and exception policy"
       ]
     },
     {
@@ -197,7 +197,7 @@
       "status": "adopted-for-project-audit",
       "clauses": [],
       "enforcement": [
-        "review:docs/standards/audit.md requirement applicability and evidence",
+        "review:docs/standards/README.md project applicability and exception policy",
         "gate:scripts/verify.sh effective build and verification controls"
       ]
     },
@@ -214,7 +214,7 @@
       "status": "adopted-for-project-audit",
       "clauses": [],
       "enforcement": [
-        "review:docs/standards/audit.md requirement applicability and evidence"
+        "review:docs/standards/README.md project applicability and exception policy"
       ]
     },
     {
@@ -230,7 +230,7 @@
       "status": "adopted-for-project-audit",
       "clauses": [],
       "enforcement": [
-        "review:docs/standards/audit.md requirement applicability and evidence",
+        "review:docs/standards/README.md project applicability and exception policy",
         "gate:scripts/verify.sh effective build and verification controls"
       ]
     },
@@ -247,7 +247,7 @@
       "status": "adopted-for-project-audit",
       "clauses": [],
       "enforcement": [
-        "review:docs/standards/audit.md requirement applicability and evidence"
+        "review:docs/standards/README.md project applicability and exception policy"
       ]
     },
     {
@@ -263,7 +263,7 @@
       "status": "adopted-for-project-audit",
       "clauses": [],
       "enforcement": [
-        "review:docs/standards/audit.md requirement applicability and evidence",
+        "review:docs/standards/README.md project applicability and exception policy",
         "gate:scripts/verify.sh effective build and verification controls"
       ]
     },
@@ -280,7 +280,7 @@
       "status": "adopted-for-project-audit",
       "clauses": [],
       "enforcement": [
-        "review:docs/standards/audit.md requirement applicability and evidence"
+        "review:docs/standards/README.md project applicability and exception policy"
       ]
     },
     {
@@ -296,7 +296,7 @@
       "status": "adopted-for-project-audit",
       "clauses": [],
       "enforcement": [
-        "review:docs/standards/audit.md requirement applicability and evidence",
+        "review:docs/standards/README.md project applicability and exception policy",
         "gate:scripts/verify.sh effective build and verification controls"
       ]
     },
@@ -313,7 +313,7 @@
       "status": "adopted-for-project-audit",
       "clauses": [],
       "enforcement": [
-        "review:docs/standards/audit.md requirement applicability and evidence"
+        "review:docs/standards/README.md project applicability and exception policy"
       ]
     },
     {
@@ -329,7 +329,7 @@
       "status": "adopted-for-project-audit",
       "clauses": [],
       "enforcement": [
-        "review:docs/standards/audit.md requirement applicability and evidence",
+        "review:docs/standards/README.md project applicability and exception policy",
         "test:DotNetMatrix_Test/PlatformContractTests.cs native process architecture qualification"
       ]
     },
@@ -346,7 +346,7 @@
       "status": "adopted-for-project-audit",
       "clauses": [],
       "enforcement": [
-        "review:docs/standards/audit.md requirement applicability and evidence",
+        "review:docs/standards/README.md project applicability and exception policy",
         "gate:scripts/verify.sh effective build and verification controls"
       ]
     },
@@ -363,7 +363,7 @@
       "status": "adopted-for-project-audit",
       "clauses": [],
       "enforcement": [
-        "review:docs/standards/audit.md requirement applicability and evidence"
+        "review:docs/standards/README.md project applicability and exception policy"
       ]
     },
     {
@@ -379,7 +379,7 @@
       "status": "adopted-for-project-audit",
       "clauses": [],
       "enforcement": [
-        "review:docs/standards/audit.md requirement applicability and evidence"
+        "review:docs/standards/README.md project applicability and exception policy"
       ]
     },
     {
@@ -395,7 +395,7 @@
       "status": "adopted-for-project-audit",
       "clauses": [],
       "enforcement": [
-        "review:docs/standards/audit.md requirement applicability and evidence"
+        "review:docs/standards/README.md project applicability and exception policy"
       ]
     },
     {
@@ -411,7 +411,7 @@
       "status": "adopted-for-project-audit",
       "clauses": [],
       "enforcement": [
-        "review:docs/standards/audit.md requirement applicability and evidence"
+        "review:docs/standards/README.md project applicability and exception policy"
       ]
     },
     {
@@ -427,7 +427,7 @@
       "status": "adopted-for-project-audit",
       "clauses": [],
       "enforcement": [
-        "review:docs/standards/audit.md requirement applicability and evidence"
+        "review:docs/standards/README.md project applicability and exception policy"
       ]
     },
     {
@@ -443,7 +443,7 @@
       "status": "adopted-for-project-audit",
       "clauses": [],
       "enforcement": [
-        "review:docs/standards/audit.md requirement applicability and evidence"
+        "review:docs/standards/README.md project applicability and exception policy"
       ]
     },
     {
@@ -461,7 +461,7 @@
         "platform-analyzer-protection"
       ],
       "enforcement": [
-        "review:docs/standards/audit.md requirement applicability and evidence"
+        "review:docs/standards/README.md project applicability and exception policy"
       ]
     },
     {
@@ -477,7 +477,7 @@
       "status": "adopted-for-project-audit",
       "clauses": [],
       "enforcement": [
-        "review:docs/standards/audit.md requirement applicability and evidence"
+        "review:docs/standards/README.md project applicability and exception policy"
       ]
     },
     {
@@ -493,7 +493,7 @@
       "status": "adopted-for-project-audit",
       "clauses": [],
       "enforcement": [
-        "review:docs/standards/audit.md requirement applicability and evidence"
+        "review:docs/standards/README.md project applicability and exception policy"
       ]
     },
     {
@@ -509,7 +509,7 @@
       "status": "adopted-for-project-audit",
       "clauses": [],
       "enforcement": [
-        "review:docs/standards/audit.md requirement applicability and evidence"
+        "review:docs/standards/README.md project applicability and exception policy"
       ]
     },
     {
@@ -525,7 +525,7 @@
       "status": "adopted-for-project-audit",
       "clauses": [],
       "enforcement": [
-        "review:docs/standards/audit.md requirement applicability and evidence"
+        "review:docs/standards/README.md project applicability and exception policy"
       ]
     },
     {
@@ -541,7 +541,7 @@
       "status": "adopted-for-project-audit",
       "clauses": [],
       "enforcement": [
-        "review:docs/standards/audit.md requirement applicability and evidence"
+        "review:docs/standards/README.md project applicability and exception policy"
       ]
     },
     {
@@ -557,7 +557,7 @@
       "status": "adopted-for-project-audit",
       "clauses": [],
       "enforcement": [
-        "review:docs/standards/audit.md requirement applicability and evidence"
+        "review:docs/standards/README.md project applicability and exception policy"
       ]
     },
     {
@@ -573,7 +573,7 @@
       "status": "adopted-for-project-audit",
       "clauses": [],
       "enforcement": [
-        "review:docs/standards/audit.md requirement applicability and evidence"
+        "review:docs/standards/README.md project applicability and exception policy"
       ]
     },
     {
@@ -589,7 +589,7 @@
       "status": "adopted-for-project-audit",
       "clauses": [],
       "enforcement": [
-        "review:docs/standards/audit.md requirement applicability and evidence"
+        "review:docs/standards/README.md project applicability and exception policy"
       ]
     },
     {
@@ -605,7 +605,7 @@
       "status": "adopted-for-project-audit",
       "clauses": [],
       "enforcement": [
-        "review:docs/standards/audit.md requirement applicability and evidence"
+        "review:docs/standards/README.md project applicability and exception policy"
       ]
     },
     {
@@ -621,7 +621,7 @@
       "status": "adopted-for-project-audit",
       "clauses": [],
       "enforcement": [
-        "review:docs/standards/audit.md requirement applicability and evidence",
+        "review:docs/standards/README.md project applicability and exception policy",
         "gate:scripts/check-standards.py catalog and override consistency"
       ]
     },
@@ -638,7 +638,7 @@
       "status": "adopted-for-project-audit",
       "clauses": [],
       "enforcement": [
-        "review:docs/standards/audit.md requirement applicability and evidence",
+        "review:docs/standards/README.md project applicability and exception policy",
         "gate:scripts/check-standards.py catalog and override consistency"
       ]
     },
@@ -655,7 +655,7 @@
       "status": "adopted-for-project-audit",
       "clauses": [],
       "enforcement": [
-        "review:docs/standards/audit.md requirement applicability and evidence",
+        "review:docs/standards/README.md project applicability and exception policy",
         "gate:scripts/check-standards.py catalog and override consistency"
       ]
     },
@@ -672,10 +672,10 @@
       "status": "adopted-for-project-audit",
       "clauses": [],
       "enforcement": [
-        "review:docs/standards/audit.md requirement applicability and evidence",
+        "review:docs/standards/README.md project applicability and exception policy",
         "gate:scripts/check-standards.py catalog and override consistency",
         "test:scripts/tests/test_standards.py synthetic exception validation cases",
-        "review:independent protected owner approval and external issue-status evidence"
+        "review:repository-maintainer approval recorded under docs/standards/README.md project policy"
       ]
     },
     {
@@ -691,7 +691,7 @@
       "status": "adopted-for-project-audit",
       "clauses": [],
       "enforcement": [
-        "review:docs/standards/audit.md requirement applicability and evidence",
+        "review:docs/standards/README.md project applicability and exception policy",
         "gate:scripts/check-standards.py catalog and override consistency"
       ]
     },
@@ -708,7 +708,7 @@
       "status": "adopted-for-project-audit",
       "clauses": [],
       "enforcement": [
-        "review:docs/standards/audit.md requirement applicability and evidence",
+        "review:docs/standards/README.md project applicability and exception policy",
         "gate:scripts/check-standards.py catalog and override consistency"
       ]
     }
