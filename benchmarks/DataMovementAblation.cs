@@ -1,0 +1,152 @@
+using System;
+using BenchmarkDotNet.Attributes;
+
+namespace DotNetMatrix.Benchmarks;
+
+public enum MovementShape { Tiny, Small, Medium, Large, Tall, Wide, SingleRow, SingleColumn, Empty }
+
+internal sealed class MovementFixture
+{
+    private readonly double[][] values;
+    private readonly int rows;
+    private readonly int columns;
+    internal GeneralMatrix Matrix { get; }
+
+    internal MovementFixture(MovementShape shape)
+    {
+        (rows, columns) = shape switch
+        {
+            MovementShape.Tiny => (1, 1),
+            MovementShape.Small => (16, 16),
+            MovementShape.Medium => (64, 64),
+            MovementShape.Large => (192, 192),
+            MovementShape.Tall => (384, 192),
+            MovementShape.Wide => (192, 384),
+            MovementShape.SingleRow => (1, 4096),
+            MovementShape.SingleColumn => (4096, 1),
+            _ => (32, 0)
+        };
+        Matrix = Fixtures.Create(rows, columns);
+        values = Matrix.Array;
+    }
+
+    // Frozen pre-optimization loop: this is the control, not production code.
+    internal GeneralMatrix ScalarCopy()
+    {
+        var result = new GeneralMatrix(rows, columns);
+        double[][] destination = result.Array;
+        for (int i = 0; i < rows; i++)
+            for (int j = 0; j < columns; j++) destination[i][j] = values[i][j];
+        return result;
+    }
+
+    internal GeneralMatrix RowCachedCopy()
+    {
+        var result = new GeneralMatrix(rows, columns);
+        double[][] destination = result.Array;
+        if (columns > 0)
+            for (int i = 0; i < rows; i++)
+            {
+                double[] sourceRow = values[i], destinationRow = destination[i];
+                for (int j = 0; j < columns; j++) destinationRow[j] = sourceRow[j];
+            }
+        return result;
+    }
+
+    internal GeneralMatrix BulkCopy()
+    {
+        var result = new GeneralMatrix(rows, columns);
+        double[][] destination = result.Array;
+        if (columns > 0)
+            for (int i = 0; i < rows; i++)
+            {
+                double[] sourceRow = values[i], destinationRow = destination[i];
+                if (sourceRow.Length >= columns)
+                    System.Array.Copy(sourceRow, destinationRow, columns);
+                else
+                    // Preserve IndexOutOfRangeException for malformed borrowed rows.
+                    for (int j = 0; j < columns; j++) destinationRow[j] = sourceRow[j];
+            }
+        return result;
+    }
+
+    internal double ScalarInfinityNorm()
+    {
+        double maximum = 0;
+        for (int i = 0; i < rows; i++)
+        {
+            double sum = 0;
+            for (int j = 0; j < columns; j++) sum += Math.Abs(values[i][j]);
+            maximum = Math.Max(maximum, sum);
+        }
+        return maximum;
+    }
+
+    internal double RowCachedInfinityNorm()
+    {
+        double maximum = 0;
+        if (columns > 0)
+            for (int i = 0; i < rows; i++)
+            {
+                double[] row = values[i];
+                double sum = 0;
+                for (int j = 0; j < columns; j++) sum += Math.Abs(row[j]);
+                maximum = Math.Max(maximum, sum);
+            }
+        return maximum;
+    }
+
+    internal void Validate()
+    {
+        foreach (GeneralMatrix copy in new[] { ScalarCopy(), RowCachedCopy(), BulkCopy(), Matrix.Copy() })
+        {
+            if (copy.RowDimension != rows || copy.ColumnDimension != columns || ReferenceEquals(copy.Array, values))
+                throw new InvalidOperationException("Copy candidate changed dimensions or ownership.");
+            for (int i = 0; i < rows; i++)
+            {
+                if (ReferenceEquals(copy.Array[i], values[i]))
+                    throw new InvalidOperationException("Copy candidate borrowed a source row.");
+                for (int j = 0; j < columns; j++)
+                    if (BitConverter.DoubleToInt64Bits(copy.Array[i][j]) != BitConverter.DoubleToInt64Bits(values[i][j]))
+                        throw new InvalidOperationException("Copy candidate changed element bits.");
+            }
+        }
+        long expected = BitConverter.DoubleToInt64Bits(ScalarInfinityNorm());
+        if (BitConverter.DoubleToInt64Bits(RowCachedInfinityNorm()) != expected ||
+            BitConverter.DoubleToInt64Bits(Matrix.NormInf()) != expected)
+            throw new InvalidOperationException("Norm candidate changed summation behavior.");
+    }
+}
+
+[MemoryDiagnoser]
+public class CopyAblation
+{
+    [ParamsAllValues] public MovementShape Shape { get; set; }
+    private MovementFixture fixture = null!;
+    [GlobalSetup]
+    public void Setup()
+    {
+        fixture = new MovementFixture(Shape);
+        fixture.Validate();
+    }
+    [Benchmark(Baseline = true)] public GeneralMatrix ScalarControl() => fixture.ScalarCopy();
+    [Benchmark] public GeneralMatrix RowCachingOnly() => fixture.RowCachedCopy();
+    [Benchmark] public GeneralMatrix RowCachingAndBulkCopy() => fixture.BulkCopy();
+    [Benchmark] public GeneralMatrix Production() => fixture.Matrix.Copy();
+}
+
+[MemoryDiagnoser]
+public class InfinityNormAblation
+{
+    [ParamsAllValues] public MovementShape Shape { get; set; }
+    private MovementFixture fixture = null!;
+    [GlobalSetup]
+    public void Setup()
+    {
+        fixture = new MovementFixture(Shape);
+        fixture.Validate();
+    }
+    [Benchmark(Baseline = true)] public double ScalarControl() => fixture.ScalarInfinityNorm();
+    [Benchmark] public double RowCachingOnly() => fixture.RowCachedInfinityNorm();
+    [Benchmark] public double Production() => fixture.Matrix.NormInf();
+}
