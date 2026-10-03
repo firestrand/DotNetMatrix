@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Runtime.Serialization;
 
 namespace DotNetMatrix
@@ -6,17 +6,17 @@ namespace DotNetMatrix
 
     /// <summary>
     ///   .NET GeneralMatrix class.
-    /// 
+    ///
     ///   The .NET GeneralMatrix Class provides the fundamental operations of numerical
     ///   linear algebra.  Various constructors create Matrices from two dimensional
     ///   arrays of double precision floating point numbers.  Various "gets" and
-    ///   "sets" provide access to submatrices and matrix elements.  Several methods 
+    ///   "sets" provide access to submatrices and matrix elements.  Several methods
     ///   implement basic matrix arithmetic, including matrix addition and
     ///   multiplication, matrix norms, and element-by-element array operations.
     ///   Methods for reading and printing matrices are also included.  All the
     ///   operations in this version of the GeneralMatrix Class involve real matrices.
     ///   Complex matrices may be handled in a future version.
-    /// 
+    ///
     ///   Five fundamental matrix decompositions, which consist of pairs or triples
     ///   of matrices, permutation vectors, and the like, produce results in five
     ///   decomposition classes.  These decompositions are accessed by the GeneralMatrix
@@ -45,7 +45,7 @@ namespace DotNetMatrix
     ///       </P>
     ///     </DL>
     /// </summary>
-    /// <author>  
+    /// <author>
     ///   The MathWorks, Inc. and the National Institute of Standards and Technology.
     /// </author>
     /// <version>  5 August 1998
@@ -193,7 +193,7 @@ namespace DotNetMatrix
                 }
             }
         }
-        public GeneralMatrix(double[] vals, int m,int n, int startIndex)
+        public GeneralMatrix(double[] vals, int m, int n, int startIndex)
         {
             _m = m;
             _n = n;
@@ -201,8 +201,8 @@ namespace DotNetMatrix
             {
                 throw new ArgumentException("Array length must be a multiple of m and sized correctly.");
             }
-            double[] subArray = new double[_m*_n];
-            System.Array.Copy(vals, startIndex, subArray, 0, _m*_n);
+            double[] subArray = new double[_m * _n];
+            System.Array.Copy(vals, startIndex, subArray, 0, _m * _n);
 
             _a = new double[_m][];
             for (int i = 0; i < _m; i++)
@@ -216,7 +216,7 @@ namespace DotNetMatrix
                     _a[i][j] = subArray[i + j * _m];
                 }
             }
-            
+
         }
         /// <summary>
         ///   Construct a matrix from a one-dimensional packed array
@@ -406,7 +406,7 @@ namespace DotNetMatrix
         /// </param>
         /// <returns>     A(i,j)
         /// </returns>
-        /// <exception cref = "System.IndexOutOfRangeException">  
+        /// <exception cref = "System.IndexOutOfRangeException">
         /// </exception>
         public virtual double GetElement(int i, int j)
         {
@@ -558,7 +558,7 @@ namespace DotNetMatrix
         /// </param>
         /// <param name = "s">   A(i,j).
         /// </param>
-        /// <exception cref = "System.IndexOutOfRangeException">  
+        /// <exception cref = "System.IndexOutOfRangeException">
         /// </exception>
         public virtual void SetElement(int i, int j, double s)
         {
@@ -1233,7 +1233,7 @@ namespace DotNetMatrix
         /// </returns>
         public static GeneralMatrix Random(int m, int n)
         {
-            var random = new Random();
+            var random = System.Random.Shared;
 
             var a = new GeneralMatrix(m, n);
             double[][] x = a.Array;
@@ -1260,7 +1260,7 @@ namespace DotNetMatrix
         /// </returns>
         public static GeneralMatrix Random(int m, int n, double minValue, double maxValue)
         {
-            var random = new Random();
+            var random = System.Random.Shared;
             var range = maxValue - minValue;
             var a = new GeneralMatrix(m, n);
             double[][] x = a.Array;
@@ -1286,15 +1286,14 @@ namespace DotNetMatrix
         /// </returns>
         public static GeneralMatrix Random(int m, int n, int minValue, int maxValue)
         {
-            var random = new Random();
-            var range = maxValue - minValue;
+            var random = System.Random.Shared;
             var a = new GeneralMatrix(m, n);
             double[][] x = a.Array;
             for (int i = 0; i < m; i++)
             {
                 for (int j = 0; j < n; j++)
                 {
-                    x[i][j] = random.Next(minValue,maxValue);
+                    x[i][j] = random.Next(minValue, maxValue);
                 }
             }
             return a;
@@ -1379,48 +1378,9 @@ namespace DotNetMatrix
         #region Implement IDisposable
 
         /// <summary>
-        ///   Do not make this method virtual.
-        ///   A derived class should not be able to override this method.
+        ///   Completes disposal. Matrix storage is managed and remains usable for compatibility.
         /// </summary>
-        public void Dispose()
-        {
-            Dispose(true);
-        }
-
-        /// <summary>
-        ///   Dispose(bool disposing) executes in two distinct scenarios.
-        ///   If disposing equals true, the method has been called directly
-        ///   or indirectly by a user's code. Managed and unmanaged resources
-        ///   can be disposed.
-        ///   If disposing equals false, the method has been called by the 
-        ///   runtime from inside the finalizer and you should not reference 
-        ///   other objects. Only unmanaged resources can be disposed.
-        /// </summary>
-        /// <param name = "disposing"></param>
-        private void Dispose(bool disposing)
-        {
-            // This object will be cleaned up by the Dispose method.
-            // Therefore, you should call GC.SupressFinalize to
-            // take this object off the finalization queue 
-            // and prevent finalization code for this object
-            // from executing a second time.
-            if (disposing)
-                GC.SuppressFinalize(this);
-        }
-
-        /// <summary>
-        ///   This destructor will run only if the Dispose method 
-        ///   does not get called.
-        ///   It gives your base class the opportunity to finalize.
-        ///   Do not provide destructors in types derived from this class.
-        /// </summary>
-        ~GeneralMatrix()
-        {
-            // Do not re-create Dispose clean-up code here.
-            // Calling Dispose(false) is optimal in terms of
-            // readability and maintainability.
-            Dispose(false);
-        }
+        public void Dispose() => GC.SuppressFinalize(this);
 
         #endregion //  Implement IDisposable
 
@@ -1458,7 +1418,7 @@ namespace DotNetMatrix
             return !m1.Equals(m2);
         }
 
-        public bool Equals(GeneralMatrix other)
+        public bool Equals(GeneralMatrix? other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
@@ -1475,12 +1435,12 @@ namespace DotNetMatrix
             return result;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != typeof (GeneralMatrix)) return false;
-            return Equals((GeneralMatrix) obj);
+            if (obj.GetType() != typeof(GeneralMatrix)) return false;
+            return Equals((GeneralMatrix)obj);
         }
 
         public override int GetHashCode()
@@ -1488,8 +1448,8 @@ namespace DotNetMatrix
             unchecked
             {
                 int result = (_a != null ? _a.GetHashCode() : 0);
-                result = (result*397) ^ _m;
-                result = (result*397) ^ _n;
+                result = (result * 397) ^ _m;
+                result = (result * 397) ^ _n;
                 return result;
             }
         }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Runtime.Serialization;
 
 namespace DotNetMatrix
@@ -8,7 +8,7 @@ namespace DotNetMatrix
     /// For an m-by-n matrix A with m >= n, the QR decomposition is an m-by-n
     /// orthogonal matrix Q and an n-by-n upper triangular matrix R so that
     /// A = Q*R.
-    /// 
+    ///
     /// The QR decompostion always exists, even if the matrix does not have
     /// full rank, so the constructor will never fail.  The primary use of the
     /// QR decomposition is in the least squares solution of nonsquare systems

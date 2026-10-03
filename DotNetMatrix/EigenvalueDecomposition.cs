@@ -1,14 +1,14 @@
-﻿using System;
+using System;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 
 namespace DotNetMatrix
 {
 
-    /// <summary>Eigenvalues and eigenvectors of a real matrix. 
+    /// <summary>Eigenvalues and eigenvectors of a real matrix.
     /// If A is symmetric, then A = V*D*V' where the eigenvalue matrix D is
     /// diagonal and the eigenvector matrix V is orthogonal.
-    /// I.e. A = V.Multiply(D.Multiply(V.Transpose())) and 
+    /// I.e. A = V.Multiply(D.Multiply(V.Transpose())) and
     /// V.Multiply(V.Transpose()) equals the identity matrix.
     /// If A is not symmetric, then the eigenvalue matrix D is block diagonal
     /// with the real eigenvalues in 1-by-1 blocks and any complex eigenvalues,
@@ -17,7 +17,7 @@ namespace DotNetMatrix
     /// i.e. A.Multiply(V) equals V.Multiply(D).  The matrix V may be badly
     /// conditioned, or even singular, so the validity of the equation
     /// A = V*D*Inverse(V) depends upon V.cond().
-    /// 
+    ///
     /// </summary>
 
     [Serializable]
@@ -48,12 +48,13 @@ namespace DotNetMatrix
         /// <summary>Array for internal storage of nonsymmetric Hessenberg form.
         /// @serial internal storage of nonsymmetric Hessenberg form.
         /// </summary>
-        private double[][] H;
+        // Used only on the nonsymmetric constructor path; initialized before orthes/hqr2.
+        private double[][] H = null!;
 
         /// <summary>Working storage for nonsymmetric algorithm.
         /// @serial working storage for nonsymmetric algorithm.
         /// </summary>
-        private double[] ort;
+        private double[] ort = null!;
 
         #endregion //  Class variables
 
