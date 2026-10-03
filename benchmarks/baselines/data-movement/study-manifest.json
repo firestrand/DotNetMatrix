@@ -1,0 +1,32 @@
+{
+  "baselineCommit": "4f83ec3c7fba2db05ed4325779bc558a6d3fb528",
+  "discoveryHarnessSha256": "c5aecd524ef9394d1fd3229d6de68a4b7d2fb8b1babf1131a8e98956b8ee62ab",
+  "guardedHarnessSha256": "6d572493dc2bd114a2fc0d591bb5e203bf62fc0af93b08d96cb841e8fc62a5a7",
+  "beforeProductionSourceSha256": "90998a0b02a21493b6043805065b4cd8e481683f49342e92d4fe7281457383c1",
+  "cpu": 5,
+  "launches": 2,
+  "warmupIterationsPerLaunch": 4,
+  "measurementIterationsPerLaunch": 12,
+  "iterationMilliseconds": 100,
+  "outlierMode": "DontRemove",
+  "statisticalComparisonThreshold": "5%",
+  "promotion": "GeneralMatrix.Copy uses bulk copying for at least 16 columns; scalar path retained below 16",
+  "productionHarnessSha256": "a1e5e4206e4980cd80269ef822d6cd10bc190af0d3c922edb5ea4e4bed14f73c",
+  "afterProductionSourceSha256": "2fa017e6c0aedb7350dcb83c04c852df1c18594e1871c2526fc7282defa2a064",
+  "affinityObserved": "Linux taskset CPU 5, verified in /proc for benchmark children",
+  "verification": {
+    "command": "bash scripts/verify.sh",
+    "exitCode": 1,
+    "testsPassed": 179,
+    "pythonTestsPassed": 61,
+    "lines": {
+      "covered": 1598,
+      "valid": 1611
+    },
+    "branches": {
+      "covered": 1054,
+      "valid": 1096
+    },
+    "remainingFailure": "Existing pending EXC-2026-001 independent protected approval/issue evidence"
+  }
+}

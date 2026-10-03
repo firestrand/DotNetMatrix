@@ -3,7 +3,7 @@ using BenchmarkDotNet.Attributes;
 
 namespace DotNetMatrix.Benchmarks;
 
-public enum MovementShape { Tiny, Small, Medium, Large, Tall, Wide, SingleRow, SingleColumn, Empty, TwoColumns, FourColumns, EightColumns }
+public enum MovementShape { Tiny, Small, Medium, Large, Tall, Wide, SingleRow, SingleColumn, Empty }
 
 internal sealed class MovementFixture
 {
@@ -24,9 +24,6 @@ internal sealed class MovementFixture
             MovementShape.Wide => (192, 384),
             MovementShape.SingleRow => (1, 4096),
             MovementShape.SingleColumn => (4096, 1),
-            MovementShape.TwoColumns => (4096, 2),
-            MovementShape.FourColumns => (4096, 4),
-            MovementShape.EightColumns => (4096, 8),
             _ => (32, 0)
         };
         Matrix = Fixtures.Create(rows, columns);
@@ -73,29 +70,6 @@ internal sealed class MovementFixture
         return result;
     }
 
-    internal GeneralMatrix GuardedBulkCopy(int minimumColumns = 2)
-    {
-        var result = new GeneralMatrix(rows, columns);
-        double[][] destination = result.Array;
-        if (columns < minimumColumns)
-        {
-            for (int i = 0; i < rows; i++)
-                for (int j = 0; j < columns; j++) destination[i][j] = values[i][j];
-        }
-        else
-        {
-            for (int i = 0; i < rows; i++)
-            {
-                double[] sourceRow = values[i], destinationRow = destination[i];
-                if (sourceRow.Length >= columns)
-                    System.Array.Copy(sourceRow, destinationRow, columns);
-                else
-                    for (int j = 0; j < columns; j++) destinationRow[j] = sourceRow[j];
-            }
-        }
-        return result;
-    }
-
     internal double ScalarInfinityNorm()
     {
         double maximum = 0;
@@ -124,7 +98,7 @@ internal sealed class MovementFixture
 
     internal void Validate()
     {
-        foreach (GeneralMatrix copy in new[] { ScalarCopy(), RowCachedCopy(), BulkCopy(), GuardedBulkCopy(), GuardedBulkCopy(16), Matrix.Copy() })
+        foreach (GeneralMatrix copy in new[] { ScalarCopy(), RowCachedCopy(), BulkCopy(), Matrix.Copy() })
         {
             if (copy.RowDimension != rows || copy.ColumnDimension != columns || ReferenceEquals(copy.Array, values))
                 throw new InvalidOperationException("Copy candidate changed dimensions or ownership.");
@@ -158,8 +132,6 @@ public class CopyAblation
     [Benchmark(Baseline = true)] public GeneralMatrix ScalarControl() => fixture.ScalarCopy();
     [Benchmark] public GeneralMatrix RowCachingOnly() => fixture.RowCachedCopy();
     [Benchmark] public GeneralMatrix RowCachingAndBulkCopy() => fixture.BulkCopy();
-    [Benchmark] public GeneralMatrix GuardedBulkCopy() => fixture.GuardedBulkCopy();
-    [Benchmark] public GeneralMatrix WideRowsOnly() => fixture.GuardedBulkCopy(16);
     [Benchmark] public GeneralMatrix Production() => fixture.Matrix.Copy();
 }
 

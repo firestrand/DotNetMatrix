@@ -73,11 +73,11 @@ internal sealed class MovementFixture
         return result;
     }
 
-    internal GeneralMatrix GuardedBulkCopy(int minimumColumns = 2)
+    internal GeneralMatrix GuardedBulkCopy()
     {
         var result = new GeneralMatrix(rows, columns);
         double[][] destination = result.Array;
-        if (columns < minimumColumns)
+        if (columns <= 1)
         {
             for (int i = 0; i < rows; i++)
                 for (int j = 0; j < columns; j++) destination[i][j] = values[i][j];
@@ -124,7 +124,7 @@ internal sealed class MovementFixture
 
     internal void Validate()
     {
-        foreach (GeneralMatrix copy in new[] { ScalarCopy(), RowCachedCopy(), BulkCopy(), GuardedBulkCopy(), GuardedBulkCopy(16), Matrix.Copy() })
+        foreach (GeneralMatrix copy in new[] { ScalarCopy(), RowCachedCopy(), BulkCopy(), GuardedBulkCopy(), Matrix.Copy() })
         {
             if (copy.RowDimension != rows || copy.ColumnDimension != columns || ReferenceEquals(copy.Array, values))
                 throw new InvalidOperationException("Copy candidate changed dimensions or ownership.");
@@ -159,7 +159,6 @@ public class CopyAblation
     [Benchmark] public GeneralMatrix RowCachingOnly() => fixture.RowCachedCopy();
     [Benchmark] public GeneralMatrix RowCachingAndBulkCopy() => fixture.BulkCopy();
     [Benchmark] public GeneralMatrix GuardedBulkCopy() => fixture.GuardedBulkCopy();
-    [Benchmark] public GeneralMatrix WideRowsOnly() => fixture.GuardedBulkCopy(16);
     [Benchmark] public GeneralMatrix Production() => fixture.Matrix.Copy();
 }
 

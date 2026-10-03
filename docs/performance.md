@@ -1,5 +1,9 @@
 # Dense matrix performance experiments
 
+The follow-up [data movement ablation study](performance-ablation.md) includes
+the promoted wide-row `Copy` optimization, isolated controls, raw reports,
+production confirmation, correctness checks and the tiny-copy tradeoff.
+
 ## Scope and reproduction
 
 The development-only `benchmarks/DotNetMatrix.Benchmarks.csproj` uses

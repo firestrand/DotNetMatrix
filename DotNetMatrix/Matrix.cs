@@ -372,11 +372,35 @@ public partial class GeneralMatrix : ICloneable, ISerializable, IDisposable, IEq
     {
         var x = new GeneralMatrix(_m, _n);
         double[][] c = x.Array;
-        for (int i = 0; i < _m; i++)
+        // Small rows do not amortize the bulk-copy call; retain the scalar path.
+        if (_n < 16)
         {
-            for (int j = 0; j < _n; j++)
+            for (int i = 0; i < _m; i++)
             {
-                c[i][j] = _a[i][j];
+                for (int j = 0; j < _n; j++)
+                {
+                    c[i][j] = _a[i][j];
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < _m; i++)
+            {
+                double[] sourceRow = _a[i];
+                double[] destinationRow = c[i];
+                if (sourceRow.Length >= _n)
+                {
+                    System.Array.Copy(sourceRow, destinationRow, _n);
+                }
+                else
+                {
+                    // Preserve the legacy exception for malformed borrowed rows.
+                    for (int j = 0; j < _n; j++)
+                    {
+                        destinationRow[j] = sourceRow[j];
+                    }
+                }
             }
         }
         return x;
