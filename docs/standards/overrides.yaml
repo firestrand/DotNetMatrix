@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "standard_version": "1.1.0-draft.1",
+  "overrides": [
+    {
+      "id": "EXC-2026-001",
+      "standard_version": "1.1.0-draft.1",
+      "rule": "DOTNET-REPO-004",
+      "clause": "CI and release publication **MUST** fail on the configured compiler/analyzer warnings.",
+      "diagnostics": [
+        "SYSLIB0050"
+      ],
+      "scope": {
+        "files": [
+          "DotNetMatrix_Test/ModernMatrixTests.cs"
+        ],
+        "symbols": [
+          "DotNetMatrix_Test.ModernMatrixTests.LegacySerializationContractEmitsNoPayload"
+        ]
+      },
+      "reason": "The original assertion directly inspects the empty legacy ISerializable callback without invoking a formatter. Preserve exact original test intent while retaining the narrow obsolete SerializationInfo/FormatterConverter warning suppression.",
+      "owner": "repository-maintainer",
+      "approved_by": null,
+      "security_impact": "Pending independent review; test-only construction of serialization metadata, no formatter/deserialization invocation.",
+      "compensating_controls": [
+        "Retain exact MemberCount == 0 and ObjectType assertions",
+        "Do not invoke any legacy binary formatter",
+        "Limit suppression to the named regression test"
+      ],
+      "created_on": "2026-10-02",
+      "expires_on": "2026-11-01",
+      "remediation_issue": null,
+      "status": "pending"
+    }
+  ]
+}

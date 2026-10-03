@@ -1,0 +1,16 @@
+# Repository owner; required reviews must be enabled in branch/ruleset settings.
+# This file does not appoint an independent exception approver.
+/.github/ @firestrand
+/docs/standards/ @firestrand
+/docs/coverage-baseline.json @firestrand
+/docs/public-api.txt @firestrand
+/scripts/ @firestrand
+**/*.csproj @firestrand
+**/*.props @firestrand
+**/*.targets @firestrand
+**/packages.lock.json @firestrand
+**/.editorconfig @firestrand
+**/.globalconfig @firestrand
+/NuGet.Config @firestrand
+/global.json @firestrand
+/.gitattributes @firestrand

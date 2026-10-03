@@ -7,7 +7,7 @@ internal static class Program
 {
     private static void Main(string[] args)
     {
-        if (args.Length == 1 && args[0] == "--validate")
+        if (args.Length == 1 && string.Equals(args[0], "--validate", StringComparison.Ordinal))
         {
             MultiplicationCandidates.Validate();
             Console.WriteLine("All multiplication candidates satisfy numerical, ownership, and reuse checks.");

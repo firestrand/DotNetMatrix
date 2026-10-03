@@ -83,7 +83,7 @@ public sealed class MatrixJsonTests
         string[] fields = { "\"formatVersion\":1", "\"rows\":0", "\"columns\":0", "\"storageOrder\":\"row-major\"", "\"values\":[]" };
         for (int missing = 0; missing < fields.Length; missing++)
         {
-            string omitted = "{" + string.Join(',', System.Array.FindAll(fields, field => field != fields[missing])) + "}";
+            string omitted = "{" + string.Join(',', System.Array.FindAll(fields, field => !string.Equals(field, fields[missing], StringComparison.Ordinal))) + "}";
             Assert.ThrowsExactly<JsonException>(() => JsonSerializer.Deserialize<GeneralMatrix>(omitted, Options()));
             string duplicate = "{" + string.Join(',', fields) + "," + fields[missing] + "}";
             Assert.ThrowsExactly<JsonException>(() => JsonSerializer.Deserialize<GeneralMatrix>(duplicate, Options()));

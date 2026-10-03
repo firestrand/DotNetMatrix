@@ -304,11 +304,13 @@ public sealed class ModernMatrixTests
     public void LegacySerializationContractEmitsNoPayload()
     {
         // Characterize the existing empty ISerializable callback without invoking a formatter.
+        // OVERRIDE(DOTNET-REPO-004, EXC-2026-001)
+        // Pending independent approval; see docs/standards/overrides.yaml.
 #pragma warning disable SYSLIB0050 // Preserve inspection of the legacy serialization contract.
         var info = new SerializationInfo(typeof(GeneralMatrix), new FormatterConverter());
         ((ISerializable)Sample()).GetObjectData(info, default);
+#pragma warning restore SYSLIB0050
         Assert.AreEqual(0, info.MemberCount);
         Assert.AreEqual(typeof(GeneralMatrix), info.ObjectType);
-#pragma warning restore SYSLIB0050
     }
 }

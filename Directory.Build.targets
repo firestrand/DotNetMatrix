@@ -1,0 +1,13 @@
+<Project>
+  <Target Name="ValidateStandardsCiSettings" BeforeTargets="PrepareForBuild;Pack;Publish"
+          Condition="'$(ContinuousIntegrationBuild)' == 'true'">
+    <Error Condition="'$(LocalWarningRelaxation)' == 'true'"
+           Text="LocalWarningRelaxation is not permitted in CI or release builds." />
+    <Error Condition="'$(TreatWarningsAsErrors)' != 'true'"
+           Text="CI and release builds require TreatWarningsAsErrors=true." />
+    <Error Condition="'$(EnforceCodeStyleInBuild)' != 'true'"
+           Text="CI and release builds require code style analyzers." />
+    <Error Condition="'$(RunAnalyzers)' == 'false' or '$(RunAnalyzersDuringBuild)' == 'false' or '$(EnableNETAnalyzers)' == 'false'"
+           Text="CI and release builds must not disable analyzers." />
+  </Target>
+</Project>

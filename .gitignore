@@ -31,3 +31,5 @@ _ReSharper*/
 artifacts/
 .serena/
 __pycache__/
+
+.nuget/

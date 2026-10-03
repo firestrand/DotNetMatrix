@@ -3,8 +3,8 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 mkdir -p artifacts
 smoke_dir="$(mktemp -d artifacts/package-smoke.XXXXXX)"
-smoke_dir="$(cd "$smoke_dir" && pwd)"
-dotnet pack DotNetMatrix/DotNetMatrix.csproj -c Release --no-build --no-restore -o "$smoke_dir/feed"
+smoke_dir="$(python3 -c 'import pathlib, sys; print(pathlib.Path(sys.argv[1]).resolve().as_posix())' "$smoke_dir")"
+dotnet pack DotNetMatrix/DotNetMatrix.csproj -c Release --no-build --no-restore -p:ContinuousIntegrationBuild=true -warnaserror -o "$smoke_dir/feed"
 mkdir -p "$smoke_dir/consumer"
 cat > "$smoke_dir/consumer/Consumer.csproj" <<'PROJECT'
 <Project Sdk="Microsoft.NET.Sdk">
@@ -48,7 +48,7 @@ cat > "$smoke_dir/consumer/NuGet.Config" <<CONFIG
 CONFIG
 # The generated consumer has no project reference and restores into a fresh cache.
 # Run outside this repository so central properties/packages cannot influence it.
-consumer_dir="$(mktemp -d "${TMPDIR:-/tmp}/dotnetmatrix-consumer.XXXXXX")"
+consumer_dir="$(python3 -c 'import pathlib, tempfile; print(pathlib.Path(tempfile.mkdtemp(prefix="dotnetmatrix-consumer.")).as_posix())')"
 trap 'python3 -c "import shutil, sys; shutil.rmtree(sys.argv[1])" "$consumer_dir"' EXIT
 cp "$smoke_dir/consumer/"* "$consumer_dir/"
 cp global.json "$consumer_dir/"
@@ -57,7 +57,7 @@ cp "$consumer_dir/packages.lock.json" "$smoke_dir/consumer/"
 dotnet restore "$consumer_dir/Consumer.csproj" --configfile "$consumer_dir/NuGet.Config" --packages "$smoke_dir/cache" --locked-mode
 dotnet run --project "$consumer_dir/Consumer.csproj" -c Release --no-restore
 python3 - "$smoke_dir/feed/DotNetMatrix.LocalPreview.2.0.0-preview.1.nupkg" <<'PY'
-import sys, zipfile
+import subprocess, sys, zipfile
 from pathlib import Path
 from xml.etree import ElementTree
 with zipfile.ZipFile(sys.argv[1]) as package:
@@ -72,5 +72,14 @@ with zipfile.ZipFile(sys.argv[1]) as package:
     license_element = nuspec.find('.//{*}license')
     if license_element is None or license_element.attrib.get('type') != 'expression' or license_element.text != 'MIT':
         sys.exit('Package must declare the MIT license expression.')
-print('Package DLL, XML documentation, README, MIT license and provenance verified.')
+    repository = nuspec.find('.//{*}repository')
+    commit = subprocess.run(['git', 'rev-parse', 'HEAD'], check=True, capture_output=True,
+                            text=True, timeout=30).stdout.strip()
+    if (repository is None or repository.attrib.get('commit') != commit
+            or repository.attrib.get('url') != 'https://github.com/firestrand/DotNetMatrix'):
+        sys.exit('Package repository metadata does not identify the exact source commit.')
+with zipfile.ZipFile(Path(sys.argv[1]).with_suffix('.snupkg')) as symbols:
+    if symbols.read('lib/net10.0/DotNetMatrix.pdb') != Path('DotNetMatrix/bin/Release/net10.0/DotNetMatrix.pdb').read_bytes():
+        sys.exit('Symbol package does not contain the matching portable PDB.')
+print('Package DLL, XML documentation, MIT license, commit metadata and matching symbols verified.')
 PY

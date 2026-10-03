@@ -2,27 +2,45 @@ name: Verify
 on:
   push:
   pull_request:
+  schedule:
+    - cron: '17 8 * * *'
 permissions:
   contents: read
 jobs:
-  linux-gate:
+  verification:
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
-        runner: [ubuntu-latest, ubuntu-24.04-arm]
+        include:
+          - runner: ubuntu-24.04
+            test_architecture: X64
+          - runner: ubuntu-24.04-arm
+            test_architecture: Arm64
+          - runner: windows-2025
+            test_architecture: X64
+          - runner: macos-15
+            test_architecture: Arm64
     runs-on: ${{ matrix.runner }}
+    env:
+      EXPECTED_TEST_ARCH: ${{ matrix.test_architecture }}
+      NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
         with:
           global-json-file: global.json
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
-          python-version: '3.x'
+          python-version: '3.14'
       - shell: bash
         run: |
-          set -o pipefail
+          set -euo pipefail
           mkdir -p artifacts
+          dotnet --info > artifacts/runtime.txt
+          python3 scripts/record-build.py > artifacts/build-provenance.json
           bash scripts/verify.sh 2>&1 | tee artifacts/verify.log
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: always()
@@ -30,26 +48,8 @@ jobs:
           name: verification-${{ matrix.runner }}
           path: |
             artifacts/verify.log
+            artifacts/runtime.txt
+            artifacts/build-provenance.json
             artifacts/verification.*
             artifacts/package-smoke.*/feed
-          if-no-files-found: warn
-  platform-smoke:
-    strategy:
-      fail-fast: false
-      matrix:
-        runner: [windows-latest, macos-latest]
-    runs-on: ${{ matrix.runner }}
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
-        with:
-          global-json-file: global.json
-      - run: dotnet restore DotNetMatrix.sln --locked-mode
-      - run: dotnet build DotNetMatrix.sln -c Release --no-restore
-      - run: dotnet test --project DotNetMatrix_Test/DotNetMatrix_Test.csproj -c Release --no-build --results-directory artifacts/platform -- --report-trx
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        if: always()
-        with:
-          name: tests-${{ matrix.runner }}
-          path: artifacts/platform
-          if-no-files-found: warn
+          if-no-files-found: error

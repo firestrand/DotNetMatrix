@@ -9,12 +9,12 @@ Read [provenance and release policy](docs/provenance-and-release.md).
 
 ## Build, test and try the package
 
-Install the exact SDK in [global.json](global.json), Bash and Python 3. From a
+Install the exact SDK in [global.json](global.json), Bash and Python 3.12+. From a
 fresh checkout:
 
 ```bash
-dotnet restore DotNetMatrix.sln --locked-mode
-dotnet build DotNetMatrix.sln -c Release --no-restore
+dotnet restore DotNetMatrix.sln --locked-mode -p:Configuration=Release -p:ContinuousIntegrationBuild=true -warnaserror
+dotnet build DotNetMatrix.sln -c Release --no-restore -p:ContinuousIntegrationBuild=true -warnaserror
 bash scripts/verify.sh
 ```
 
@@ -22,7 +22,16 @@ The full gate checks formatting, all unit tests, strict **greater than 80%**
 production line and branch coverage, verifier rejection cases, a reviewed public
 API baseline and independent local NuGet consumption. Each run has fresh report
 directories under `artifacts/`; no skipped tests or missing production classes
-can pass. To run unit tests alone:
+can pass.
+
+The gate also prevents coverage reductions against the reviewed baseline, audits
+dependencies, checks symbols/package metadata, and validates the adopted
+[engineering standard](docs/standards/README.md). It currently fails on the
+**pending legacy serialization exception**; see the
+[audit and remaining controls](docs/standards/audit.md). A passing build/test run
+alone is not full standards compliance.
+
+To run unit tests alone:
 
 ```bash
 dotnet test --project DotNetMatrix_Test/DotNetMatrix_Test.csproj -c Release

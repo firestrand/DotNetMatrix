@@ -1,0 +1,716 @@
+{
+  "schema_version": 1,
+  "standard_version": "1.1.0-draft.1",
+  "source_sha256": "8c56930ec1cd26e8b58a273d47cb0b9713f55e6d4961b6d29a636ffaf4f0ebe2",
+  "source_status": "Proposed corporate standard; adopted only for this repository audit by user instruction",
+  "rules": [
+    {
+      "id": "DOTNET-BASE-004",
+      "title": "Scope, vocabulary, and servicing policy",
+      "kind": "group",
+      "source": {
+        "path": "docs/standards/engineering-standard.md",
+        "start_line": 74,
+        "end_line": 127
+      },
+      "owner": "Repository maintainer / responsible standards owner",
+      "status": "adopted-for-project-audit",
+      "clauses": [],
+      "enforcement": [
+        "review:docs/standards/audit.md requirement applicability and evidence"
+      ]
+    },
+    {
+      "id": "DOTNET-BASE-001",
+      "title": "Standard `DOTNET-BASE-001`:** repositories **MUST** contain a root `global.json`. Its version **MUST** be advanced as part of routine dependency/platform maintenance.",
+      "kind": "rule",
+      "source": {
+        "path": "docs/standards/engineering-standard.md",
+        "start_line": 122,
+        "end_line": 122
+      },
+      "owner": "Repository maintainer / responsible standards owner",
+      "status": "adopted-for-project-audit",
+      "clauses": [],
+      "enforcement": [
+        "review:docs/standards/audit.md requirement applicability and evidence"
+      ]
+    },
+    {
+      "id": "DOTNET-BASE-002",
+      "title": "Standard `DOTNET-BASE-002`:** stable branches **MUST NOT** use `allowPrerelease: true`, `rollForward: latestMajor`, or an equivalent mechanism that can silently advance the compiler/runtime generation.",
+      "kind": "rule",
+      "source": {
+        "path": "docs/standards/engineering-standard.md",
+        "start_line": 124,
+        "end_line": 124
+      },
+      "owner": "Repository maintainer / responsible standards owner",
+      "status": "adopted-for-project-audit",
+      "clauses": [],
+      "enforcement": [
+        "review:docs/standards/audit.md requirement applicability and evidence"
+      ]
+    },
+    {
+      "id": "DOTNET-BASE-003",
+      "title": "Standard `DOTNET-BASE-003`:** the SDK version is a build-tool decision; the TFM is a runtime/API-contract decision. They **MUST NOT** be treated as interchangeable.",
+      "kind": "rule",
+      "source": {
+        "path": "docs/standards/engineering-standard.md",
+        "start_line": 126,
+        "end_line": 126
+      },
+      "owner": "Repository maintainer / responsible standards owner",
+      "status": "adopted-for-project-audit",
+      "clauses": [],
+      "enforcement": [
+        "review:docs/standards/audit.md requirement applicability and evidence"
+      ]
+    },
+    {
+      "id": "DOTNET-BASE-005",
+      "title": "Target frameworks and language baseline",
+      "kind": "group",
+      "source": {
+        "path": "docs/standards/engineering-standard.md",
+        "start_line": 128,
+        "end_line": 156
+      },
+      "owner": "Repository maintainer / responsible standards owner",
+      "status": "adopted-for-project-audit",
+      "clauses": [],
+      "enforcement": [
+        "review:docs/standards/audit.md requirement applicability and evidence"
+      ]
+    },
+    {
+      "id": "DOTNET-BASE-006",
+      "title": "Supported platforms and forward validation",
+      "kind": "group",
+      "source": {
+        "path": "docs/standards/engineering-standard.md",
+        "start_line": 157,
+        "end_line": 182
+      },
+      "owner": "Repository maintainer / responsible standards owner",
+      "status": "adopted-for-project-audit",
+      "clauses": [],
+      "enforcement": [
+        "review:docs/standards/audit.md requirement applicability and evidence",
+        "test:DotNetMatrix_Test/PlatformContractTests.cs native process architecture qualification"
+      ]
+    },
+    {
+      "id": "DOTNET-REPO-001",
+      "title": "`DOTNET-REPO-001`: new repositories MUST use `.slnx` unless required tooling cannot consume it.",
+      "kind": "rule",
+      "source": {
+        "path": "docs/standards/engineering-standard.md",
+        "start_line": 189,
+        "end_line": 189
+      },
+      "owner": "Repository maintainer / responsible standards owner",
+      "status": "adopted-for-project-audit",
+      "clauses": [],
+      "enforcement": [
+        "review:docs/standards/audit.md requirement applicability and evidence"
+      ]
+    },
+    {
+      "id": "DOTNET-REPO-002",
+      "title": "`DOTNET-REPO-002`: source, tests, build automation, documentation, package configuration, and standards configuration MUST be clearly separated.",
+      "kind": "rule",
+      "source": {
+        "path": "docs/standards/engineering-standard.md",
+        "start_line": 191,
+        "end_line": 191
+      },
+      "owner": "Repository maintainer / responsible standards owner",
+      "status": "adopted-for-project-audit",
+      "clauses": [],
+      "enforcement": [
+        "review:docs/standards/audit.md requirement applicability and evidence"
+      ]
+    },
+    {
+      "id": "DOTNET-REPO-003",
+      "title": "Project identity and dependency boundaries",
+      "kind": "group",
+      "source": {
+        "path": "docs/standards/engineering-standard.md",
+        "start_line": 260,
+        "end_line": 287
+      },
+      "owner": "Repository maintainer / responsible standards owner",
+      "status": "adopted-for-project-audit",
+      "clauses": [],
+      "enforcement": [
+        "review:docs/standards/audit.md requirement applicability and evidence"
+      ]
+    },
+    {
+      "id": "DOTNET-REPO-004",
+      "title": "Analyzers, warnings, symbols, and source style",
+      "kind": "group",
+      "source": {
+        "path": "docs/standards/engineering-standard.md",
+        "start_line": 288,
+        "end_line": 434
+      },
+      "owner": "Repository maintainer / responsible standards owner",
+      "status": "adopted-for-project-audit",
+      "clauses": [
+        "CI and release publication **MUST** fail on the configured compiler/analyzer warnings."
+      ],
+      "enforcement": [
+        "review:docs/standards/audit.md requirement applicability and evidence",
+        "gate:scripts/verify.sh effective build and verification controls"
+      ]
+    },
+    {
+      "id": "DOTNET-DEP-001",
+      "title": "`DOTNET-DEP-001`: multi-project repositories MUST use Central Package Management unless a documented technical limitation prevents it.",
+      "kind": "rule",
+      "source": {
+        "path": "docs/standards/engineering-standard.md",
+        "start_line": 439,
+        "end_line": 439
+      },
+      "owner": "Repository maintainer / responsible standards owner",
+      "status": "adopted-for-project-audit",
+      "clauses": [],
+      "enforcement": [
+        "review:docs/standards/audit.md requirement applicability and evidence"
+      ]
+    },
+    {
+      "id": "DOTNET-DEP-002",
+      "title": "Locked dependency and restore profiles",
+      "kind": "group",
+      "source": {
+        "path": "docs/standards/engineering-standard.md",
+        "start_line": 469,
+        "end_line": 524
+      },
+      "owner": "Repository maintainer / responsible standards owner",
+      "status": "adopted-for-project-audit",
+      "clauses": [],
+      "enforcement": [
+        "review:docs/standards/audit.md requirement applicability and evidence",
+        "gate:scripts/verify.sh effective build and verification controls"
+      ]
+    },
+    {
+      "id": "DOTNET-DEP-003",
+      "title": "Feed mapping and package-cache trust",
+      "kind": "group",
+      "source": {
+        "path": "docs/standards/engineering-standard.md",
+        "start_line": 525,
+        "end_line": 578
+      },
+      "owner": "Repository maintainer / responsible standards owner",
+      "status": "adopted-for-project-audit",
+      "clauses": [],
+      "enforcement": [
+        "review:docs/standards/audit.md requirement applicability and evidence"
+      ]
+    },
+    {
+      "id": "DOTNET-DEP-004",
+      "title": "Dependency vulnerability policy",
+      "kind": "group",
+      "source": {
+        "path": "docs/standards/engineering-standard.md",
+        "start_line": 579,
+        "end_line": 582
+      },
+      "owner": "Repository maintainer / responsible standards owner",
+      "status": "adopted-for-project-audit",
+      "clauses": [],
+      "enforcement": [
+        "review:docs/standards/audit.md requirement applicability and evidence",
+        "gate:scripts/verify.sh effective build and verification controls"
+      ]
+    },
+    {
+      "id": "DOTNET-API-003",
+      "title": "Package versioning and compatibility contracts",
+      "kind": "group",
+      "source": {
+        "path": "docs/standards/engineering-standard.md",
+        "start_line": 583,
+        "end_line": 676
+      },
+      "owner": "Repository maintainer / responsible standards owner",
+      "status": "adopted-for-project-audit",
+      "clauses": [],
+      "enforcement": [
+        "review:docs/standards/audit.md requirement applicability and evidence"
+      ]
+    },
+    {
+      "id": "DOTNET-API-001",
+      "title": "`DOTNET-API-001`: externally or cross-team consumed libraries MUST run package/API compatibility validation in CI.",
+      "kind": "rule",
+      "source": {
+        "path": "docs/standards/engineering-standard.md",
+        "start_line": 637,
+        "end_line": 637
+      },
+      "owner": "Repository maintainer / responsible standards owner",
+      "status": "adopted-for-project-audit",
+      "clauses": [],
+      "enforcement": [
+        "review:docs/standards/audit.md requirement applicability and evidence",
+        "gate:scripts/verify.sh effective build and verification controls"
+      ]
+    },
+    {
+      "id": "DOTNET-API-002",
+      "title": "`DOTNET-API-002`: an API-compatibility suppression MUST identify the corresponding intentional SemVer-major change or approved compatibility exception.",
+      "kind": "rule",
+      "source": {
+        "path": "docs/standards/engineering-standard.md",
+        "start_line": 639,
+        "end_line": 639
+      },
+      "owner": "Repository maintainer / responsible standards owner",
+      "status": "adopted-for-project-audit",
+      "clauses": [],
+      "enforcement": [
+        "review:docs/standards/audit.md requirement applicability and evidence"
+      ]
+    },
+    {
+      "id": "DOTNET-CI-001",
+      "title": "`DOTNET-CI-001`: CI-provider YAML MUST remain a thin orchestration layer around repository-owned `dotnet` commands.",
+      "kind": "rule",
+      "source": {
+        "path": "docs/standards/engineering-standard.md",
+        "start_line": 693,
+        "end_line": 693
+      },
+      "owner": "Repository maintainer / responsible standards owner",
+      "status": "adopted-for-project-audit",
+      "clauses": [],
+      "enforcement": [
+        "review:docs/standards/audit.md requirement applicability and evidence",
+        "gate:scripts/verify.sh effective build and verification controls"
+      ]
+    },
+    {
+      "id": "DOTNET-CI-002",
+      "title": "Build and immutable artifact lifecycle",
+      "kind": "group",
+      "source": {
+        "path": "docs/standards/engineering-standard.md",
+        "start_line": 707,
+        "end_line": 737
+      },
+      "owner": "Repository maintainer / responsible standards owner",
+      "status": "adopted-for-project-audit",
+      "clauses": [],
+      "enforcement": [
+        "review:docs/standards/audit.md requirement applicability and evidence"
+      ]
+    },
+    {
+      "id": "DOTNET-CI-003",
+      "title": "Provider template and native architecture verification",
+      "kind": "group",
+      "source": {
+        "path": "docs/standards/engineering-standard.md",
+        "start_line": 738,
+        "end_line": 834
+      },
+      "owner": "Repository maintainer / responsible standards owner",
+      "status": "adopted-for-project-audit",
+      "clauses": [],
+      "enforcement": [
+        "review:docs/standards/audit.md requirement applicability and evidence",
+        "test:DotNetMatrix_Test/PlatformContractTests.cs native process architecture qualification"
+      ]
+    },
+    {
+      "id": "DOTNET-TEST-001",
+      "title": "Test runner, test levels, and coverage",
+      "kind": "group",
+      "source": {
+        "path": "docs/standards/engineering-standard.md",
+        "start_line": 835,
+        "end_line": 877
+      },
+      "owner": "Repository maintainer / responsible standards owner",
+      "status": "adopted-for-project-audit",
+      "clauses": [],
+      "enforcement": [
+        "review:docs/standards/audit.md requirement applicability and evidence",
+        "gate:scripts/verify.sh effective build and verification controls"
+      ]
+    },
+    {
+      "id": "DOTNET-PKG-001",
+      "title": "Publication modes and runtime servicing",
+      "kind": "group",
+      "source": {
+        "path": "docs/standards/engineering-standard.md",
+        "start_line": 878,
+        "end_line": 902
+      },
+      "owner": "Repository maintainer / responsible standards owner",
+      "status": "adopted-for-project-audit",
+      "clauses": [],
+      "enforcement": [
+        "review:docs/standards/audit.md requirement applicability and evidence"
+      ]
+    },
+    {
+      "id": "DOTNET-CTR-001",
+      "title": "Container build inputs, cache, and runtime contract",
+      "kind": "group",
+      "source": {
+        "path": "docs/standards/engineering-standard.md",
+        "start_line": 903,
+        "end_line": 980
+      },
+      "owner": "Repository maintainer / responsible standards owner",
+      "status": "adopted-for-project-audit",
+      "clauses": [],
+      "enforcement": [
+        "review:docs/standards/audit.md requirement applicability and evidence"
+      ]
+    },
+    {
+      "id": "DOTNET-PLAT-001",
+      "title": "Portable file-system contracts",
+      "kind": "group",
+      "source": {
+        "path": "docs/standards/engineering-standard.md",
+        "start_line": 983,
+        "end_line": 1008
+      },
+      "owner": "Repository maintainer / responsible standards owner",
+      "status": "adopted-for-project-audit",
+      "clauses": [],
+      "enforcement": [
+        "review:docs/standards/audit.md requirement applicability and evidence"
+      ]
+    },
+    {
+      "id": "DOTNET-PROC-001",
+      "title": "External process execution boundary",
+      "kind": "group",
+      "source": {
+        "path": "docs/standards/engineering-standard.md",
+        "start_line": 1009,
+        "end_line": 1054
+      },
+      "owner": "Repository maintainer / responsible standards owner",
+      "status": "adopted-for-project-audit",
+      "clauses": [],
+      "enforcement": [
+        "review:docs/standards/audit.md requirement applicability and evidence"
+      ]
+    },
+    {
+      "id": "DOTNET-FS-001",
+      "title": "Private file creation and access control",
+      "kind": "group",
+      "source": {
+        "path": "docs/standards/engineering-standard.md",
+        "start_line": 1055,
+        "end_line": 1092
+      },
+      "owner": "Repository maintainer / responsible standards owner",
+      "status": "adopted-for-project-audit",
+      "clauses": [],
+      "enforcement": [
+        "review:docs/standards/audit.md requirement applicability and evidence"
+      ]
+    },
+    {
+      "id": "DOTNET-FS-002",
+      "title": "Temporary storage allocation and lifecycle",
+      "kind": "group",
+      "source": {
+        "path": "docs/standards/engineering-standard.md",
+        "start_line": 1093,
+        "end_line": 1103
+      },
+      "owner": "Repository maintainer / responsible standards owner",
+      "status": "adopted-for-project-audit",
+      "clauses": [],
+      "enforcement": [
+        "review:docs/standards/audit.md requirement applicability and evidence"
+      ]
+    },
+    {
+      "id": "DOTNET-PLAT-002",
+      "title": "Platform boundaries and analyzer protection",
+      "kind": "group",
+      "source": {
+        "path": "docs/standards/engineering-standard.md",
+        "start_line": 1104,
+        "end_line": 1147
+      },
+      "owner": "Repository maintainer / responsible standards owner",
+      "status": "adopted-for-project-audit",
+      "clauses": [
+        "platform-analyzer-protection"
+      ],
+      "enforcement": [
+        "review:docs/standards/audit.md requirement applicability and evidence"
+      ]
+    },
+    {
+      "id": "DOTNET-PLAT-003",
+      "title": "Native library interoperability",
+      "kind": "group",
+      "source": {
+        "path": "docs/standards/engineering-standard.md",
+        "start_line": 1148,
+        "end_line": 1161
+      },
+      "owner": "Repository maintainer / responsible standards owner",
+      "status": "adopted-for-project-audit",
+      "clauses": [],
+      "enforcement": [
+        "review:docs/standards/audit.md requirement applicability and evidence"
+      ]
+    },
+    {
+      "id": "DOTNET-SEC-001",
+      "title": "Runtime and application security baseline",
+      "kind": "group",
+      "source": {
+        "path": "docs/standards/engineering-standard.md",
+        "start_line": 1162,
+        "end_line": 1184
+      },
+      "owner": "Repository maintainer / responsible standards owner",
+      "status": "adopted-for-project-audit",
+      "clauses": [],
+      "enforcement": [
+        "review:docs/standards/audit.md requirement applicability and evidence"
+      ]
+    },
+    {
+      "id": "DOTNET-CFG-001",
+      "title": "Configuration binding and validation",
+      "kind": "group",
+      "source": {
+        "path": "docs/standards/engineering-standard.md",
+        "start_line": 1185,
+        "end_line": 1231
+      },
+      "owner": "Repository maintainer / responsible standards owner",
+      "status": "adopted-for-project-audit",
+      "clauses": [],
+      "enforcement": [
+        "review:docs/standards/audit.md requirement applicability and evidence"
+      ]
+    },
+    {
+      "id": "DOTNET-SEC-002",
+      "title": "Secret management and disclosure prevention",
+      "kind": "group",
+      "source": {
+        "path": "docs/standards/engineering-standard.md",
+        "start_line": 1232,
+        "end_line": 1249
+      },
+      "owner": "Repository maintainer / responsible standards owner",
+      "status": "adopted-for-project-audit",
+      "clauses": [],
+      "enforcement": [
+        "review:docs/standards/audit.md requirement applicability and evidence"
+      ]
+    },
+    {
+      "id": "DOTNET-OBS-001",
+      "title": "Structured logs and sensitive diagnostics",
+      "kind": "group",
+      "source": {
+        "path": "docs/standards/engineering-standard.md",
+        "start_line": 1250,
+        "end_line": 1299
+      },
+      "owner": "Repository maintainer / responsible standards owner",
+      "status": "adopted-for-project-audit",
+      "clauses": [],
+      "enforcement": [
+        "review:docs/standards/audit.md requirement applicability and evidence"
+      ]
+    },
+    {
+      "id": "DOTNET-OBS-002",
+      "title": "Metrics and distributed trace contracts",
+      "kind": "group",
+      "source": {
+        "path": "docs/standards/engineering-standard.md",
+        "start_line": 1300,
+        "end_line": 1313
+      },
+      "owner": "Repository maintainer / responsible standards owner",
+      "status": "adopted-for-project-audit",
+      "clauses": [],
+      "enforcement": [
+        "review:docs/standards/audit.md requirement applicability and evidence"
+      ]
+    },
+    {
+      "id": "DOTNET-PERF-001",
+      "title": "Performance evidence and diagnostics",
+      "kind": "group",
+      "source": {
+        "path": "docs/standards/engineering-standard.md",
+        "start_line": 1314,
+        "end_line": 1331
+      },
+      "owner": "Repository maintainer / responsible standards owner",
+      "status": "adopted-for-project-audit",
+      "clauses": [],
+      "enforcement": [
+        "review:docs/standards/audit.md requirement applicability and evidence"
+      ]
+    },
+    {
+      "id": "DOTNET-TIME-001",
+      "title": "Instants, civil schedules, and time-zone IDs",
+      "kind": "group",
+      "source": {
+        "path": "docs/standards/engineering-standard.md",
+        "start_line": 1332,
+        "end_line": 1343
+      },
+      "owner": "Repository maintainer / responsible standards owner",
+      "status": "adopted-for-project-audit",
+      "clauses": [],
+      "enforcement": [
+        "review:docs/standards/audit.md requirement applicability and evidence"
+      ]
+    },
+    {
+      "id": "DOTNET-GLOB-001",
+      "title": "Globalization and localization semantics",
+      "kind": "group",
+      "source": {
+        "path": "docs/standards/engineering-standard.md",
+        "start_line": 1344,
+        "end_line": 1361
+      },
+      "owner": "Repository maintainer / responsible standards owner",
+      "status": "adopted-for-project-audit",
+      "clauses": [],
+      "enforcement": [
+        "review:docs/standards/audit.md requirement applicability and evidence"
+      ]
+    },
+    {
+      "id": "DOTNET-GOV-001",
+      "title": "Rule identity and enforcement traceability",
+      "kind": "group",
+      "source": {
+        "path": "docs/standards/engineering-standard.md",
+        "start_line": 1364,
+        "end_line": 1375
+      },
+      "owner": "Repository maintainer / responsible standards owner",
+      "status": "adopted-for-project-audit",
+      "clauses": [],
+      "enforcement": [
+        "review:docs/standards/audit.md requirement applicability and evidence",
+        "gate:scripts/check-standards.py catalog and override consistency"
+      ]
+    },
+    {
+      "id": "DOTNET-GOV-002",
+      "title": "Roles, tooling, and repository templates",
+      "kind": "group",
+      "source": {
+        "path": "docs/standards/engineering-standard.md",
+        "start_line": 1376,
+        "end_line": 1434
+      },
+      "owner": "Repository maintainer / responsible standards owner",
+      "status": "adopted-for-project-audit",
+      "clauses": [],
+      "enforcement": [
+        "review:docs/standards/audit.md requirement applicability and evidence",
+        "gate:scripts/check-standards.py catalog and override consistency"
+      ]
+    },
+    {
+      "id": "DOTNET-GOV-003",
+      "title": "Compliance, audit, and review requirements",
+      "kind": "group",
+      "source": {
+        "path": "docs/standards/engineering-standard.md",
+        "start_line": 1435,
+        "end_line": 1500
+      },
+      "owner": "Repository maintainer / responsible standards owner",
+      "status": "adopted-for-project-audit",
+      "clauses": [],
+      "enforcement": [
+        "review:docs/standards/audit.md requirement applicability and evidence",
+        "gate:scripts/check-standards.py catalog and override consistency"
+      ]
+    },
+    {
+      "id": "DOTNET-GOV-004",
+      "title": "Exception authorization and expiration",
+      "kind": "group",
+      "source": {
+        "path": "docs/standards/engineering-standard.md",
+        "start_line": 1501,
+        "end_line": 1553
+      },
+      "owner": "Repository maintainer / responsible standards owner",
+      "status": "adopted-for-project-audit",
+      "clauses": [],
+      "enforcement": [
+        "review:docs/standards/audit.md requirement applicability and evidence",
+        "gate:scripts/check-standards.py catalog and override consistency",
+        "test:scripts/tests/test_standards.py synthetic exception validation cases",
+        "review:independent protected owner approval and external issue-status evidence"
+      ]
+    },
+    {
+      "id": "DOTNET-GOV-005",
+      "title": "Legacy adoption scope",
+      "kind": "group",
+      "source": {
+        "path": "docs/standards/engineering-standard.md",
+        "start_line": 1554,
+        "end_line": 1557
+      },
+      "owner": "Repository maintainer / responsible standards owner",
+      "status": "adopted-for-project-audit",
+      "clauses": [],
+      "enforcement": [
+        "review:docs/standards/audit.md requirement applicability and evidence",
+        "gate:scripts/check-standards.py catalog and override consistency"
+      ]
+    },
+    {
+      "id": "DOTNET-GOV-006",
+      "title": "Standard versioning and lifecycle",
+      "kind": "group",
+      "source": {
+        "path": "docs/standards/engineering-standard.md",
+        "start_line": 1558,
+        "end_line": 1600
+      },
+      "owner": "Repository maintainer / responsible standards owner",
+      "status": "adopted-for-project-audit",
+      "clauses": [],
+      "enforcement": [
+        "review:docs/standards/audit.md requirement applicability and evidence",
+        "gate:scripts/check-standards.py catalog and override consistency"
+      ]
+    }
+  ]
+}

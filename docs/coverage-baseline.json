@@ -1,0 +1,7 @@
+{
+  "coverageSourceCommit": "911ce1822be37343ae3c1acce53db63501ce3a5e",
+  "minimumTests": 168,
+  "minimumTestsEstablishedBy": "2026-10-02 standards adoption audit",
+  "lines": {"covered": 1590, "valid": 1603},
+  "branches": {"covered": 1046, "valid": 1088}
+}

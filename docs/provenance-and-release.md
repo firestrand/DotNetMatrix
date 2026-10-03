@@ -55,9 +55,14 @@ Compiler-generated nested methods are attributed to their containing class.
 Python verifier tests reject exact-80% rates, missing/duplicate modules or
 reports, failed/skipped/empty suites and malformed coverage counts.
 
-Generated XML documentation suppresses only CS1591 for historically undocumented
-public members. Other warnings remain errors; filling the historical comment
-gaps remains documentation work rather than a relaxed compiler gate.
+Generated XML documentation has no CS1591 suppression. All public members are
+documented. The only source warning suppression is the two-line legacy
+serialization metadata test, whose independent approval remains pending.
+
+Production artifacts include portable matching symbols in `.snupkg`, repository
+URL/commit metadata and Source Link. The hosted clean-checkout gate retrieves
+mapped production source and checks PDB checksums. Embedded source is explicitly
+disclosed; uncommitted work cannot claim retrieval from its old HEAD mapping.
 
 The Linux arm64 job uses the documented standard `ubuntu-24.04-arm` runner;
 see [GitHub's hosted runner reference](https://docs.github.com/en/actions/reference/runners/github-hosted-runners).

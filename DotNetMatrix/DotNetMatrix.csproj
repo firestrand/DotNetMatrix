@@ -10,8 +10,10 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageTags>matrix;linear-algebra;dense;numerical</PackageTags>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <!-- Historical members lack full XML comments. Other documentation/compiler warnings remain errors. -->
-    <NoWarn>$(NoWarn);CS1591</NoWarn>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <EnablePackageValidation>true</EnablePackageValidation>
   </PropertyGroup>
   <ItemGroup>
     <None Include="../README.md" Pack="true" PackagePath="/" />

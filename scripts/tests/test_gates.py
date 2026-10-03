@@ -15,6 +15,7 @@ def load(name):
 
 coverage = load('check-coverage')
 api = load('check-api')
+vulnerabilities = load('check-vulnerabilities')
 
 
 class CoverageGateTests(unittest.TestCase):
@@ -110,6 +111,62 @@ class CoverageGateTests(unittest.TestCase):
                 self.write()
                 with self.assertRaises(ValueError):
                     self.check()
+
+    def test_reviewed_baseline_rejects_reduced_tests_or_coverage(self):
+        baseline = {'minimumTests': 2, 'lines': {'covered': 81, 'valid': 100},
+                    'branches': {'covered': 81, 'valid': 100}}
+        coverage.check(self.directory, ['DotNetMatrix.Old', 'DotNetMatrix.New'], baseline)
+        baseline['minimumTests'] = 3
+        with self.assertRaisesRegex(ValueError, 'test count'):
+            coverage.check(self.directory, ['DotNetMatrix.Old', 'DotNetMatrix.New'], baseline)
+        baseline['minimumTests'] = 2
+        for metric in ('lines', 'branches'):
+            baseline[metric]['covered'] = 82
+            with self.assertRaisesRegex(ValueError, 'decreased'):
+                coverage.check(self.directory, ['DotNetMatrix.Old', 'DotNetMatrix.New'], baseline)
+            baseline[metric]['covered'] = 81
+
+
+class VulnerabilityGateTests(unittest.TestCase):
+    def setUp(self):
+        self.root = Path.cwd()
+        self.report = {'version': 1, 'parameters': '--vulnerable --include-transitive',
+                       'sources': ['https://data.nuget.org/v3/index.json'],
+                       'projects': [{'path': str(self.root / name),
+                                     'frameworks': [{'framework': 'net10.0', 'topLevelPackages': []}]}
+                                    for name in sorted(vulnerabilities.PROJECTS)]}
+
+    def test_complete_empty_result_passes(self):
+        self.assertEqual([], vulnerabilities.check(self.report, self.root))
+
+    def test_unknown_or_serious_transitive_vulnerability_blocks(self):
+        finding = {'severity': 'low'}
+        self.report['projects'][0]['frameworks'] = [{'framework': 'net10.0', 'topLevelPackages': [], 'transitivePackages': [
+            {'id': 'Example.Package', 'vulnerabilities': [finding]}]}]
+        self.assertEqual([('Example.Package', 'low')], vulnerabilities.check(self.report, self.root))
+        for severity in ('high', 'critical', 'unknown', ''):
+            finding['severity'] = severity
+            with self.subTest(severity=severity), self.assertRaises(ValueError):
+                vulnerabilities.check(self.report, self.root)
+
+    def test_incomplete_failed_and_untrusted_evidence_rejected(self):
+        for field, value in (('projects', []), ('errors', ['audit unavailable']),
+                             ('sources', ['https://example.com/feed']), ('parameters', '--vulnerable')):
+            with self.subTest(field=field), self.assertRaises(ValueError):
+                vulnerabilities.check(dict(self.report, **{field: value}), self.root)
+        self.report['projects'].append(self.report['projects'][0])
+        with self.assertRaisesRegex(ValueError, 'exactly once'):
+            vulnerabilities.check(self.report, self.root)
+
+    def test_missing_framework_or_vulnerability_evidence_fails_closed(self):
+        project = self.report['projects'][0]
+        for frameworks in (None, [], [{'framework': 'net9.0', 'topLevelPackages': []}],
+                           [{'framework': 'net10.0'}],
+                           [{'framework': 'net10.0', 'topLevelPackages': [{'id': 'Unknown.Package'}]}],
+                           [{'framework': 'net10.0', 'topLevelPackages': [], 'problems': ['audit failed']}]):
+            with self.subTest(frameworks=frameworks), self.assertRaises(ValueError):
+                project['frameworks'] = frameworks
+                vulnerabilities.check(self.report, self.root)
 
 
 class ApiGateTests(unittest.TestCase):

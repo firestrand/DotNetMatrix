@@ -10,6 +10,6 @@ public sealed class LegacyHarnessTests
     [TestMethod]
     public void LegacyNumericalHarnessReportsNoErrors()
     {
-        Assert.AreEqual(0, DotNetMatrix.test.TestMatrix.Run([]));
+        Assert.AreEqual(0, TestMatrix.Run([]));
     }
 }

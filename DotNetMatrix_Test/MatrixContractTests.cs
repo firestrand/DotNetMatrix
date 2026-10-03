@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using DotNetMatrix;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
