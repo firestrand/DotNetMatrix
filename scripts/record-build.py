@@ -2,7 +2,7 @@
 """Record non-secret build inputs; this is provenance, not a signed attestation.
 
 Only fixed git/.NET queries run. Installations must be operator/runner managed:
-Unix ownership/modes are checked (groups assigned to the runner are trusted);
+Unix ownership/modes are checked (the operator primary group is trusted);
 Windows installation ACLs remain an external
 runner qualification responsibility. This does not attest installation integrity.
 """
@@ -44,12 +44,11 @@ def _validate_installation(path):
     if not path.is_file() or not os.access(path, os.X_OK):
         raise ValueError('Build tool is not an executable file.')
     if os.name != 'nt':
-        trusted_groups = {0, os.getgid(), *os.getgroups()}
         for location in (path, *path.parents):
             mode = location.stat()
             permissions = stat.S_IMODE(mode.st_mode)
             if (mode.st_uid not in (0, os.getuid()) or permissions & 0o002
-                    or (permissions & 0o020 and mode.st_gid not in trusted_groups)):
+                    or (permissions & 0o020 and mode.st_gid not in (0, os.getgid()))):
                 raise ValueError('Build tool installation is not owned and protected by the operator or root.')
     return path
 
