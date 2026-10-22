@@ -49,7 +49,8 @@ def _validate_installation(path):
             permissions = stat.S_IMODE(mode.st_mode)
             if (mode.st_uid not in (0, os.getuid()) or permissions & 0o002
                     or (permissions & 0o020 and mode.st_gid not in (0, os.getgid()))):
-                raise ValueError('Build tool installation is not owned and protected by the operator or root.')
+                raise ValueError('Build tool installation is not owned and protected by the operator or root: '
+                                 f'{location} mode={permissions:o}, uid={mode.st_uid}, gid={mode.st_gid}.')
     return path
 
 
