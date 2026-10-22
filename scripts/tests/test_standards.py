@@ -64,7 +64,7 @@ class StandardsGateTests(unittest.TestCase):
         self.assertTrue(any("missing registry fields" in error for error in self.validate()))
 
     def test_scope_cannot_be_wildcard_absolute_or_traversal(self):
-        for path in ["**/*.cs", "/source/file.cs", "../file.cs"]:
+        for path in ["**/*.cs", "/source/file.cs", "../file.cs", "C:\\source\\file.cs", "..\\file.cs"]:
             self.record["scope"]["files"] = [path]
             self.assertTrue(any("exact repository-relative" in error for error in self.validate()))
 

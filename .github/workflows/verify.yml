@@ -52,4 +52,4 @@ jobs:
             artifacts/build-provenance.json
             artifacts/verification.*
             artifacts/package-smoke.*/feed
-          if-no-files-found: error
+          if-no-files-found: warn

@@ -8,7 +8,7 @@ import json
 import re
 import sys
 from datetime import date, datetime, timezone
-from pathlib import Path
+from pathlib import Path, PurePosixPath, PureWindowsPath
 import xml.etree.ElementTree as ET
 
 STANDARD_VERSION = "1.1.0-draft.1"
@@ -124,7 +124,14 @@ def validate_record(record: dict, catalog: dict, now: datetime) -> list[str]:
         if not isinstance(record["scope"]["files"], list) or not isinstance(record["scope"]["symbols"], list) or not all(isinstance(symbol, str) and symbol for symbol in record["scope"]["symbols"]):
             errors.append("scope files/symbols must be nonempty string lists")
         for file in record["scope"]["files"]:
-            if not isinstance(file, str) or Path(file).is_absolute() or ".." in Path(file).parts or any(char in file for char in "*?["):
+            if (
+                not isinstance(file, str)
+                or PurePosixPath(file).is_absolute()
+                or PureWindowsPath(file).is_absolute()
+                or "\\" in file
+                or ".." in PurePosixPath(file).parts
+                or any(char in file for char in "*?[")
+            ):
                 errors.append("scope must use exact repository-relative files")
     for field in ("reason", "owner", "security_impact", "compensating_controls", "diagnostics"):
         if not record[field]:
