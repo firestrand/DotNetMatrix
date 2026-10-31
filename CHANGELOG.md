@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+- Align the MSTest adapter and framework at 4.5.2 and their testing-platform
+  extensions at 2.5.2, preventing test-process startup failures from mixed versions.
+- Group `MSTest.*` Dependabot updates so the adapter and framework advance together.
+- Refresh the pinned `actions/upload-artifact` action to 7.0.2 while retaining
+  the Linux SDK isolation and cross-platform path-validation fixes.
+
 ## 2.0.0-preview.1 — local correctness preview
 
 Intentional behavior corrections require a major consumer release:
